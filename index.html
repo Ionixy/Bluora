@@ -24,7 +24,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            -webkit-text-size-adjust: 100%; /* Запрет автоизменения шрифта на iOS */
+            -webkit-text-size-adjust: 100%;
         }
 
         /* Логотип */
@@ -34,7 +34,6 @@
             margin: 20px 0 10px 0;
             text-align: center;
             font-weight: 400;
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
 
         /* Категории */
@@ -57,15 +56,12 @@
             text-transform: uppercase;
             font-size: 14px; 
             cursor: pointer;
-            transition: opacity 0.2s;
         }
-
-        .cat-btn:hover { opacity: 0.8; }
 
         /* Сетка товаров */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 колонки на ПК */
+            grid-template-columns: repeat(4, 1fr);
             gap: 25px;
             max-width: 1100px;
             width: 90%;
@@ -81,7 +77,7 @@
             flex-direction: column;
             align-items: center;
             padding-bottom: 20px;
-            aspect-ratio: 2 / 3; /* Жесткая пропорция */
+            aspect-ratio: 2 / 3;
             width: 100%;
         }
 
@@ -103,25 +99,21 @@
             object-fit: cover;
         }
 
-        .placeholder-text {
-            color: #000;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
         .info {
             text-align: center;
             padding: 15px 10px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: space-around;
             height: 30%;
+            width: 100%;
+            box-sizing: border-box;
         }
 
+        /* Стили текста для ПК */
         .name-type {
             font-size: 14px;
             font-weight: 500;
-            margin-bottom: 5px;
             line-height: 1.2;
             text-transform: lowercase;
         }
@@ -129,7 +121,6 @@
         .price {
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 15px;
         }
 
         .buy-btn {
@@ -141,30 +132,38 @@
             font-weight: bold;
             font-size: 14px;
             display: inline-block;
-            transition: transform 0.2s;
         }
 
-        .buy-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* АДАПТИВНОСТЬ */
-        @media (max-width: 900px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .logo { font-size: 100px; }
-        }
-
-        /* Мобильные телефоны */
+        /* --- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ --- */
         @media (max-width: 550px) {
             .product-grid { 
-                grid-template-columns: 1fr; /* Одна карточка в строчку */
-                max-width: 350px; /* Ограничиваем ширину, чтобы не была огромной */
+                grid-template-columns: 1fr;
+                max-width: 360px; /* Ограничение ширины карточки на телефоне */
+                gap: 40px; /* Увеличил отступ между карточками */
             }
-            .logo { font-size: 80px; margin: 30px 0 10px 0; }
-            /* Шрифты остаются такими же, как на ПК */
-            .name-type { font-size: 14px; }
-            .buy-btn { font-size: 14px; }
-            .price { font-size: 16px; }
+
+            .logo { font-size: 90px; }
+
+            /* УВЕЛИЧЕННЫЕ РАЗМЕРЫ ДЛЯ ТЕЛЕФОНА */
+            .name-type { 
+                font-size: 20px; /* Было 14px */
+                margin-bottom: 8px;
+            }
+
+            .price { 
+                font-size: 24px; /* Было 16px */
+                margin-bottom: 15px;
+            }
+
+            .buy-btn { 
+                font-size: 18px; /* Было 14px */
+                padding: 12px 60px; /* Кнопка стала массивнее */
+                border-radius: 30px;
+            }
+
+            .info {
+                padding: 20px 10px;
+            }
         }
     </style>
 </head>
@@ -182,19 +181,16 @@
         <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
     </nav>
 
-    <main class="product-grid" id="grid">
-        </main>
+    <main class="product-grid" id="grid"></main>
 
     <script>
-        // --- БАЗА ТОВАРОВ ---
-        // Когда добавляешь новый товар, следи, чтобы после фигурной скобки } стояла запятая (кроме последнего товара)
         const products = [
             {
                 name: "Oversize Black Tee",
                 type: "t-shirt",
                 price: "45",
                 category: "tshirts",
-                img: "https://i.postimg.cc/NFwHTgz3/bcb34c67f5e7a4c20608e8cb4103f055.png"
+                img: "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg"
             },
             {
                 name: "Cargo Pants Grey",
@@ -204,31 +200,10 @@
                 img: ""
             },
             {
-                name: "Bluora Winter Hat",
-                type: "hat",
-                price: "25",
-                category: "hats",
-                img: ""
-            },
-            {
                 name: "Heavy Cotton Hoodie",
                 type: "hoodie",
                 price: "110",
                 category: "hoodies",
-                img: ""
-            },
-            {
-                name: "Silver Bracelet",
-                type: "accessory",
-                price: "35",
-                category: "accessories",
-                img: ""
-            },
-            {
-                name: "Street Runners V1",
-                type: "shoes",
-                price: "150",
-                category: "shoes",
                 img: ""
             }
         ];
@@ -237,13 +212,12 @@
 
         function render(items) {
             const grid = document.getElementById('grid');
-            grid.innerHTML = ''; // Очищаем сетку перед отрисовкой
-
+            grid.innerHTML = '';
             items.forEach(item => {
                 grid.innerHTML += `
                     <div class="card">
                         <div class="image-container">
-                            ${item.img ? `<img src="${item.img}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
+                            ${item.img ? `<img src="${item.img}" alt="${item.name}">` : `<span style="color:#000; font-weight:bold; font-size:24px;">image</span>`}
                         </div>
                         <div class="info">
                             <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
@@ -256,13 +230,10 @@
         }
 
         function filter(cat) {
-            // Если категория 'all', показываем все товары, иначе фильтруем по категории
             render(cat === 'all' ? products : products.filter(p => p.category === cat));
         }
 
-        // Запуск отрисовки товаров при первой загрузке страницы
         render(products);
     </script>
 </body>
 </html>
-
