@@ -24,14 +24,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Убираем автоматическое изменение размера шрифта на iOS */
-            -webkit-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%; /* Запрет автоизменения шрифта на iOS */
         }
 
-        /* Логотип — фиксированный размер для всех устройств */
+        /* Логотип */
         .logo {
-            font-family: 'Kunstler Script', serif;
-            font-size: 100px; /* Оптимальный размер для читаемости везде */
+            font-family: 'Playfair Display', serif;
+            font-size: 100px;
             font-style: italic;
             margin: 40px 0;
             letter-spacing: -2px;
@@ -45,7 +44,7 @@
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 50px;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
         .cat-btn {
@@ -56,7 +55,7 @@
             border-radius: 20px;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 14px; /* Шрифт остается 14px и на мобильных */
+            font-size: 14px; 
             cursor: pointer;
             transition: opacity 0.2s;
         }
@@ -64,11 +63,10 @@
         /* Сетка товаров */
         .product-grid {
             display: grid;
-            /* 4 колонки на ПК, 2 на средних экранах, 2 на мобильных для сохранения пропорций */
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr); /* 4 в ряд на ПК */
+            gap: 25px;
             max-width: 1100px;
-            width: 95%;
+            width: 90%;
             padding-bottom: 50px;
         }
 
@@ -80,13 +78,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-bottom: 15px;
-            aspect-ratio: 2 / 3; /* Жестко сохраняем пропорцию карточки */
+            padding-bottom: 20px;
+            /* Пропорция 2:3 как на твоем макете */
+            aspect-ratio: 2 / 3; 
+            width: 100%;
         }
 
         .image-container {
             width: 90%;
-            height: 65%; /* Соотношение высоты картинки к карточке */
+            height: 65%;
             background-color: var(--accent-white);
             border-radius: 15px;
             margin-top: 15px;
@@ -102,15 +102,9 @@
             object-fit: cover;
         }
 
-        .placeholder-text {
-            color: #000;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
         .info {
             text-align: center;
-            padding: 10px 5px;
+            padding: 15px 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -118,45 +112,52 @@
         }
 
         .name-type {
-            font-size: 13px; /* Фиксированный шрифт */
+            font-size: 14px; /* Тот же размер, что на ПК */
             font-weight: 500;
             margin-bottom: 5px;
-            line-height: 1.1;
+            line-height: 1.2;
             text-transform: lowercase;
         }
 
         .price {
-            font-size: 15px; /* Фиксированный шрифт */
+            font-size: 16px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .buy-btn {
             background-color: var(--accent-white);
             color: var(--text-dark);
             text-decoration: none;
-            padding: 6px 0;
-            width: 120px; /* Фиксированная ширина кнопки */
+            padding: 8px 45px;
             border-radius: 20px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
             display: inline-block;
         }
 
-        /* Адаптивность ТОЛЬКО для сетки, шрифты НЕ меняем */
+        /* АДАПТИВНОСТЬ */
+        
+        /* Планшеты: 2 в ряд */
         @media (max-width: 900px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .product-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
             .logo { font-size: 80px; }
         }
 
-        @media (max-width: 480px) {
+        /* Телефоны: 1 в ряд */
+        @media (max-width: 550px) {
             .product-grid { 
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 10px; /* Чуть меньше отступы на мобилке */
+                grid-template-columns: 1fr; /* Один товар в строчку */
+                max-width: 350px; /* Ограничиваем ширину, чтобы карточка не была гигантской */
             }
             .logo { font-size: 60px; }
-            .buy-btn { width: 90px; padding: 5px 0; font-size: 11px; }
-            .name-type { font-size: 11px; }
+            
+            /* Шрифты оставляем как просил — такими же как на ПК */
+            .name-type { font-size: 14px; }
+            .price { font-size: 16px; }
+            .buy-btn { font-size: 14px; }
         }
     </style>
 </head>
@@ -194,39 +195,11 @@
                 img: ""
             },
             {
-                name: "Bluora Winter Hat",
-                type: "hat",
-                price: "25",
-                category: "hats",
-                img: ""
-            },
-            {
                 name: "Heavy Cotton Hoodie",
                 type: "hoodie",
                 price: "110",
                 category: "hoodies",
                 img: ""
-            },
-            {
-                name: "Silver Bracelet",
-                type: "accessory",
-                price: "35",
-                category: "accessories",
-                img: ""
-            },
-            {
-                name: "Street Runners V1",
-                type: "shoes",
-                price: "150",
-                category: "shoes",
-                img: ""
-            },
-            {
-                name: "six seven gold",
-                type: "shoes",
-                price: "67",
-                category: "shoes",
-                img: "https://cdn.vectorstock.com/i/1000v/45/47/3d-golden-number-67-isolated-on-white-background-vector-36384547.jpg"
             }
         ];
 
@@ -240,7 +213,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <div class="image-container">
-                            ${item.img ? `<img src="${item.img}" alt="">` : `<span class="placeholder-text">image</span>`}
+                            ${item.img ? `<img src="${item.img}" alt="">` : `<span style="color:#000; font-weight:bold; font-size:20px;">image</span>`}
                         </div>
                         <div class="info">
                             <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
@@ -265,4 +238,3 @@
     </script>
 </body>
 </html>
-
