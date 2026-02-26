@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bluora Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -24,50 +24,51 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* Убираем автоматическое изменение размера шрифта на iOS */
+            -webkit-text-size-adjust: 100%;
         }
 
-        /* Логотип */
+        /* Логотип — фиксированный размер для всех устройств */
         .logo {
-            font-family: 'Kunstler Script', serif;
-            font-size: 200px;
+            font-family: 'Playfair Display', serif;
+            font-size: 100px; /* Оптимальный размер для читаемости везде */
             font-style: italic;
             margin: 40px 0;
             letter-spacing: -2px;
+            text-align: center;
         }
 
         /* Категории */
         .categories {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 50px;
+            padding: 0 10px;
         }
 
         .cat-btn {
             background-color: var(--accent-white);
             color: var(--text-dark);
             border: none;
-            padding: 8px 25px;
+            padding: 8px 20px;
             border-radius: 20px;
-            font-weight: bold;
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 14px;
+            font-size: 14px; /* Шрифт остается 14px и на мобильных */
             cursor: pointer;
             transition: opacity 0.2s;
-        }
-
-        .cat-btn:hover {
-            opacity: 0.8;
         }
 
         /* Сетка товаров */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 колонки как на фото */
+            /* 4 колонки на ПК, 2 на средних экранах, 2 на мобильных для сохранения пропорций */
+            grid-template-columns: repeat(4, 1fr); 
             gap: 20px;
             max-width: 1100px;
-            width: 90%;
+            width: 95%;
             padding-bottom: 50px;
         }
 
@@ -80,11 +81,12 @@
             flex-direction: column;
             align-items: center;
             padding-bottom: 15px;
+            aspect-ratio: 2 / 3; /* Жестко сохраняем пропорцию карточки */
         }
 
         .image-container {
             width: 90%;
-            height: 250px;
+            height: 65%; /* Соотношение высоты картинки к карточке */
             background-color: var(--accent-white);
             border-radius: 15px;
             margin-top: 15px;
@@ -103,50 +105,58 @@
         .placeholder-text {
             color: #000;
             font-weight: bold;
-            font-size: 24px;
+            font-size: 18px;
         }
 
         .info {
             text-align: center;
-            padding: 15px 10px;
+            padding: 10px 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 30%;
         }
 
         .name-type {
-            font-size: 14px;
+            font-size: 13px; /* Фиксированный шрифт */
             font-weight: 500;
             margin-bottom: 5px;
-            line-height: 1.2;
+            line-height: 1.1;
+            text-transform: lowercase;
         }
 
         .price {
-            font-size: 16px;
+            font-size: 15px; /* Фиксированный шрифт */
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .buy-btn {
             background-color: var(--accent-white);
             color: var(--text-dark);
             text-decoration: none;
-            padding: 8px 50px;
+            padding: 6px 0;
+            width: 120px; /* Фиксированная ширина кнопки */
             border-radius: 20px;
             font-weight: bold;
-            font-size: 14px;
-            transition: transform 0.2s;
+            font-size: 13px;
+            display: inline-block;
         }
 
-        .buy-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* Адаптивность для мобилок */
+        /* Адаптивность ТОЛЬКО для сетки, шрифты НЕ меняем */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .logo { font-size: 60px; }
+            .logo { font-size: 80px; }
         }
 
-        @media (max-width: 500px) {
-            .product-grid { grid-template-columns: 1fr; }
+        @media (max-width: 480px) {
+            .product-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 10px; /* Чуть меньше отступы на мобилке */
+            }
+            .logo { font-size: 60px; }
+            .buy-btn { width: 90px; padding: 5px 0; font-size: 11px; }
+            .name-type { font-size: 11px; }
         }
     </style>
 </head>
@@ -168,15 +178,13 @@
         </main>
 
     <script>
-        // --- БЛОК ДОБАВЛЕНИЯ ТОВАРОВ ---
-        // Категории: tshirts, pants, hoodies, hats, shoes, accessories
         const products = [
             {
                 name: "Oversize Black Tee",
                 type: "t-shirt",
                 price: "45",
                 category: "tshirts",
-                img: "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg" // Ссылка на фото (если пусто, будет просто белое поле)
+                img: "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg"
             },
             {
                 name: "Cargo Pants Grey",
@@ -214,7 +222,7 @@
                 img: ""
             },
             {
-                name: "six seven penis",
+                name: "six seven gold",
                 type: "shoes",
                 price: "67",
                 category: "shoes",
@@ -235,7 +243,7 @@
                             ${item.img ? `<img src="${item.img}" alt="">` : `<span class="placeholder-text">image</span>`}
                         </div>
                         <div class="info">
-                            <div class="name-type">${item.name.toUpperCase()},<br>type of ${item.type}</div>
+                            <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
                             <div class="price">${item.price}€</div>
                             <a href="${telegramLink}" class="buy-btn" target="_blank">BUY</a>
                         </div>
@@ -253,12 +261,7 @@
             }
         }
 
-        // Запуск при открытии
         render(products);
     </script>
 </body>
 </html>
-
-
-
-
