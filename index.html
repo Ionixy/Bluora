@@ -3,210 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bluoralv Store</title>
+    <title>Bluora Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary-color: #cc0000; /* Цвет Telegram */
-            --bg-color: #1a1a1a;
-            --card-bg: #2d2d2d;
-            --text-color: #ffffff;
+            --bg-color: #222222;
+            --card-bg: #333333;
+            --text-white: #ffffff;
+            --accent-white: #ffffff;
+            --text-dark: #000000;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        header {
-            text-align: center;
-            padding: 40px 0;
+        /* Логотип */
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 80px;
+            font-style: italic;
+            margin: 40px 0;
+            letter-spacing: -2px;
         }
 
-        /* Меню категорий */
+        /* Категории */
         .categories {
             display: flex;
-            justify-content: center;
+            gap: 15px;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 40px;
+            justify-content: center;
+            margin-bottom: 50px;
         }
 
-        .category-btn {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: white;
-            padding: 10px 25px;
-            cursor: pointer;
-            border-radius: 25px;
+        .cat-btn {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
+            border: none;
+            padding: 8px 25px;
+            border-radius: 20px;
             font-weight: bold;
-            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        .category-btn.active, .category-btn:hover {
-            background: var(--primary-color);
-            box-shadow: 0 0 15px rgba(0, 136, 204, 0.4);
+        .cat-btn:hover {
+            opacity: 0.8;
         }
 
         /* Сетка товаров */
-        .products-grid {
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(4, 1fr); /* 4 колонки как на фото */
+            gap: 20px;
+            max-width: 1100px;
+            width: 90%;
+            padding-bottom: 50px;
         }
 
-        .product-card {
-            background: var(--card-bg);
-            border-radius: 15px;
+        /* Карточка товара */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
             overflow: hidden;
-            transition: transform 0.3s;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            padding-bottom: 15px;
         }
 
-        .product-card:hover {
-            transform: translateY(-10px);
+        .image-container {
+            width: 90%;
+            height: 250px;
+            background-color: var(--accent-white);
+            border-radius: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .product-img {
+        .image-container img {
             width: 100%;
-            height: 300px;
+            height: 100%;
             object-fit: cover;
-            background: #3d3d3d;
         }
 
-        .product-info {
-            padding: 20px;
+        .placeholder-text {
+            color: #000;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .info {
             text-align: center;
-            flex-grow: 1;
+            padding: 15px 10px;
         }
 
-        .product-name {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+        .name-type {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            line-height: 1.2;
         }
 
-        .product-price {
-            color: var(--primary-color);
-            font-size: 1.1rem;
+        .price {
+            font-size: 16px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .buy-link {
-            display: block;
-            background: var(--primary-color);
-            color: white;
+        .buy-btn {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
             text-decoration: none;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 8px 50px;
+            border-radius: 20px;
             font-weight: bold;
-            transition: 0.2s;
+            font-size: 14px;
+            transition: transform 0.2s;
         }
 
-        .buy-link:hover {
-            filter: brightness(1.1);
+        .buy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Адаптивность для мобилок */
+        @media (max-width: 900px) {
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .logo { font-size: 60px; }
+        }
+
+        @media (max-width: 500px) {
+            .product-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>BLUORALV CATALOG</h1>
-    <div class="categories" id="categoryMenu">
-        <button class="category-btn active" onclick="filterProducts('all')">All</button>
-        <button class="category-btn" onclick="filterProducts('tshirts')">T-shirts</button>
-        <button class="category-btn" onclick="filterProducts('pants')">Pants</button>
-        <button class="category-btn" onclick="filterProducts('hoodies')">Hoodies</button>
-        <button class="category-btn" onclick="filterProducts('hats')">Hats</button>
-        <button class="category-btn" onclick="filterProducts('shoes')">Shoes</button>
-        <button class="category-btn" onclick="filterProducts('accessories')">Accessories</button>
-    </div>
-</header>
+    <div class="logo">Bluora</div>
 
-<div class="products-grid" id="productsGrid">
-    </div>
+    <nav class="categories">
+        <button class="cat-btn" onclick="filter('all')">ALL</button>
+        <button class="cat-btn" onclick="filter('tshirts')">TSHIRTS</button>
+        <button class="cat-btn" onclick="filter('pants')">PANTS</button>
+        <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
+        <button class="cat-btn" onclick="filter('hats')">HATS</button>
+        <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
+        <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
+    </nav>
 
-<script>
-    // --- БЛОК ДОБАВЛЕНИЯ ТОВАРОВ ---
-    // Категории: tshirts, pants, hoodies, hats, shoes, accessories
-    const products = [
-        {
-            name: "Classic Black T-Shirt",
-            category: "tshirts",
-            price: "100$",
-            image: "https://images-prod.dazeddigital.com/1400/azure/dazed-prod/1190/1/1191449.jpg"
-        },
-        {
-            name: "Cargo Pants Olive",
-            category: "pants",
-            price: "4200₽",
-            image: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=500&auto=format"
-        },
-        {
-            name: "Streetwear Hoodie",
-            category: "hoodies",
-            price: "5500₽",
-            image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&auto=format"
-        },
-        {
-            name: "Bluoralv Cap",
-            category: "hats",
-            price: "1800₽",
-            image: "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg"
-        }
-        // Чтобы добавить новый товар, просто скопируй блок { ... } выше и поставь запятую
-    ];
+    <main class="product-grid" id="grid">
+        </main>
 
-    const tgLink = "https://t.me/bluoralv";
-
-    function renderProducts(filter = 'all') {
-        const grid = document.getElementById('productsGrid');
-        grid.innerHTML = '';
-
-        const filtered = filter === 'all' 
-            ? products 
-            : products.filter(p => p.category === filter);
-
-        filtered.forEach(item => {
-            const card = `
-                <div class="product-card">
-                    <img src="${item.image}" alt="${item.name}" class="product-img">
-                    <div class="product-info">
-                        <div class="product-name">${item.name}</div>
-                        <div class="product-price">${item.price}</div>
-                        <a href="${tgLink}" target="_blank" class="buy-link">КУПИТЬ</a>
-                    </div>
-                </div>
-            `;
-            grid.innerHTML += card;
-        });
-    }
-
-    function filterProducts(cat) {
-        // Подсветка активной кнопки
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if(btn.innerText.toLowerCase() === cat || (cat === 'all' && btn.innerText === 'All')) {
-                btn.classList.add('active');
+    <script>
+        // --- БЛОК ДОБАВЛЕНИЯ ТОВАРОВ ---
+        // Категории: tshirts, pants, hoodies, hats, shoes, accessories
+        const products = [
+            {
+                name: "Oversize Black Tee",
+                type: "t-shirt",
+                price: "45",
+                category: "tshirts",
+                img: "" // Ссылка на фото (если пусто, будет просто белое поле)
+            },
+            {
+                name: "Cargo Pants Grey",
+                type: "pants",
+                price: "80",
+                category: "pants",
+                img: ""
+            },
+            {
+                name: "Bluora Winter Hat",
+                type: "hat",
+                price: "25",
+                category: "hats",
+                img: ""
+            },
+            {
+                name: "Heavy Cotton Hoodie",
+                type: "hoodie",
+                price: "110",
+                category: "hoodies",
+                img: ""
+            },
+            {
+                name: "Silver Bracelet",
+                type: "accessory",
+                price: "35",
+                category: "accessories",
+                img: ""
+            },
+            {
+                name: "Street Runners V1",
+                type: "shoes",
+                price: "150",
+                category: "shoes",
+                img: ""
             }
-        });
-        
-        renderProducts(cat);
-    }
+        ];
 
-    // Инициализация сайта
-    renderProducts();
-</script>
+        const telegramLink = "https://t.me/bluoralv";
 
+        function render(items) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+
+            items.forEach(item => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="image-container">
+                            ${item.img ? `<img src="${item.img}" alt="">` : `<span class="placeholder-text">image</span>`}
+                        </div>
+                        <div class="info">
+                            <div class="name-type">${item.name.toUpperCase()},<br>type of ${item.type}</div>
+                            <div class="price">${item.price}€</div>
+                            <a href="${telegramLink}" class="buy-btn" target="_blank">BUY</a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filter(cat) {
+            if (cat === 'all') {
+                render(products);
+            } else {
+                const filtered = products.filter(p => p.category === cat);
+                render(filtered);
+            }
+        }
+
+        // Запуск при открытии
+        render(products);
+    </script>
 </body>
-
 </html>
-
-
-
-
