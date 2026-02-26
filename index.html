@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bluora Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -24,17 +24,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            -webkit-text-size-adjust: 100%; /* Запрет автоизменения шрифта на iOS */
+            -webkit-text-size-adjust: 100%;
         }
 
-        /* Логотип */
+        /* Обновленный логотип */
         .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 100px;
-            font-style: italic;
-            margin: 40px 0;
-            letter-spacing: -2px;
+            font-family: 'Pinyon Script', cursive; /* Тот самый рукописный стиль */
+            font-size: 140px; /* Увеличил размер для каллиграфии */
+            margin: 20px 0 10px 0;
             text-align: center;
+            font-weight: 400;
+            /* Легкое свечение, чтобы логотип выглядел премиально */
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
 
         /* Категории */
@@ -60,10 +61,12 @@
             transition: opacity 0.2s;
         }
 
+        .cat-btn:hover { opacity: 0.8; }
+
         /* Сетка товаров */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 в ряд на ПК */
+            grid-template-columns: repeat(4, 1fr);
             gap: 25px;
             max-width: 1100px;
             width: 90%;
@@ -75,166 +78,4 @@
             background-color: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-bottom: 20px;
-            /* Пропорция 2:3 как на твоем макете */
-            aspect-ratio: 2 / 3; 
-            width: 100%;
-        }
-
-        .image-container {
-            width: 90%;
-            height: 65%;
-            background-color: var(--accent-white);
-            border-radius: 15px;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .info {
-            text-align: center;
-            padding: 15px 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 30%;
-        }
-
-        .name-type {
-            font-size: 14px; /* Тот же размер, что на ПК */
-            font-weight: 500;
-            margin-bottom: 5px;
-            line-height: 1.2;
-            text-transform: lowercase;
-        }
-
-        .price {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .buy-btn {
-            background-color: var(--accent-white);
-            color: var(--text-dark);
-            text-decoration: none;
-            padding: 8px 45px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-            display: inline-block;
-        }
-
-        /* АДАПТИВНОСТЬ */
-        
-        /* Планшеты: 2 в ряд */
-        @media (max-width: 900px) {
-            .product-grid { 
-                grid-template-columns: repeat(2, 1fr); 
-            }
-            .logo { font-size: 80px; }
-        }
-
-        /* Телефоны: 1 в ряд */
-        @media (max-width: 550px) {
-            .product-grid { 
-                grid-template-columns: 1fr; /* Один товар в строчку */
-                max-width: 350px; /* Ограничиваем ширину, чтобы карточка не была гигантской */
-            }
-            .logo { font-size: 60px; }
-            
-            /* Шрифты оставляем как просил — такими же как на ПК */
-            .name-type { font-size: 14px; }
-            .price { font-size: 16px; }
-            .buy-btn { font-size: 14px; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="logo">Bluora</div>
-
-    <nav class="categories">
-        <button class="cat-btn" onclick="filter('all')">ALL</button>
-        <button class="cat-btn" onclick="filter('tshirts')">TSHIRTS</button>
-        <button class="cat-btn" onclick="filter('pants')">PANTS</button>
-        <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
-        <button class="cat-btn" onclick="filter('hats')">HATS</button>
-        <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
-        <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
-    </nav>
-
-    <main class="product-grid" id="grid">
-        </main>
-
-    <script>
-        const products = [
-            {
-                name: "Oversize Black Tee",
-                type: "t-shirt",
-                price: "45",
-                category: "tshirts",
-                img: "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg"
-            },
-            {
-                name: "Cargo Pants Grey",
-                type: "pants",
-                price: "80",
-                category: "pants",
-                img: ""
-            },
-            {
-                name: "Heavy Cotton Hoodie",
-                type: "hoodie",
-                price: "110",
-                category: "hoodies",
-                img: ""
-            }
-        ];
-
-        const telegramLink = "https://t.me/bluoralv";
-
-        function render(items) {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-
-            items.forEach(item => {
-                grid.innerHTML += `
-                    <div class="card">
-                        <div class="image-container">
-                            ${item.img ? `<img src="${item.img}" alt="">` : `<span style="color:#000; font-weight:bold; font-size:20px;">image</span>`}
-                        </div>
-                        <div class="info">
-                            <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
-                            <div class="price">${item.price}€</div>
-                            <a href="${telegramLink}" class="buy-btn" target="_blank">BUY</a>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function filter(cat) {
-            if (cat === 'all') {
-                render(products);
-            } else {
-                const filtered = products.filter(p => p.category === cat);
-                render(filtered);
-            }
-        }
-
-        render(products);
-    </script>
-</body>
-</html>
+            display: flex
