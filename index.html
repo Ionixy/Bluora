@@ -24,17 +24,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            -webkit-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%; /* Запрет автоизменения шрифта на iOS */
         }
 
-        /* Обновленный логотип */
+        /* Логотип */
         .logo {
-            font-family: 'Pinyon Script', cursive; /* Тот самый рукописный стиль */
-            font-size: 140px; /* Увеличил размер для каллиграфии */
+            font-family: 'Pinyon Script', cursive;
+            font-size: 140px;
             margin: 20px 0 10px 0;
             text-align: center;
             font-weight: 400;
-            /* Легкое свечение, чтобы логотип выглядел премиально */
             text-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
 
@@ -66,7 +65,7 @@
         /* Сетка товаров */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr); /* 4 колонки на ПК */
             gap: 25px;
             max-width: 1100px;
             width: 90%;
@@ -78,4 +77,191 @@
             background-color: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
-            display: flex
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 20px;
+            aspect-ratio: 2 / 3; /* Жесткая пропорция */
+            width: 100%;
+        }
+
+        .image-container {
+            width: 90%;
+            height: 65%;
+            background-color: var(--accent-white);
+            border-radius: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .placeholder-text {
+            color: #000;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .info {
+            text-align: center;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 30%;
+        }
+
+        .name-type {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            line-height: 1.2;
+            text-transform: lowercase;
+        }
+
+        .price {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 8px 45px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 900px) {
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .logo { font-size: 100px; }
+        }
+
+        /* Мобильные телефоны */
+        @media (max-width: 550px) {
+            .product-grid { 
+                grid-template-columns: 1fr; /* Одна карточка в строчку */
+                max-width: 350px; /* Ограничиваем ширину, чтобы не была огромной */
+            }
+            .logo { font-size: 80px; margin: 30px 0 10px 0; }
+            /* Шрифты остаются такими же, как на ПК */
+            .name-type { font-size: 14px; }
+            .buy-btn { font-size: 14px; }
+            .price { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">Bluora</div>
+
+    <nav class="categories">
+        <button class="cat-btn" onclick="filter('all')">ALL</button>
+        <button class="cat-btn" onclick="filter('tshirts')">TSHIRTS</button>
+        <button class="cat-btn" onclick="filter('pants')">PANTS</button>
+        <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
+        <button class="cat-btn" onclick="filter('hats')">HATS</button>
+        <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
+        <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
+    </nav>
+
+    <main class="product-grid" id="grid">
+        </main>
+
+    <script>
+        // --- БАЗА ТОВАРОВ ---
+        // Когда добавляешь новый товар, следи, чтобы после фигурной скобки } стояла запятая (кроме последнего товара)
+        const products = [
+            {
+                name: "Oversize Black Tee",
+                type: "t-shirt",
+                price: "45",
+                category: "tshirts",
+                img: "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg"
+            },
+            {
+                name: "Cargo Pants Grey",
+                type: "pants",
+                price: "80",
+                category: "pants",
+                img: ""
+            },
+            {
+                name: "Bluora Winter Hat",
+                type: "hat",
+                price: "25",
+                category: "hats",
+                img: ""
+            },
+            {
+                name: "Heavy Cotton Hoodie",
+                type: "hoodie",
+                price: "110",
+                category: "hoodies",
+                img: ""
+            },
+            {
+                name: "Silver Bracelet",
+                type: "accessory",
+                price: "35",
+                category: "accessories",
+                img: ""
+            },
+            {
+                name: "Street Runners V1",
+                type: "shoes",
+                price: "150",
+                category: "shoes",
+                img: ""
+            }
+        ];
+
+        const telegramLink = "https://t.me/bluoralv";
+
+        function render(items) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = ''; // Очищаем сетку перед отрисовкой
+
+            items.forEach(item => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="image-container">
+                            ${item.img ? `<img src="${item.img}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
+                        </div>
+                        <div class="info">
+                            <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
+                            <div class="price">${item.price}€</div>
+                            <a href="${telegramLink}" class="buy-btn" target="_blank">BUY</a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filter(cat) {
+            // Если категория 'all', показываем все товары, иначе фильтруем по категории
+            render(cat === 'all' ? products : products.filter(p => p.category === cat));
+        }
+
+        // Запуск отрисовки товаров при первой загрузке страницы
+        render(products);
+    </script>
+</body>
+</html>
