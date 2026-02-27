@@ -13,6 +13,7 @@
             --text-white: #ffffff;
             --accent-white: #ffffff;
             --text-dark: #000000;
+            --btn-info-bg: #777777; /* Цвет кнопки INFO */
         }
 
         body {
@@ -35,7 +36,7 @@
             text-align: center;
             font-weight: 400;
             text-shadow: 0 0 10px rgba(255,255,255,0.1);
-            cursor: pointer;
+            cursor: pointer; /* Делаем логотип кликабельным */
             transition: opacity 0.2s;
         }
         .logo:hover { opacity: 0.8; }
@@ -105,7 +106,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            cursor: pointer;
+            cursor: pointer; /* Показываем, что фото кликабельно */
         }
         .image-container img {
             width: 100%;
@@ -155,26 +156,32 @@
             width: 100%;
         }
         .btn {
-            background-color: var(--accent-white); /* Единый белый фон */
-            color: var(--text-dark); /* Единый черный текст */
             text-decoration: none;
             padding: 8px 0;
             border-radius: 20px;
-            font-weight: 800; /* Одинаковый жирный шрифт */
+            font-weight: 800;
             font-size: 14px;
             display: inline-block;
             cursor: pointer;
             border: none;
             transition: transform 0.2s, opacity 0.2s;
-            flex: 1;
+            flex: 1; /* Кнопки занимают равное пространство */
             text-align: center;
         }
         .btn:hover { transform: scale(1.05); }
+        .btn-buy {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
+        }
+        .btn-info {
+            background-color: var(--btn-info-bg);
+            color: var(--text-dark);
+        }
 
 
         /* --- ОКНО ДЕТАЛЕЙ ТОВАРА --- */
         #detail-view {
-            display: none;
+            display: none; /* Скрыто по умолчанию */
             width: 100%;
             max-width: 900px;
             padding: 20px;
@@ -188,7 +195,7 @@
         }
 
         .detail-card {
-            background-color: #444444;
+            background-color: #444444; /* Темно-серый фон окна */
             border-radius: 20px;
             padding: 40px;
             display: flex;
@@ -218,34 +225,17 @@
             left: 0;
             z-index: 1;
         }
-        
-        /* Кнопки слайдера со стрелками */
         .slider-btn {
             background: none;
             border: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-dark);
             cursor: pointer;
             z-index: 2;
+            padding: 10px;
             user-select: none;
-            width: 30px; /* Размер кнопки */
-            height: 30px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        .slider-btn span { display: none; } /* Скрыть текстовые символы */
-
-        .slider-btn-prev {
-            background-image: url('image_2.png'); /* Левая стрелка */
-        }
-        .slider-btn-next {
-            background-image: url('image_2.png'); /* Используем то же изображение */
-            transform: scaleX(-1); /* Зеркально отразить для получения правой стрелки */
-        }
-
         .slider-placeholder {
             color: #000;
             font-weight: bold;
@@ -271,7 +261,7 @@
             line-height: 1.5;
             margin-bottom: 20px;
             color: #dddddd;
-            white-space: pre-line;
+            white-space: pre-line; /* Сохраняет переносы строк */
         }
         .detail-specs {
             font-size: 14px;
@@ -358,10 +348,10 @@
     <div id="detail-view">
         <div class="detail-card">
             <div class="detail-slider">
-                <button class="slider-btn slider-btn-prev" onclick="prevImg()"><span>&lt;</span></button>
+                <button class="slider-btn" onclick="prevImg()">&lt;</button>
                 <span class="slider-placeholder" id="detail-placeholder">image</span>
                 <img id="detail-img" src="" alt="" style="display: none;">
-                <button class="slider-btn slider-btn-next" onclick="nextImg()"><span>&gt;</span></button>
+                <button class="slider-btn" onclick="nextImg()">&gt;</button>
             </div>
             
             <div class="detail-info">
@@ -376,7 +366,8 @@
     </div>
 
     <script>
-        // Данные товаров (без изменений)
+        // Обновленные данные товаров
+        // Теперь вместо 'img' используется массив 'images'. Добавлены id, description и specs.
         const products = [
             {
                 id: 1,
@@ -386,7 +377,7 @@
                 category: "tshirts",
                 images: [
                     "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg",
-                    "https://via.placeholder.com/400x400/222/fff?text=Tee+Image+2"
+                    "https://via.placeholder.com/400x400/222/fff?text=Tee+Image+2" // пример второй фотки
                 ],
                 description: "Базовая оверсайз футболка из плотного хлопка.\nИдеально подходит для повседневной носки.\nНе теряет форму после стирки.",
                 specs: "- цвета: черный\n- размеры: S, M, L, XL\n- 100% хлопок"
@@ -421,7 +412,7 @@
                 type: "hat",
                 price: "25",
                 category: "hats",
-                images: [],
+                images: [], // Нет фото
                 description: "Теплая зимняя шапка с логотипом Bluora.\nЗащитит от любого ветра.",
                 specs: "- цвета: черный, белый\n- размер: one size\n- материал: шерсть/акрил"
             },
@@ -467,6 +458,7 @@
             grid.innerHTML = ''; 
 
             items.forEach(item => {
+                // Берем первое фото из массива, если оно есть
                 const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
 
                 grid.innerHTML += `
@@ -478,8 +470,8 @@
                             <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
                             <div class="price">${item.price}€</div>
                             <div class="card-buttons">
-                                <a href="${telegramLink}" class="btn" target="_blank">BUY</a>
-                                <button class="btn" onclick="openDetail(${item.id})">INFO</button>
+                                <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
+                                <button class="btn btn-info" onclick="openDetail(${item.id})">INFO</button>
                             </div>
                         </div>
                     </div>
@@ -491,27 +483,32 @@
             render(cat === 'all' ? products : products.filter(p => p.category === cat));
         }
 
-        // Логика детального окна
+        // --- ЛОГИКА ОКНА ДЕТАЛЕЙ (СЛАЙДЕР И ИНФО) ---
         let currentItem = null;
         let currentImgIndex = 0;
 
         function openDetail(id) {
+            // Ищем товар по ID
             currentItem = products.find(p => p.id === id);
             if (!currentItem) return;
 
+            // Заполняем текстовую инфу
             document.getElementById('detail-name').innerText = currentItem.name;
             document.getElementById('detail-desc').innerText = currentItem.description || "Нет описания";
             document.getElementById('detail-specs').innerText = currentItem.specs || "";
 
+            // Настраиваем фото
             currentImgIndex = 0;
             updateSliderView();
 
+            // Переключаем экраны
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // Прокручиваем наверх
         }
 
         function closeDetail() {
+            // Переключаем экраны обратно
             document.getElementById('detail-view').style.display = 'none';
             document.getElementById('main-view').style.display = 'flex';
         }
@@ -542,7 +539,7 @@
             updateSliderView();
         }
 
-        // Инициализация
+        // Инициализация при загрузке
         render(products);
     </script>
 </body>
