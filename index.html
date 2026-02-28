@@ -264,11 +264,34 @@
                 text-align: center;  /* Центрируем текст */
             }
         }
-        @media (max-width: 550px) {
+       @media (max-width: 550px) {
+            /* Уменьшаем логотип на телефонах */
+            .logo { 
+                font-size: 80px; 
+                margin: 15px 0 5px 0; /* Чуть уменьшаем отступы, чтобы сэкономить место */
+            }
+            
             .product-grid { grid-template-columns: 1fr; }
             .detail-card {
                 padding: 25px 20px;
                 gap: 15px;
+            }
+            .detail-name {
+                font-size: 26px;
+                margin-bottom: 10px;
+            }
+            .detail-desc, .detail-specs {
+                margin-bottom: 15px;
+            }
+            .detail-buy-btn {
+                width: 80%;
+                font-size: 20px;
+                padding: 10px 0;
+            }
+            .detail-cancel-btn {
+                margin-top: 15px;
+            }
+        }
             }
             .detail-name {
                 font-size: 26px;
@@ -442,3 +465,4 @@
     </script>
 </body>
 </html>
+
