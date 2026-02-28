@@ -117,6 +117,7 @@
             justify-content: space-between;
             height: 30%;
             width: 90%;
+            box-sizing: border-box; /* Важно, чтобы текст не вылазил за края */
         }
 
         .name-type {
@@ -124,7 +125,6 @@
             font-weight: 700;
             margin-bottom: 5px;
             line-height: 1.2;
-            /* Убрали lowercase, чтобы разрешить большие буквы */
         }
 
         .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
@@ -230,7 +230,7 @@
             flex: 1; 
             display: flex; 
             flex-direction: column; 
-            align-items: center; /* Центрируем всё содержимое по горизонтали */
+            align-items: center; 
             text-align: center;
         }
         .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
@@ -246,8 +246,8 @@
             font-family: 'Inter', sans-serif;
             text-align: center;
             transition: transform 0.2s;
-            width: 100%; /* Растягиваем кнопку */
-            max-width: 300px; /* Ограничиваем ширину для красоты */
+            width: 100%; 
+            max-width: 300px; 
             display: block;
         }
 
@@ -258,19 +258,45 @@
             display: block;
         }
 
-        /* --- АДАПТИВНОСТЬ --- */
+        /* --- АДАПТИВНОСТЬ (ДЛЯ ПЛАНШЕТОВ И ТЕЛЕФОНОВ) --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
+            
+            /* Детальное окно */
             .detail-card { 
                 flex-direction: column; 
                 padding: 30px;
                 gap: 20px;
             }
-            .detail-slider {
-                width: 100%;
+            .detail-slider { width: 100%; }
+            .detail-info { width: 100%; }
+
+            /* Карточки товаров: новый дизайн как на 2-й картинке */
+            .card {
+                aspect-ratio: auto; /* Убираем жесткие пропорции высоты */
+                padding-bottom: 0; 
             }
-            .detail-info {
+            .image-container {
+                width: 100%; /* Картинка на всю ширину */
+                margin-top: 0; /* Убираем отступ сверху */
+                border-radius: 20px 20px 0 0; /* Скругления только сверху */
+                height: auto;
+                aspect-ratio: 4 / 5; /* Сохраняем красивые пропорции фото */
+            }
+            .info {
+                height: auto; 
                 width: 100%;
+                padding: 15px 20px 20px 20px; /* Добавляем отступы вокруг текста и кнопок */
+                gap: 15px; /* Разделяем блоки */
+            }
+            .card-buttons {
+                flex-direction: column; /* Кнопки друг под другом */
+                gap: 10px;
+            }
+            .btn {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px 0; /* Кнопки чуть толще для удобного нажатия на телефоне */
             }
         }
 
