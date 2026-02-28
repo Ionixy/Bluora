@@ -25,19 +25,38 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            -webkit-text-size-adjust: 100%;
         }
 
+        /* Логотип */
         .logo {
             font-family: 'Pinyon Script', cursive;
             font-size: 140px;
             margin: 20px 0 10px 0;
             text-align: center;
+            font-weight: 400;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
             cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .logo:hover { opacity: 0.8; }
+
+        /* --- ОСНОВНАЯ СТРАНИЦА --- */
+        #main-view {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        #main-view { width: 100%; display: flex; flex-direction: column; align-items: center; }
-
-        .categories { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px; }
+        .categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 50px;
+            padding: 0 15px;
+        }
 
         .cat-btn {
             background-color: var(--accent-white);
@@ -46,6 +65,8 @@
             padding: 8px 20px;
             border-radius: 20px;
             font-weight: 700;
+            text-transform: uppercase;
+            font-size: 14px; 
             cursor: pointer;
         }
 
@@ -61,88 +82,173 @@
         .card {
             background-color: var(--card-bg);
             border-radius: 20px;
-            padding-bottom: 20px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding-bottom: 20px;
+            aspect-ratio: 2 / 3;
+            width: 100%;
         }
 
         .image-container {
             width: 90%;
-            height: 250px;
+            height: 65%;
             background-color: var(--accent-white);
             border-radius: 15px;
             margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
         }
-        .image-container img { width: 100%; height: 100%; object-fit: cover; }
+        .image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .image-container:hover img { transform: scale(1.05); }
 
-        .info { text-align: center; padding: 15px; width: 90%; }
-        .name-type { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+        .info {
+            text-align: center;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 30%;
+            width: 90%;
+        }
+
+        .name-type {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1.2;
+            text-transform: lowercase;
+        }
+
         .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
 
-        /* КНОПКИ С ОДИНАКОВЫМ ШРИФТОМ */
-        .card-buttons { display: flex; gap: 10px; }
+        /* --- КНОПКИ (ИСПРАВЛЕННЫЙ ШРИФТ) --- */
+        .card-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
         .btn {
-            font-family: 'Inter', sans-serif !important;
-            font-weight: 800;
+            /* Устанавливаем шрифт явно для всех типов элементов */
+            font-family: 'Inter', sans-serif !important; 
+            text-transform: uppercase; /* Текст капсом, как на фото */
+            font-weight: 800; /* Жирный шрифт */
             font-size: 14px;
-            text-transform: uppercase;
+            
             text-decoration: none;
-            padding: 10px 0;
-            border-radius: 20px;
+            padding: 8px 0;
+            border-radius: 10px; /* Кнопки на фото чуть более прямоугольные */
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
             flex: 1;
             text-align: center;
-            border: none;
-            cursor: pointer;
         }
-        .btn-buy { background-color: var(--accent-white); color: var(--text-dark); }
-        .btn-info { background-color: var(--btn-info-bg); color: var(--text-dark); }
+        .btn:hover { transform: scale(1.05); }
+        
+        .btn-buy {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
+        }
+        .btn-info {
+            background-color: var(--btn-info-bg);
+            color: var(--text-dark);
+        }
 
-        /* ДЕТАЛЬНОЕ ОКНО */
-        #detail-view { display: none; width: 100%; max-width: 900px; padding: 20px; }
-        .detail-card { background-color: #444444; border-radius: 20px; padding: 40px; display: flex; gap: 40px; align-items: center; }
+        /* --- ДЕТАЛЬНОЕ ОКНО И СТРЕЛКИ --- */
+        #detail-view {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease;
+        }
 
-        /* СЛАЙДЕР И СТРЕЛКИ */
+        .detail-card {
+            background-color: #444444;
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
         .detail-slider {
             flex: 1;
-            background-color: #fff;
+            background-color: var(--accent-white);
             border-radius: 15px;
-            aspect-ratio: 3/4;
+            aspect-ratio: 3 / 4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             position: relative;
-            display: flex; align-items: center; justify-content: center;
             overflow: hidden;
+            padding: 0 5px;
         }
-        .detail-slider img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        
-        .slider-btn {
-            position: absolute;
-            top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,0.6);
-            border: none; border-radius: 50%;
-            width: 40px; height: 40px;
-            cursor: pointer; z-index: 10;
-            display: flex; align-items: center; justify-content: center;
+        .detail-slider img {
+            width: 100%; height: 100%; object-fit: cover;
+            position: absolute; top: 0; left: 0; z-index: 1;
         }
-        .slider-btn:hover { background: #fff; }
-        .slider-btn svg { width: 24px; height: 24px; fill: #000; }
-        .slider-btn-prev { left: 10px; }
-        .slider-btn-next { right: 10px; }
 
-        .detail-info { flex: 1; }
-        .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 15px; }
-        .detail-buy-btn { 
-            display: block; background: #fff; color: #000; 
-            padding: 15px; text-align: center; border-radius: 10px; 
-            font-weight: 800; text-decoration: none; margin-bottom: 10px;
+        /* Кнопки-стрелки из картинки */
+        .slider-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
+            width: 25px; 
+            height: 25px;
+            background-image: url('image_aaf1df.png'); /* Путь к твоей картинке стрелки */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
-        .detail-cancel-btn { background: none; border: none; color: #aaa; cursor: pointer; width: 100%; }
+        .slider-btn:hover { opacity: 1; }
+        .slider-btn-next {
+            transform: rotate(180deg); /* Разворачиваем стрелку вправо */
+        }
+
+        .slider-placeholder { color: #000; font-weight: 800; z-index: 0; margin: auto; }
+
+        .detail-info { flex: 1; display: flex; flex-direction: column; }
+        .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
+        .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+
+        .detail-buy-btn {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-weight: 800;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .detail-cancel-btn {
+            background: none; border: none; color: #aaa;
+            margin-top: 10px; cursor: pointer; font-weight: 700;
+        }
 
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { flex-direction: column; }
+        }
+        @media (max-width: 550px) {
+            .product-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -155,6 +261,10 @@
             <button class="cat-btn" onclick="filter('all')">ALL</button>
             <button class="cat-btn" onclick="filter('tshirts')">TSHIRTS</button>
             <button class="cat-btn" onclick="filter('pants')">PANTS</button>
+            <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
+            <button class="cat-btn" onclick="filter('hats')">HATS</button>
+            <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
+            <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
         </nav>
         <main class="product-grid" id="grid"></main>
     </div>
@@ -162,18 +272,15 @@
     <div id="detail-view">
         <div class="detail-card">
             <div class="detail-slider">
-                <button class="slider-btn slider-btn-prev" onclick="prevImg()">
-                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-                </button>
-                <img id="detail-img" src="">
-                <button class="slider-btn slider-btn-next" onclick="nextImg()">
-                    <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
+                <button class="slider-btn slider-btn-prev" onclick="prevImg()"></button>
+                <span class="slider-placeholder" id="detail-placeholder">image</span>
+                <img id="detail-img" src="" alt="" style="display: none;">
+                <button class="slider-btn slider-btn-next" onclick="nextImg()"></button>
             </div>
             <div class="detail-info">
-                <h2 class="detail-name" id="detail-name"></h2>
-                <p id="detail-desc"></p>
-                <p id="detail-specs" style="color:#ccc; font-size:12px;"></p>
+                <h2 class="detail-name" id="detail-name">Clothes Name</h2>
+                <div class="detail-desc" id="detail-desc"></div>
+                <div class="detail-specs" id="detail-specs"></div>
                 <a href="https://t.me/bluoralv" class="detail-buy-btn" target="_blank">BUY</a>
                 <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
             </div>
@@ -181,50 +288,76 @@
     </div>
 
     <script>
-        // ТВОЙ СПИСОК ТОВАРОВ (редактируй тут)
-        const products = [
-            {
-                id: 1,
-                name: "Oversize Black Tee",
-                type: "t-shirt",
-                price: "45",
-                category: "tshirts",
+       const products = [
+            { 
+                id: 1, 
+                name: "Oversize Black Tee", 
+                type: "t-shirt", 
+                price: "45", 
+                category: "tshirts", 
                 images: [
                     "https://celebbio.org/wp-content/cache/thumb/47/87101b51d070b47_400x400.jpg",
-                    "https://via.placeholder.com/400x400?text=Back+View"
-                ],
-                description: "Базовая оверсайз футболка из плотного хлопка.",
-                specs: "- 100% Cotton\n- Oversize fit"
+                    "https://image-cdn.hypb.st/https%3A%2F%2Fs3.store.hypebeast.com%2Fmedia%2Fimage%2F2b%2F9d%2Fjacket-1-1-da39c.jpg?fit=max&w=1080&q=90"
+                    // "https://твоя-ссылка-на-фото-2.jpg",
+                    // "https://твоя-ссылка-на-фото-3.jpg"
+                ], 
+                description: "Базовая оверсайз футболка.", 
+                specs: "- цвета: черный\n- размеры: S, M, L" 
             },
-            {
-                id: 2,
-                name: "Cargo Pants Grey",
-                type: "pants",
-                price: "80",
-                category: "pants",
-                images: ["https://beyondriders.com/products/relaxed-fit-cargo-pants-grey-with-pads?srsltid=AfmBOopHoWANtFY9zZPgjTRSM6aHfPhRnB8pj8AdNPfuST4h6aOBMyyM"],
-                description: "Свободные карго штаны.",
-                specs: "- Grey color\n- Multi-pockets"
+            { 
+                id: 2, 
+                name: "Cargo Pants Grey", 
+                type: "pants", 
+                price: "80", 
+                category: "pants", 
+                images: [
+                    "https://beyondriders.com/products/relaxed-fit-cargo-pants-grey-with-pads?srsltid=AfmBOopHoWANtFY9zZPgjTRSM6aHfPhRnB8pj8AdNPfuST4h6aOBMyyM"
+                    // И сюда тоже можно добавить фотки для штанов
+                ], 
+                description: "Свободные карго штаны.", 
+                specs: "- цвета: серый" 
+            },
+            { 
+                id: 3, 
+                name: "Long Sleeve Acne", 
+                type: "long sleeve", 
+                price: "40", 
+                category: "tshirts", 
+                images: [
+                    "https://www.acnestudios.com/dw/image/v2/AAXV_PRD/on/demandware.static/-/Sites-acne-product-catalog/default/dw134dceb0/images/CL/CL0197-/2000x/CL0197-BM0_FLAT.jpg?sw=200&sh=300"
+                ], 
+                description: "Классический лонгслив.", 
+                specs: "- 100% хлопок" 
             }
         ];
 
+        const telegramLink = "https://t.me/bluoralv";
+
         function render(items) {
             const grid = document.getElementById('grid');
-            grid.innerHTML = items.map(item => `
-                <div class="card">
-                    <div class="image-container" onclick="openDetail(${item.id})">
-                        <img src="${item.images[0] || ''}">
-                    </div>
-                    <div class="info">
-                        <div class="name-type">${item.name.toLowerCase()}, type of ${item.type}</div>
-                        <div class="price">${item.price}€</div>
-                        <div class="card-buttons">
-                            <a href="https://t.me/bluoralv" class="btn btn-buy" target="_blank">BUY</a>
-                            <button class="btn btn-info" onclick="openDetail(${item.id})">INFO</button>
+            grid.innerHTML = ''; 
+            items.forEach(item => {
+                const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="image-container" onclick="openDetail(${item.id})">
+                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
+                        </div>
+                        <div class="info">
+                            <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
+                            <div class="price">${item.price}€</div>
+                            <div class="card-buttons">
+                                <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
+                                <button class="btn btn-info" onclick="openDetail(${item.id})">INFO</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            });
+        }
+
+        function filter(cat) {
+            render(cat === 'all' ? products : products.filter(p => p.category === cat));
         }
 
         let currentItem = null;
@@ -232,27 +365,14 @@
 
         function openDetail(id) {
             currentItem = products.find(p => p.id === id);
+            if (!currentItem) return;
             document.getElementById('detail-name').innerText = currentItem.name;
             document.getElementById('detail-desc').innerText = currentItem.description;
             document.getElementById('detail-specs').innerText = currentItem.specs;
             currentImgIndex = 0;
-            updateSlider();
+            updateSliderView();
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
-        }
-
-        function updateSlider() {
-            document.getElementById('detail-img').src = currentItem.images[currentImgIndex];
-        }
-
-        function nextImg() {
-            currentImgIndex = (currentImgIndex + 1) % currentItem.images.length;
-            updateSlider();
-        }
-
-        function prevImg() {
-            currentImgIndex = (currentImgIndex - 1 + currentItem.images.length) % currentItem.images.length;
-            updateSlider();
         }
 
         function closeDetail() {
@@ -260,8 +380,29 @@
             document.getElementById('main-view').style.display = 'flex';
         }
 
-        function filter(cat) {
-            render(cat === 'all' ? products : products.filter(p => p.category === cat));
+        function updateSliderView() {
+            const imgEl = document.getElementById('detail-img');
+            const placeholder = document.getElementById('detail-placeholder');
+            if (currentItem.images && currentItem.images.length > 0) {
+                imgEl.src = currentItem.images[currentImgIndex];
+                imgEl.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                imgEl.style.display = 'none';
+                placeholder.style.display = 'block';
+            }
+        }
+
+        function nextImg() {
+            if (!currentItem.images.length) return;
+            currentImgIndex = (currentImgIndex + 1) % currentItem.images.length;
+            updateSliderView();
+        }
+
+        function prevImg() {
+            if (!currentItem.images.length) return;
+            currentImgIndex = (currentImgIndex - 1 + currentItem.images.length) % currentItem.images.length;
+            updateSliderView();
         }
 
         render(products);
