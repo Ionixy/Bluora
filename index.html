@@ -129,7 +129,7 @@
 
         .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
 
-        /* --- КНОПКИ (ИСПРАВЛЕННЫЙ ШРИФТ) --- */
+        /* --- КНОПКИ --- */
         .card-buttons {
             display: flex;
             justify-content: center;
@@ -198,9 +198,8 @@
             position: absolute; top: 0; left: 0; z-index: 1;
         }
 
-        /* Обновленные кнопки-стрелки */
         .slider-btn {
-            background: rgba(255, 255, 255, 0.7); /* Полупрозрачный белый фон */
+            background: rgba(255, 255, 255, 0.7);
             color: #000;
             border: none;
             cursor: pointer;
@@ -216,7 +215,7 @@
             transition: opacity 0.2s, transform 0.2s;
             position: absolute;
             top: 50%;
-            transform: translateY(-50%); /* Центрирование по вертикали */
+            transform: translateY(-50%);
         }
         .slider-btn:hover { 
             opacity: 1; 
@@ -248,12 +247,44 @@
             margin-top: 10px; cursor: pointer; font-weight: 700;
         }
 
+        /* --- АДАПТИВНОСТЬ (ИЗМЕНЕНИЯ ЗДЕСЬ) --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .detail-card { flex-direction: column; }
+            .detail-card { 
+                flex-direction: column; 
+                padding: 30px;
+                gap: 20px;
+            }
+            .detail-slider {
+                width: 100%;
+            }
+            .detail-info {
+                width: 100%;
+                align-items: center; /* Центрируем кнопки */
+                text-align: center;  /* Центрируем текст */
+            }
         }
         @media (max-width: 550px) {
             .product-grid { grid-template-columns: 1fr; }
+            .detail-card {
+                padding: 25px 20px;
+                gap: 15px;
+            }
+            .detail-name {
+                font-size: 26px;
+                margin-bottom: 10px;
+            }
+            .detail-desc, .detail-specs {
+                margin-bottom: 15px;
+            }
+            .detail-buy-btn {
+                width: 80%; /* Кнопка чуть уже карточки, как на макете */
+                font-size: 20px;
+                padding: 10px 0;
+            }
+            .detail-cancel-btn {
+                margin-top: 15px;
+            }
         }
     </style>
 </head>
