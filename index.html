@@ -127,6 +127,11 @@
             line-height: 1.2;
         }
 
+        /* Новый стиль для затемненного текста типа товара */
+        .item-type {
+            color: #aaaaaa;
+        }
+
         .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
 
         /* --- КНОПКИ --- */
@@ -398,7 +403,7 @@
                 ], 
                 description: "Классический лонгслив Black color.", 
                 specs: "- 100% хлопок" 
-            },           
+            },            
             { 
                 id: 4, 
                 name: "Polo Ralph Lauren", 
@@ -426,7 +431,7 @@
                             ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
                         </div>
                         <div class="info">
-                            <div class="name-type">${item.name},<br>type of ${item.type}</div>
+                            <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
                             <div class="price">${item.price}€</div>
                             <div class="card-buttons">
                                 <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
@@ -492,15 +497,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
