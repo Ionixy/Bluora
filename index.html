@@ -124,7 +124,7 @@
             font-weight: 700;
             margin-bottom: 5px;
             line-height: 1.2;
-            text-transform: lowercase;
+            /* Убрали lowercase, чтобы разрешить большие буквы */
         }
 
         .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
@@ -162,7 +162,7 @@
             color: var(--text-dark);
         }
 
-        /* --- ДЕТАЛЬНОЕ ОКНО И СТРЕЛКИ --- */
+        /* --- ДЕТАЛЬНОЕ ОКНО --- */
         #detail-view {
             display: none;
             width: 100%;
@@ -226,7 +226,13 @@
 
         .slider-placeholder { color: #000; font-weight: 800; z-index: 0; }
 
-        .detail-info { flex: 1; display: flex; flex-direction: column; }
+        .detail-info { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; /* Центрируем всё содержимое по горизонтали */
+            text-align: center;
+        }
         .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
         .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
 
@@ -240,14 +246,19 @@
             font-family: 'Inter', sans-serif;
             text-align: center;
             transition: transform 0.2s;
+            width: 100%; /* Растягиваем кнопку */
+            max-width: 300px; /* Ограничиваем ширину для красоты */
+            display: block;
         }
 
         .detail-cancel-btn {
             background: none; border: none; color: #aaa;
-            margin-top: 10px; cursor: pointer; font-weight: 700;
+            margin-top: 15px; cursor: pointer; font-weight: 700;
+            text-transform: lowercase;
+            display: block;
         }
 
-        /* --- АДАПТИВНОСТЬ (ИЗМЕНЕНИЯ ЗДЕСЬ) --- */
+        /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { 
@@ -260,17 +271,14 @@
             }
             .detail-info {
                 width: 100%;
-                align-items: center; /* Центрируем кнопки */
-                text-align: center;  /* Центрируем текст */
             }
         }
-       @media (max-width: 550px) {
-            /* Уменьшаем логотип на телефонах */
+
+        @media (max-width: 550px) {
             .logo { 
                 font-size: 80px; 
-                margin: 15px 0 5px 0; /* Чуть уменьшаем отступы, чтобы сэкономить место */
+                margin: 15px 0 5px 0;
             }
-            
             .product-grid { grid-template-columns: 1fr; }
             .detail-card {
                 padding: 25px 20px;
@@ -280,34 +288,15 @@
                 font-size: 26px;
                 margin-bottom: 10px;
             }
-            .detail-desc, .detail-specs {
-                margin-bottom: 15px;
-            }
             .detail-buy-btn {
-                width: 80%;
-                font-size: 20px;
-                padding: 10px 0;
-            }
-            .detail-cancel-btn {
-                margin-top: 15px;
+                width: 85%;
+                font-size: 18px;
             }
         }
-            }
-            .detail-name {
-                font-size: 26px;
-                margin-bottom: 10px;
-            }
-            .detail-desc, .detail-specs {
-                margin-bottom: 15px;
-            }
-            .detail-buy-btn {
-                width: 80%; /* Кнопка чуть уже карточки, как на макете */
-                font-size: 20px;
-                padding: 10px 0;
-            }
-            .detail-cancel-btn {
-                margin-top: 15px;
-            }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -347,7 +336,7 @@
     </div>
 
     <script>
-       const products = [
+        const products = [
             { 
                 id: 1, 
                 name: "Oversize Black Tee", 
@@ -400,7 +389,7 @@
                             ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
                         </div>
                         <div class="info">
-                            <div class="name-type">${item.name.toLowerCase()},<br>type of ${item.type}</div>
+                            <div class="name-type">${item.name},<br>type of ${item.type}</div>
                             <div class="price">${item.price}€</div>
                             <div class="card-buttons">
                                 <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
@@ -429,6 +418,7 @@
             updateSliderView();
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
+            window.scrollTo(0, 0);
         }
 
         function closeDetail() {
@@ -465,6 +455,3 @@
     </script>
 </body>
 </html>
-
-
-
