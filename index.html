@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* ... Весь ваш предыдущий CSS остается без изменений ... */
         :root {
             --bg-color: #222222;
             --card-bg: #333333;
@@ -315,20 +314,74 @@
                 <h2 class="detail-name" id="detail-name">Clothes Name</h2>
                 <div class="detail-desc" id="detail-desc"></div>
                 <div class="detail-specs" id="detail-specs"></div>
-                <a href="https://web.telegram.org/k/#@bluorabot" class="detail-buy-btn" target="_blank">BUY</a>
+                <a href="https://web.telegram.org/k/#@bluorabot" class="detail-buy-btn" target="_blank">INFO</a>
                 <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Массив товаров остался прежним
         const products = [
-            { id: 1, name: "Polo Ralph Lauren", type: "Replica", price: "30", category: "shirts", images: ["https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275"], description: "Базовая оверсайз футболка.", specs: "- цвета: черный\n- размеры: S, M, L" },
-            { id: 2, name: "Acne Studio Hoodie", type: "Replica", price: "60", category: "hoodies", images: ["https://media.discordapp.net/attachments/979762155601657926/1477435494806585567/odezhda_00000.png?ex=69a4c087&is=69a36f07&hm=eb45f929a56e86c0cee8f5306412752425dfe6c7c1138ba9f10d9381b0f1c870&=&format=webp&quality=lossless&width=750&height=960"], description: "Бомбовая худи Акне Студио", specs: "- цвета: черный" },
-            { id: 3, name: "Long Sleeve Acne", type: "Replica", price: "40", category: "shirts", images: ["https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"], description: "Классический лонгслив Black color.", specs: "- 100% хлопок" },            
-            { id: 4, name: "Polo Ralph Lauren", type: "Replica", price: "50", category: "hoodies", images: ["https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot"], description: "grey Zip-Up hoodie", specs: "- цвета: GREY\n- размеры: S, M, L" }, 
-            { id: 5, name: "Moncler Hat", type: "Replica", price: "20", category: "hats", images: ["https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"], description: "Black Hat", specs: "- цвета: Black\n- размеры: S, M, L" }
+            {
+                id: 1,
+                name: "Polo Ralph Lauren",
+                type: "Replica",
+                price: "30",
+                category: "shirts",
+                images: [
+                    "https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275"
+                ],
+                description: "Базовая оверсайз футболка.",
+                specs: "- цвета: черный\n- размеры: S, M, L"
+            },
+            {
+                id: 2,
+                name: "Acne Studio Hoodie",
+                type: "Replica",
+                price: "60",
+                category: "hoodies",
+                images: [
+                    "https://media.discordapp.net/attachments/979762155601657926/1477435494806585567/odezhda_00000.png?ex=69a4c087&is=69a36f07&hm=eb45f929a56e86c0cee8f5306412752425dfe6c7c1138ba9f10d9381b0f1c870&=&format=webp&quality=lossless&width=750&height=960"
+                ],
+                description: "Бомбовая худи Акне Студио",
+                specs: "- цвета: черный"
+            },
+            {
+                id: 3,
+                name: "Long Sleeve Acne",
+                type: "Replica",
+                price: "40",
+                category: "shirts",
+                images: [
+                    "https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"
+                ],
+                description: "Классический лонгслив Black color.",
+                specs: "- 100% хлопок"
+            },
+            {
+                id: 4,
+                name: "Polo Ralph Lauren",
+                type: "Replica",
+                price: "50",
+                category: "hoodies",
+                images: [
+                    "https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot"
+                ],
+                description: "grey Zip-Up hoodie",
+                specs: "- цвета: GREY\n- размеры: S, M, L"
+            },
+            {
+                id: 5,
+                name: "Moncler Hat",
+                type: "Replica",
+                price: "20",
+                category: "hats",
+                images: [
+                    "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"
+                ],
+                description: "Black Hat",
+                specs: "- цвета: Black\n- размеры: S, M, L"
+            }
         ];
 
         const telegramLink = "https://web.telegram.org/k/#@bluorabot";
@@ -355,9 +408,10 @@
             });
         }
 
-        // Остальные функции без изменений
-        function filter(cat) { render(cat === 'all' ? products : products.filter(p => p.category === cat)); }
-        
+        function filter(cat) {
+            render(cat === 'all' ? products : products.filter(p => p.category === cat));
+        }
+
         let currentItem = null;
         let currentImgIndex = 0;
 
