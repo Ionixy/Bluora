@@ -8,11 +8,13 @@
     
     <style>
         :root {
-            --bg-color: #222222;
-            --card-bg: #333333;
+            --bg-color: #1a1a1a;
+            --card-bg: #242424;
+            --card-border: #333333;
             --text-white: #ffffff;
             --accent-white: #ffffff;
             --text-dark: #000000;
+            --text-gray: #a0a0a0;
         }
 
         body {
@@ -28,8 +30,8 @@
 
         .logo {
             font-family: 'Pinyon Script', cursive;
-            font-size: 140px;
-            margin: 20px 0 10px 0;
+            font-size: 100px;
+            margin: 20px 0 20px 0;
             text-align: center;
             font-weight: 400;
             text-shadow: 0 0 10px rgba(255,255,255,0.1);
@@ -48,7 +50,7 @@
             gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             padding: 0 15px;
         }
 
@@ -62,89 +64,97 @@
             text-transform: uppercase;
             font-size: 14px; 
             cursor: pointer;
+            transition: opacity 0.2s;
         }
+        .cat-btn:hover { opacity: 0.8; }
 
         .product-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
+            gap: 20px;
             max-width: 1100px;
             width: 90%;
             padding-bottom: 50px;
         }
 
+        /* КАРТОЧКА ТОВАРА (ГЛАВНАЯ) */
         .card {
             background-color: var(--card-bg);
-            border-radius: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: 420px;
             transition: transform 0.2s;
         }
         .card:hover { transform: translateY(-5px); }
 
         .image-container {
-            width: 90%;
-            height: 250px;
-            background-color: #444;
-            border-radius: 15px;
-            margin: 15px auto 0 auto;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #fff; /* Белый фон под фото с рваной бумагой */
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             cursor: pointer;
-            flex-shrink: 0;
         }
         .image-container img {
-            width: 100%; height: 100%; object-fit: cover;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Заполняет всё пространство без черных линий */
         }
 
         .info {
-            text-align: center;
-            padding: 15px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
+            text-align: left;
         }
 
         .name-type {
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 1.2;
-            height: 40px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-white);
+            white-space: nowrap;
             overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .item-type {
-            color: #aaaaaa;
-            font-weight: 400;
+            color: var(--text-gray);
+            font-weight: 500;
             font-size: 13px;
-            margin-top: 4px;
         }
 
         .btn {
             font-family: 'Inter', sans-serif !important; 
             text-transform: uppercase; 
             font-weight: 800; 
-            font-size: 14px;
+            font-size: 13px;
             text-decoration: none;
             padding: 12px 0;
-            border-radius: 10px; 
+            border-radius: 8px; 
             display: block;
+            text-align: center;
             cursor: pointer;
             border: none;
             background-color: var(--accent-white);
             color: var(--text-dark);
+            width: 100%;
             transition: opacity 0.2s;
         }
+        .btn:hover { opacity: 0.9; }
 
+        /* КАРТОЧКА ДЕТАЛЕЙ (ВНУТРИ) */
         #detail-view {
             display: none;
             width: 100%;
@@ -152,20 +162,121 @@
             padding: 20px;
             animation: fadeIn 0.3s ease;
         }
-        .detail-card { background-color: #444; border-radius: 20px; padding: 40px; display: flex; gap: 40px; align-items: center; }
-        .detail-slider { flex: 1; background-color: #555; border-radius: 15px; aspect-ratio: 3 / 4; position: relative; overflow: hidden; display: flex; align-items: center; }
-        .detail-slider img { width: 100%; height: 100%; object-fit: cover; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.7); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 2; }
-        .slider-btn-prev { left: 15px; } .slider-btn-next { right: 15px; }
-        .detail-info { flex: 1; text-align: center; }
-        .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
-        .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-        .detail-buy-btn { background-color: white; color: black; text-decoration: none; padding: 12px 0; border-radius: 10px; font-weight: 800; display: block; }
-        .detail-cancel-btn { background: none; border: none; color: #aaa; margin-top: 15px; cursor: pointer; }
+        
+        .detail-card { 
+            background-color: var(--card-bg); 
+            border: 1px solid var(--card-border);
+            border-radius: 20px; 
+            padding: 24px; 
+            display: flex; 
+            gap: 40px; 
+            align-items: center; 
+        }
+
+        .detail-slider { 
+            flex: 1; 
+            background-color: #fff; /* Белый фон для рваной бумаги */
+            border-radius: 12px; 
+            aspect-ratio: 1 / 1; /* Квадратные пропорции */
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+        }
+        .detail-slider img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Полное заполнение без черных полос */
+        }
+        
+        .slider-btn { 
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(30, 30, 30, 0.7); 
+            color: white;
+            border: none; 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            z-index: 2; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .slider-btn:hover { background: rgba(0, 0, 0, 0.9); }
+        .slider-btn-prev { left: 10px; } 
+        .slider-btn-next { right: 10px; }
+        
+        .detail-info { 
+            flex: 1; 
+            text-align: left; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .detail-name { 
+            font-size: 26px; 
+            font-weight: 800; 
+            margin: 0 0 10px 0; 
+        }
+        
+        .detail-desc { 
+            font-size: 14px; 
+            color: var(--text-gray);
+            margin-bottom: 24px; 
+            line-height: 1.5; 
+        }
+        
+        .detail-specs-box {
+            background-color: #2e2e2e;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 30px;
+        }
+
+        .detail-specs { 
+            margin: 0;
+            padding-left: 15px;
+            font-size: 13px; 
+            line-height: 1.6; 
+            color: #dddddd;
+        }
+        
+        .detail-buy-btn { 
+            background-color: var(--accent-white); 
+            color: var(--text-dark); 
+            text-decoration: none; 
+            padding: 14px 0; 
+            border-radius: 8px; 
+            font-weight: 800; 
+            font-size: 14px;
+            display: block; 
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .detail-buy-btn:hover { opacity: 0.9; }
+
+        .detail-cancel-btn { 
+            background: none; 
+            border: none; 
+            color: var(--text-gray); 
+            margin-top: 16px; 
+            cursor: pointer; 
+            font-size: 14px;
+            text-decoration: underline;
+            text-align: center;
+            width: 100%;
+        }
+        .detail-cancel-btn:hover { color: white; }
 
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .detail-card { flex-direction: column; }
+            .detail-card { flex-direction: column; gap: 20px;}
+            .detail-slider { width: 100%; max-width: 400px; margin: 0 auto;}
         }
         @media (max-width: 550px) {
             .product-grid { grid-template-columns: 1fr; }
@@ -201,9 +312,11 @@
             <div class="detail-info">
                 <h2 class="detail-name" id="detail-name">Clothes Name</h2>
                 <div class="detail-desc" id="detail-desc"></div>
-                <div class="detail-specs" id="detail-specs"></div>
-                <a href="https://web.telegram.org/k/#@bluorabot" class="detail-buy-btn" target="_blank">INFO</a>
-                <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
+                <div class="detail-specs-box">
+                    <ul class="detail-specs" id="detail-specs"></ul>
+                </div>
+                <a href="https://web.telegram.org/k/#@bluorabot" class="detail-buy-btn" target="_blank">ORDER VIA TELEGRAM</a>
+                <button class="detail-cancel-btn" onclick="closeDetail()">Back to catalog</button>
             </div>
         </div>
     </div>
@@ -312,3 +425,4 @@
     </script>
 </body>
 </html>
+
