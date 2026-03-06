@@ -86,14 +86,14 @@
             flex-direction: column;
             align-items: center;
             padding-bottom: 20px;
-            /* Убрали жесткий aspect-ratio, чтобы описание помещалось */
-            min-height: 400px; 
             width: 100%;
+            transition: transform 0.2s;
         }
+        .card:hover { transform: translateY(-5px); }
 
         .image-container {
             width: 90%;
-            height: 220px; /* Фиксированная высота для превью */
+            height: 250px;
             background-color: var(--accent-white);
             border-radius: 15px;
             margin-top: 15px;
@@ -105,50 +105,34 @@
         }
         .image-container img {
             width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.3s;
         }
-        .image-container:hover img { transform: scale(1.05); }
 
         .info {
             text-align: center;
             padding: 15px 10px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
             width: 90%;
             box-sizing: border-box;
         }
 
         .name-type {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
             line-height: 1.2;
         }
 
         .item-type {
             color: #aaaaaa;
-        }
-
-        .card-desc {
-            font-size: 12px;
-            color: #cccccc;
-            margin-bottom: 15px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2; /* Ограничиваем описание двумя строками на карточке */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-weight: 400;
         }
 
         /* --- КНОПКИ --- */
         .card-buttons {
             display: flex;
             justify-content: center;
-            gap: 10px;
             width: 100%;
-            margin-top: auto;
         }
         .btn {
             font-family: 'Inter', sans-serif !important; 
@@ -161,11 +145,11 @@
             display: inline-block;
             cursor: pointer;
             border: none;
-            transition: transform 0.2s;
+            transition: opacity 0.2s;
             flex: 1;
             text-align: center;
         }
-        .btn:hover { transform: scale(1.05); }
+        .btn:hover { opacity: 0.9; }
         
         .btn-buy {
             background-color: var(--accent-white);
@@ -220,13 +204,10 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            opacity: 0.7;
-            transition: opacity 0.2s, transform 0.2s;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
         }
-        .slider-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
         .slider-btn-prev { left: 15px; }
         .slider-btn-next { right: 15px; }
 
@@ -249,7 +230,6 @@
             font-weight: 800;
             font-family: 'Inter', sans-serif;
             text-align: center;
-            transition: transform 0.2s;
             width: 100%; 
             max-width: 300px; 
             display: block;
@@ -266,17 +246,12 @@
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
-            .detail-slider { width: 100%; }
-            .detail-info { width: 100%; }
-            .card { min-height: auto; }
-            .image-container { width: 100%; margin-top: 0; border-radius: 20px 20px 0 0; height: 250px; }
-            .info { width: 100%; padding: 15px 20px 20px 20px; }
+            .image-container { height: 200px; }
         }
 
         @media (max-width: 550px) {
             .logo { font-size: 80px; }
             .product-grid { grid-template-columns: 1fr; }
-            .detail-buy-btn { width: 85%; }
         }
 
         @keyframes fadeIn {
@@ -397,7 +372,6 @@
                         </div>
                         <div class="info">
                             <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
-                            <div class="card-desc">${item.description}</div>
                             <div class="card-buttons">
                                 <a href="${telegramLink}" class="btn btn-buy" target="_blank">INFO</a>
                             </div>
@@ -407,9 +381,7 @@
             });
         }
 
-        function filter(cat) {
-            render(cat === 'all' ? products : products.filter(p => p.category === cat));
-        }
+        function filter(cat) { render(cat === 'all' ? products : products.filter(p => p.category === cat)); }
 
         let currentItem = null;
         let currentImgIndex = 0;
