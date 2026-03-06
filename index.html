@@ -27,7 +27,6 @@
             -webkit-text-size-adjust: 100%;
         }
 
-        /* Логотип */
         .logo {
             font-family: 'Pinyon Script', cursive;
             font-size: 140px;
@@ -40,7 +39,6 @@
         }
         .logo:hover { opacity: 0.8; }
 
-        /* --- ОСНОВНАЯ СТРАНИЦА --- */
         #main-view {
             width: 100%;
             display: flex;
@@ -94,7 +92,7 @@
         .image-container {
             width: 90%;
             height: 250px;
-            background-color: var(--accent-white);
+            background-color: #444; /* Фон на случай если картинка не грузится */
             border-radius: 15px;
             margin-top: 15px;
             display: flex;
@@ -106,6 +104,7 @@
         .image-container img {
             width: 100%; height: 100%; object-fit: cover;
         }
+        .placeholder-text { color: #888; font-weight: 700; text-transform: uppercase; }
 
         .info {
             text-align: center;
@@ -128,7 +127,6 @@
             font-weight: 400;
         }
 
-        /* --- КНОПКИ --- */
         .card-buttons {
             display: flex;
             justify-content: center;
@@ -156,7 +154,6 @@
             color: var(--text-dark);
         }
 
-        /* --- ДЕТАЛЬНОЕ ОКНО --- */
         #detail-view {
             display: none;
             width: 100%;
@@ -177,7 +174,7 @@
 
         .detail-slider {
             flex: 1;
-            background-color: var(--accent-white);
+            background-color: #555;
             border-radius: 15px;
             aspect-ratio: 3 / 4;
             display: flex;
@@ -242,7 +239,6 @@
             display: block;
         }
 
-        /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
@@ -302,7 +298,7 @@
                 type: "Replica",
                 category: "hoodies",
                 images: [
-                    "blob:https://web.telegram.org/08739ca3-fdf0-46b3-b713-9976eafd7f6b"
+                    "https://placehold.co/400x533/white/black?text=Acne+Hoodie" 
                 ],
                 description: "Бомбовая худи Акне Студио в черном цвете.",
                 specs: "- цвета: Black"
@@ -313,9 +309,9 @@
                 type: "Replica",
                 category: "shoes",
                 images: [
-                    "blob:https://web.telegram.org/1a12c70f-df91-4106-bc07-70a2e4f17da8"
-                    "blob:https://web.telegram.org/e2fe379a-4ed7-40a7-81b7-329101947b25"
-                    "blob:https://web.telegram.org/c9e411c7-f364-4b6e-a01f-3e877b7855a1"
+                    "https://placehold.co/400x533/white/black?text=Balenciaga+1",
+                    "https://placehold.co/400x533/white/black?text=Balenciaga+2",
+                    "https://placehold.co/400x533/white/black?text=Balenciaga+3"
                 ],
                 description: "Кроссовки Баленсиага в большом количестве расцветок",
                 specs: "- цвета: All\n- размеры: от 35 до 46"
@@ -326,7 +322,7 @@
                 type: "Replica",
                 category: "hoodies",
                 images: [
-                    "blob:https://web.telegram.org/fe49522c-9620-427b-93e9-3076943a4636"
+                    "https://placehold.co/400x533/white/black?text=Stone+Island"
                 ],
                 description: "Свитер Стонайланд с высвесшим эффектом ткани",
                 specs: "- цвета: Dark Gray, Black\n- размеры: M, L, XL, 2XL"
@@ -384,17 +380,19 @@
             if (currentItem.images && currentItem.images.length > 0) {
                 imgEl.src = currentItem.images[currentImgIndex];
                 imgEl.style.display = 'block';
+            } else {
+                imgEl.style.display = 'none';
             }
         }
 
         function nextImg() {
-            if (!currentItem.images.length) return;
+            if (!currentItem || !currentItem.images.length) return;
             currentImgIndex = (currentImgIndex + 1) % currentItem.images.length;
             updateSliderView();
         }
 
         function prevImg() {
-            if (!currentItem.images.length) return;
+            if (!currentItem || !currentItem.images.length) return;
             currentImgIndex = (currentImgIndex - 1 + currentItem.images.length) % currentItem.images.length;
             updateSliderView();
         }
@@ -403,4 +401,3 @@
     </script>
 </body>
 </html>
-
