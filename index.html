@@ -73,22 +73,21 @@
             padding-bottom: 50px;
         }
 
-        /* --- ИСПРАВЛЕННАЯ КАРТОЧКА --- */
         .card {
             background-color: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
             display: flex;
-            flex-direction: column; /* Элементы в колонку */
+            flex-direction: column;
             width: 100%;
-            height: 420px; /* Фиксированная высота всей карточки */
+            height: 420px;
             transition: transform 0.2s;
         }
         .card:hover { transform: translateY(-5px); }
 
         .image-container {
             width: 90%;
-            height: 250px; /* Фиксированная высота картинки */
+            height: 250px;
             background-color: #444;
             border-radius: 15px;
             margin: 15px auto 0 auto;
@@ -97,7 +96,7 @@
             justify-content: center;
             overflow: hidden;
             cursor: pointer;
-            flex-shrink: 0; /* Чтобы картинка не сжималась */
+            flex-shrink: 0;
         }
         .image-container img {
             width: 100%; height: 100%; object-fit: cover;
@@ -108,15 +107,15 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1; /* Занимает всё оставшееся пространство */
-            justify-content: space-between; /* Название сверху, кнопка снизу */
+            flex-grow: 1;
+            justify-content: space-between;
         }
 
         .name-type {
             font-size: 15px;
             font-weight: 700;
             line-height: 1.2;
-            height: 40px; /* Высота под 2-3 строки текста, чтобы кнопка не прыгала */
+            height: 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -128,11 +127,6 @@
             font-weight: 400;
             font-size: 13px;
             margin-top: 4px;
-        }
-
-        .card-buttons {
-            margin-top: auto; /* Прижимает кнопку к низу блока info */
-            width: 100%;
         }
 
         .btn {
@@ -150,9 +144,7 @@
             color: var(--text-dark);
             transition: opacity 0.2s;
         }
-        .btn:hover { opacity: 0.9; }
 
-        /* --- ОСТАЛЬНЫЕ СТИЛИ (ДЕТАЛИ) --- */
         #detail-view {
             display: none;
             width: 100%;
@@ -232,9 +224,11 @@
                 name: "Balenciaga Runner 2",
                 type: "Replica",
                 category: "shoes",
-                images: ["https://dl.springsfern.in/dl/AAAAADCx4UBRYRK3G2sMQQ/7RWs2_3ToHzAmYgjUX-l_w8ywjc2Pr9jBnRTJInAfmI"
-                        "https://dl.springsfern.in/dl/AAAAADCx4UBRYRK3G2sMQw/A-kJHkL3kspbjIg_S5KBNnJiq-8hcddtwlHJMPREoqw"
-                        "https://dl.springsfern.in/dl/AAAAADCx4UBRYRK3G2sMRA/_f1gaei3aN5q8y13OFDsyYM_25u90xzUoozEj5P1Fks"],
+                images: [
+                    "https://dl.springsfern.in/dl/AAAAADCx4UBRYRK3G2sMQQ/7RWs2_3ToHzAmYgjUX-l_w8ywjc2Pr9jBnRTJInAfmI",
+                    "https://dl.springsfern.in/dl/AAAAADCx4UBRYRK3G2sMQw/A-kJHkL3kspbjIg_S5KBNnJiq-8hcddtwlHJMPREoqw",
+                    "https://dl.springsfern.in/dl/AAAAADCx4UBRYRK3G2sMRA/_f1gaei3aN5q8y13OFDsyYM_25u90xzUoozEj5P1Fks"
+                ],
                 description: "Кроссовки Баленсиага в большом количестве расцветок",
                 specs: "- цвета: All\n- размеры: от 35 до 46"
             },
@@ -317,4 +311,3 @@
     </script>
 </body>
 </html>
-
