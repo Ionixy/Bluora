@@ -13,7 +13,6 @@
             --text-white: #ffffff;
             --accent-white: #ffffff;
             --text-dark: #000000;
-            --btn-info-bg: #777777; 
         }
 
         body {
@@ -87,13 +86,14 @@
             flex-direction: column;
             align-items: center;
             padding-bottom: 20px;
-            aspect-ratio: 2 / 3;
+            /* Убрали жесткий aspect-ratio, чтобы описание помещалось */
+            min-height: 400px; 
             width: 100%;
         }
 
         .image-container {
             width: 90%;
-            height: 65%;
+            height: 220px; /* Фиксированная высота для превью */
             background-color: var(--accent-white);
             border-radius: 15px;
             margin-top: 15px;
@@ -115,7 +115,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 30%;
+            flex-grow: 1;
             width: 90%;
             box-sizing: border-box;
         }
@@ -123,7 +123,7 @@
         .name-type {
             font-size: 14px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             line-height: 1.2;
         }
 
@@ -131,7 +131,16 @@
             color: #aaaaaa;
         }
 
-        .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+        .card-desc {
+            font-size: 12px;
+            color: #cccccc;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Ограничиваем описание двумя строками на карточке */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
         /* --- КНОПКИ --- */
         .card-buttons {
@@ -139,6 +148,7 @@
             justify-content: center;
             gap: 10px;
             width: 100%;
+            margin-top: auto;
         }
         .btn {
             font-family: 'Inter', sans-serif !important; 
@@ -146,7 +156,7 @@
             font-weight: 800; 
             font-size: 14px;
             text-decoration: none;
-            padding: 8px 0;
+            padding: 10px 0;
             border-radius: 10px; 
             display: inline-block;
             cursor: pointer;
@@ -204,8 +214,7 @@
             border: none;
             cursor: pointer;
             z-index: 2;
-            width: 40px; 
-            height: 40px;
+            width: 40px; height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -217,14 +226,9 @@
             top: 50%;
             transform: translateY(-50%);
         }
-        .slider-btn:hover { 
-            opacity: 1; 
-            transform: translateY(-50%) scale(1.1); 
-        }
+        .slider-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
         .slider-btn-prev { left: 15px; }
         .slider-btn-next { right: 15px; }
-
-        .slider-placeholder { color: #000; font-weight: 800; z-index: 0; }
 
         .detail-info { 
             flex: 1; 
@@ -264,19 +268,15 @@
             .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
             .detail-slider { width: 100%; }
             .detail-info { width: 100%; }
-            .card { aspect-ratio: auto; padding-bottom: 0; }
-            .image-container { width: 100%; margin-top: 0; border-radius: 20px 20px 0 0; height: auto; aspect-ratio: 4 / 5; }
-            .info { height: auto; width: 100%; padding: 15px 20px 20px 20px; gap: 15px; }
-            .card-buttons { flex-direction: column; gap: 10px; }
-            .btn { width: 100%; box-sizing: border-box; padding: 10px 0; }
+            .card { min-height: auto; }
+            .image-container { width: 100%; margin-top: 0; border-radius: 20px 20px 0 0; height: 250px; }
+            .info { width: 100%; padding: 15px 20px 20px 20px; }
         }
 
         @media (max-width: 550px) {
-            .logo { font-size: 80px; margin: 15px 0 5px 0; }
+            .logo { font-size: 80px; }
             .product-grid { grid-template-columns: 1fr; }
-            .detail-card { padding: 25px 20px; gap: 15px; }
-            .detail-name { font-size: 26px; margin-bottom: 10px; }
-            .detail-buy-btn { width: 85%; font-size: 18px; }
+            .detail-buy-btn { width: 85%; }
         }
 
         @keyframes fadeIn {
@@ -306,8 +306,7 @@
         <div class="detail-card">
             <div class="detail-slider">
                 <button class="slider-btn slider-btn-prev" onclick="prevImg()">&#10094;</button>
-                <span class="slider-placeholder" id="detail-placeholder">image</span>
-                <img id="detail-img" src="" alt="" style="display: none;">
+                <img id="detail-img" src="" alt="">
                 <button class="slider-btn slider-btn-next" onclick="nextImg()">&#10095;</button>
             </div>
             <div class="detail-info">
@@ -331,7 +330,7 @@
                 images: [
                     "https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275"
                 ],
-                description: "Базовая оверсайз футболка.",
+                description: "Базовая оверсайз футболка высшего качества.",
                 specs: "- цвета: черный\n- размеры: S, M, L"
             },
             {
@@ -343,7 +342,7 @@
                 images: [
                     "https://media.discordapp.net/attachments/979762155601657926/1477435494806585567/odezhda_00000.png?ex=69a4c087&is=69a36f07&hm=eb45f929a56e86c0cee8f5306412752425dfe6c7c1138ba9f10d9381b0f1c870&=&format=webp&quality=lossless&width=750&height=960"
                 ],
-                description: "Бомбовая худи Акне Студио",
+                description: "Бомбовая худи Акне Студио в черном цвете.",
                 specs: "- цвета: черный"
             },
             {
@@ -355,7 +354,7 @@
                 images: [
                     "https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"
                 ],
-                description: "Классический лонгслив Black color.",
+                description: "Классический лонгслив Black color из плотного хлопка.",
                 specs: "- 100% хлопок"
             },
             {
@@ -367,7 +366,7 @@
                 images: [
                     "https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot"
                 ],
-                description: "grey Zip-Up hoodie",
+                description: "Zip-Up худи в сером цвете для повседневной носки.",
                 specs: "- цвета: GREY\n- размеры: S, M, L"
             },
             {
@@ -379,7 +378,7 @@
                 images: [
                     "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"
                 ],
-                description: "Black Hat",
+                description: "Теплая шапка Moncler из шерсти и кашемира.",
                 specs: "- цвета: Black\n- размеры: S, M, L"
             }
         ];
@@ -398,7 +397,7 @@
                         </div>
                         <div class="info">
                             <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
-                            <div class="price">${item.price}€</div>
+                            <div class="card-desc">${item.description}</div>
                             <div class="card-buttons">
                                 <a href="${telegramLink}" class="btn btn-buy" target="_blank">INFO</a>
                             </div>
@@ -435,14 +434,9 @@
 
         function updateSliderView() {
             const imgEl = document.getElementById('detail-img');
-            const placeholder = document.getElementById('detail-placeholder');
             if (currentItem.images && currentItem.images.length > 0) {
                 imgEl.src = currentItem.images[currentImgIndex];
                 imgEl.style.display = 'block';
-                placeholder.style.display = 'none';
-            } else {
-                imgEl.style.display = 'none';
-                placeholder.style.display = 'block';
             }
         }
 
