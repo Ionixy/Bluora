@@ -276,32 +276,32 @@
             .detail-slider { width: 100%; }
             .detail-info { width: 100%; }
 
-            /* Карточки товаров: новый дизайн как на 2-й картинке */
+            /* Карточки товаров */
             .card {
-                aspect-ratio: auto; /* Убираем жесткие пропорции высоты */
+                aspect-ratio: auto; 
                 padding-bottom: 0; 
             }
             .image-container {
-                width: 100%; /* Картинка на всю ширину */
-                margin-top: 0; /* Убираем отступ сверху */
-                border-radius: 20px 20px 0 0; /* Скругления только сверху */
+                width: 100%; 
+                margin-top: 0; 
+                border-radius: 20px 20px 0 0; 
                 height: auto;
-                aspect-ratio: 4 / 5; /* Сохраняем красивые пропорции фото */
+                aspect-ratio: 4 / 5; 
             }
             .info {
                 height: auto; 
                 width: 100%;
-                padding: 15px 20px 20px 20px; /* Добавляем отступы вокруг текста и кнопок */
-                gap: 15px; /* Разделяем блоки */
+                padding: 15px 20px 20px 20px; 
+                gap: 15px; 
             }
             .card-buttons {
-                flex-direction: column; /* Кнопки друг под другом */
+                flex-direction: column; 
                 gap: 10px;
             }
             .btn {
                 width: 100%;
                 box-sizing: border-box;
-                padding: 10px 0; /* Кнопки чуть толще для удобного нажатия на телефоне */
+                padding: 10px 0; 
             }
         }
 
@@ -447,7 +447,6 @@
                             <div class="price">${item.price}€</div>
                             <div class="card-buttons">
                                 <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
-                                <button class="btn btn-info" onclick="openDetail(${item.id})">INFO</button>
                             </div>
                         </div>
                     </div>
