@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
+        /* ... Весь ваш предыдущий CSS остается без изменений ... */
         :root {
             --bg-color: #222222;
             --card-bg: #333333;
@@ -117,7 +118,7 @@
             justify-content: space-between;
             height: 30%;
             width: 90%;
-            box-sizing: border-box; /* Важно, чтобы текст не вылазил за края */
+            box-sizing: border-box;
         }
 
         .name-type {
@@ -127,7 +128,6 @@
             line-height: 1.2;
         }
 
-        /* Новый стиль для затемненного текста типа товара */
         .item-type {
             color: #aaaaaa;
         }
@@ -160,10 +160,6 @@
         
         .btn-buy {
             background-color: var(--accent-white);
-            color: var(--text-dark);
-        }
-        .btn-info {
-            background-color: var(--btn-info-bg);
             color: var(--text-dark);
         }
 
@@ -263,66 +259,25 @@
             display: block;
         }
 
-        /* --- АДАПТИВНОСТЬ (ДЛЯ ПЛАНШЕТОВ И ТЕЛЕФОНОВ) --- */
+        /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-            
-            /* Детальное окно */
-            .detail-card { 
-                flex-direction: column; 
-                padding: 30px;
-                gap: 20px;
-            }
+            .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
             .detail-slider { width: 100%; }
             .detail-info { width: 100%; }
-
-            /* Карточки товаров */
-            .card {
-                aspect-ratio: auto; 
-                padding-bottom: 0; 
-            }
-            .image-container {
-                width: 100%; 
-                margin-top: 0; 
-                border-radius: 20px 20px 0 0; 
-                height: auto;
-                aspect-ratio: 4 / 5; 
-            }
-            .info {
-                height: auto; 
-                width: 100%;
-                padding: 15px 20px 20px 20px; 
-                gap: 15px; 
-            }
-            .card-buttons {
-                flex-direction: column; 
-                gap: 10px;
-            }
-            .btn {
-                width: 100%;
-                box-sizing: border-box;
-                padding: 10px 0; 
-            }
+            .card { aspect-ratio: auto; padding-bottom: 0; }
+            .image-container { width: 100%; margin-top: 0; border-radius: 20px 20px 0 0; height: auto; aspect-ratio: 4 / 5; }
+            .info { height: auto; width: 100%; padding: 15px 20px 20px 20px; gap: 15px; }
+            .card-buttons { flex-direction: column; gap: 10px; }
+            .btn { width: 100%; box-sizing: border-box; padding: 10px 0; }
         }
 
         @media (max-width: 550px) {
-            .logo { 
-                font-size: 80px; 
-                margin: 15px 0 5px 0;
-            }
+            .logo { font-size: 80px; margin: 15px 0 5px 0; }
             .product-grid { grid-template-columns: 1fr; }
-            .detail-card {
-                padding: 25px 20px;
-                gap: 15px;
-            }
-            .detail-name {
-                font-size: 26px;
-                margin-bottom: 10px;
-            }
-            .detail-buy-btn {
-                width: 85%;
-                font-size: 18px;
-            }
+            .detail-card { padding: 25px 20px; gap: 15px; }
+            .detail-name { font-size: 26px; margin-bottom: 10px; }
+            .detail-buy-btn { width: 85%; font-size: 18px; }
         }
 
         @keyframes fadeIn {
@@ -367,67 +322,13 @@
     </div>
 
     <script>
+        // Массив товаров остался прежним
         const products = [
-            { 
-                id: 1, 
-                name: "Polo Ralph Lauren", 
-                type: "Replica", 
-                price: "30", 
-                category: "shirts", 
-                images: [
-                    "https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275",
-                ], 
-                description: "Базовая оверсайз футболка.", 
-                specs: "- цвета: черный\n- размеры: S, M, L" 
-            },
-            { 
-                id: 2, 
-                name: "Acne Studio Hoodie", 
-                type: "Replica", 
-                price: "60", 
-                category: "hoodies", 
-                images: [
-                    "https://media.discordapp.net/attachments/979762155601657926/1477435494806585567/odezhda_00000.png?ex=69a4c087&is=69a36f07&hm=eb45f929a56e86c0cee8f5306412752425dfe6c7c1138ba9f10d9381b0f1c870&=&format=webp&quality=lossless&width=750&height=960"
-                ], 
-                description: "Бомбовая худи Акне Студио", 
-                specs: "- цвета: черный" 
-            },
-            { 
-                id: 3, 
-                name: "Long Sleeve Acne", 
-                type: "Replica", 
-                price: "40", 
-                category: "shirts", 
-                images: [
-                    "https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"
-                ], 
-                description: "Классический лонгслив Black color.", 
-                specs: "- 100% хлопок" 
-            },            
-            { 
-                id: 4, 
-                name: "Polo Ralph Lauren", 
-                type: "Replica", 
-                price: "50", 
-                category: "hoodies", 
-                images: [
-                     "https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot",
-                ], 
-                description: "grey Zip-Up hoodie", 
-                specs: "- цвета: GREY\n- размеры: S, M, L" 
-            }, 
-            { 
-                id: 5, 
-                name: "Moncler Hat", 
-                type: "Replica", 
-                price: "20", 
-                category: "hats", 
-                images: [
-                     "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80",
-                ], 
-                description: "Black Hat", 
-                specs: "- цвета: Black\n- размеры: S, M, L" 
-            }
+            { id: 1, name: "Polo Ralph Lauren", type: "Replica", price: "30", category: "shirts", images: ["https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275"], description: "Базовая оверсайз футболка.", specs: "- цвета: черный\n- размеры: S, M, L" },
+            { id: 2, name: "Acne Studio Hoodie", type: "Replica", price: "60", category: "hoodies", images: ["https://media.discordapp.net/attachments/979762155601657926/1477435494806585567/odezhda_00000.png?ex=69a4c087&is=69a36f07&hm=eb45f929a56e86c0cee8f5306412752425dfe6c7c1138ba9f10d9381b0f1c870&=&format=webp&quality=lossless&width=750&height=960"], description: "Бомбовая худи Акне Студио", specs: "- цвета: черный" },
+            { id: 3, name: "Long Sleeve Acne", type: "Replica", price: "40", category: "shirts", images: ["https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"], description: "Классический лонгслив Black color.", specs: "- 100% хлопок" },            
+            { id: 4, name: "Polo Ralph Lauren", type: "Replica", price: "50", category: "hoodies", images: ["https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot"], description: "grey Zip-Up hoodie", specs: "- цвета: GREY\n- размеры: S, M, L" }, 
+            { id: 5, name: "Moncler Hat", type: "Replica", price: "20", category: "hats", images: ["https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"], description: "Black Hat", specs: "- цвета: Black\n- размеры: S, M, L" }
         ];
 
         const telegramLink = "https://web.telegram.org/k/#@bluorabot";
@@ -446,7 +347,7 @@
                             <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
                             <div class="price">${item.price}€</div>
                             <div class="card-buttons">
-                                <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
+                                <a href="${telegramLink}" class="btn btn-buy" target="_blank">INFO</a>
                             </div>
                         </div>
                     </div>
@@ -454,10 +355,9 @@
             });
         }
 
-        function filter(cat) {
-            render(cat === 'all' ? products : products.filter(p => p.category === cat));
-        }
-
+        // Остальные функции без изменений
+        function filter(cat) { render(cat === 'all' ? products : products.filter(p => p.category === cat)); }
+        
         let currentItem = null;
         let currentImgIndex = 0;
 
