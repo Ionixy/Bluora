@@ -8,14 +8,15 @@
     
     <style>
         :root {
-            --bg-color: #2a2a2a; /* Темно-серый фон страницы */
-            --card-bg: #242424; /* Фон карточек в каталоге */
-            --detail-bg: #555555; /* Более светлый серый фон для детальной карточки (как на фото 2) */
-            --specs-bg: #1e1e1e; /* Темный фон для блока характеристик (как на фото 1) */
+            /* Палитра на основе ваших изображений */
+            --bg-color: #0f0f0f;      /* Глубокий черный фон страницы */
+            --card-bg: #1c1c1c;       /* Темно-серый для карточек в сетке */
+            --detail-bg: #1c1c1c;     /* Фон модального окна товара */
+            --specs-bg: #121212;      /* Угольный фон для блока характеристик (как на фото 1) */
             --text-white: #ffffff;
             --accent-white: #ffffff;
             --text-dark: #000000;
-            --text-gray: #a0a0a0;
+            --text-gray: #888888;
         }
 
         body {
@@ -31,11 +32,10 @@
 
         .logo {
             font-family: 'Pinyon Script', cursive;
-            font-size: 100px;
-            margin: 20px 0;
+            font-size: 80px;
+            margin: 30px 0;
             text-align: center;
             font-weight: 400;
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
             cursor: pointer;
         }
 
@@ -46,9 +46,10 @@
             align-items: center;
         }
 
+        /* ОФОРМЛЕНИЕ ВКЛАДОК */
         .categories {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 40px;
@@ -59,129 +60,107 @@
             background-color: var(--accent-white);
             color: var(--text-dark);
             border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
+            padding: 10px 22px;
+            border-radius: 25px;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 14px; 
+            font-size: 13px; 
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: transform 0.2s, opacity 0.2s;
         }
-        .cat-btn:hover { opacity: 0.8; }
+        .cat-btn:hover { opacity: 0.9; transform: scale(1.03); }
 
         .product-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            max-width: 1100px;
+            gap: 25px;
+            max-width: 1200px;
             width: 90%;
             padding-bottom: 50px;
         }
 
-        /* КАРТОЧКА ТОВАРА В КАТАЛОГЕ */
+        /* КАРТОЧКА ТОВАРА */
         .card {
             background-color: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.2s;
+            transition: transform 0.3s ease;
         }
-        .card:hover { transform: translateY(-5px); }
+        .card:hover { transform: translateY(-8px); }
 
         .image-container {
             width: 100%;
             aspect-ratio: 1 / 1;
-            background-color: var(--card-bg);
+            background-color: #f5f5f5; /* Светлый фон для превью, чтобы вещь выделялась */
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             cursor: pointer;
         }
         .image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover; 
-            display: block;
         }
 
         .info {
-            padding: 16px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .name-type {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: 16px;
             flex-grow: 1;
         }
 
         .item-name {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text-white);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
         .item-type {
             color: var(--text-gray);
-            font-weight: 500;
-            font-size: 13px;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
 
         .btn {
-            font-family: 'Inter', sans-serif !important; 
-            text-transform: uppercase; 
-            font-weight: 800; 
-            font-size: 13px;
-            text-decoration: none;
-            padding: 12px 0;
-            border-radius: 8px; 
-            display: block;
-            text-align: center;
-            cursor: pointer;
-            border: none;
             background-color: var(--accent-white);
             color: var(--text-dark);
-            width: 100%;
-            transition: opacity 0.2s;
+            border: none;
+            padding: 12px 0;
+            border-radius: 10px; 
+            font-weight: 800; 
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            text-transform: uppercase;
             margin-top: auto;
         }
-        .btn:hover { opacity: 0.9; }
 
-        /* КАРТОЧКА ДЕТАЛЕЙ (ОФОРМЛЕНИЕ 2) */
+        /* ОФОРМЛЕНИЕ ОТКРЫТОГО ТОВАРА (ПК ВЕРСИЯ) */
         #detail-view {
             display: none;
             width: 100%;
-            max-width: 900px;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
+            max-width: 1000px;
+            padding: 40px 20px;
+            animation: fadeIn 0.4s ease;
         }
         
         .detail-card { 
             background-color: var(--detail-bg); 
-            border-radius: 20px; 
+            border-radius: 24px; 
             padding: 40px; 
             display: flex; 
-            gap: 40px; 
-            align-items: stretch; /* Растягиваем колонки на одну высоту */
+            gap: 50px; 
+            align-items: flex-start;
         }
 
         .detail-slider { 
             flex: 1; 
-            background-color: #ffffff; /* Белый фон как на фото 2 */
-            border-radius: 12px; 
-            aspect-ratio: 3 / 4; /* Вертикальный формат как на фото 2 */
+            background-color: #ffffff; 
+            border-radius: 16px; 
+            aspect-ratio: 1 / 1;
             position: relative; 
             overflow: hidden; 
             display: flex; 
@@ -190,64 +169,57 @@
         .detail-slider img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; 
+            object-fit: contain; 
         }
         
         .slider-btn { 
             position: absolute; 
             top: 50%; 
             transform: translateY(-50%); 
-            background: rgba(30, 30, 30, 0.7); 
+            background: rgba(0, 0, 0, 0.4); 
             color: white;
             border: none; 
-            width: 36px; 
-            height: 36px; 
+            width: 40px; 
+            height: 40px; 
             border-radius: 50%; 
             cursor: pointer; 
-            z-index: 2; 
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 18px;
         }
-        .slider-btn:hover { background: rgba(0, 0, 0, 0.9); }
-        .slider-btn-prev { left: 10px; } 
-        .slider-btn-next { right: 10px; }
-        
+
         .detail-info { 
-            flex: 1.2; 
-            text-align: left; 
+            flex: 1; 
             display: flex;
             flex-direction: column;
         }
         
         .detail-name { 
-            font-size: 36px; 
+            font-size: 32px; 
             font-weight: 800; 
-            margin: 0 0 15px 0; 
-            line-height: 1.1;
+            margin: 0 0 10px 0; 
         }
         
         .detail-desc { 
             font-size: 15px; 
-            color: var(--text-white);
-            margin-bottom: 24px; 
+            color: var(--text-gray);
+            margin-bottom: 25px; 
             line-height: 1.5; 
         }
         
-        /* БЛОК ХАРАКТЕРИСТИК (ОФОРМЛЕНИЕ 1) */
+        /* ТЕМНЫЙ БЛОК ХАРАКТЕРИСТИК (Как на фото 1) */
         .detail-specs-box {
             background-color: var(--specs-bg);
-            border-radius: 10px;
-            padding: 16px 20px;
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 30px;
         }
 
         .detail-specs { 
-            margin: 0;
             font-size: 14px; 
-            line-height: 1.6; 
-            color: #dddddd;
+            line-height: 1.8; 
+            color: #ccc;
             white-space: pre-line;
         }
         
@@ -255,43 +227,36 @@
             background-color: var(--accent-white); 
             color: var(--text-dark); 
             text-decoration: none; 
-            padding: 16px 0; 
-            border-radius: 10px; 
+            padding: 18px 0; 
+            border-radius: 12px; 
             font-weight: 800; 
-            font-size: 18px;
+            font-size: 16px;
             display: block; 
             text-align: center;
             text-transform: uppercase;
-            margin-top: auto; /* Прижимает кнопку к низу, как на фото 2 */
+            letter-spacing: 1px;
         }
-        .detail-buy-btn:hover { opacity: 0.9; }
 
-        .detail-cancel-btn { 
-            background: none; 
-            border: none; 
-            color: #ffffff; 
-            margin-top: 10px; 
-            cursor: pointer; 
-            font-size: 13px;
-            text-decoration: none;
+        .detail-back { 
+            display: block;
             text-align: center;
+            margin-top: 20px;
+            color: var(--text-gray);
+            text-decoration: underline;
+            font-size: 14px;
+            cursor: pointer;
+            background: none;
+            border: none;
             width: 100%;
-            font-weight: 500;
         }
-        .detail-cancel-btn:hover { color: var(--text-gray); }
 
-        @media (max-width: 900px) {
+        @media (max-width: 950px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .detail-card { flex-direction: column; gap: 20px;}
-            .detail-slider { width: 100%; max-width: 450px; margin: 0 auto;}
+            .detail-card { flex-direction: column; padding: 25px; }
+            .detail-slider { width: 100%; }
         }
-        @media (max-width: 550px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; width: 95%; }
-            .logo { font-size: 60px; }
-            .cat-btn { font-size: 12px; padding: 6px 15px; }
-            .detail-name { font-size: 28px; }
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -301,12 +266,10 @@
     <div id="main-view">
         <nav class="categories">
             <button class="cat-btn" onclick="filter('all')">ALL</button>
-            <button class="cat-btn" onclick="filter('shirts')">SHIRTS</button>
-            <button class="cat-btn" onclick="filter('pants')">PANTS</button>
+            <button class="cat-btn" onclick="filter('sweaters')">SWEATERS</button>
             <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
-            <button class="cat-btn" onclick="filter('hats')">HATS</button>
-            <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
-            <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
+            <button class="cat-btn" onclick="filter('pants')">PANTS</button>
+            <button class="cat-btn" onclick="filter('t-shirts')">T-SHIRTS</button>
         </nav>
         <main class="product-grid" id="grid"></main>
     </div>
@@ -314,9 +277,9 @@
     <div id="detail-view">
         <div class="detail-card">
             <div class="detail-slider">
-                <button class="slider-btn slider-btn-prev" onclick="prevImg()">&#10094;</button>
+                <button class="slider-btn" style="left:10px" onclick="prevImg()">&#10094;</button>
                 <img id="detail-img" src="" alt="">
-                <button class="slider-btn slider-btn-next" onclick="nextImg()">&#10095;</button>
+                <button class="slider-btn" style="right:10px" onclick="nextImg()">&#10095;</button>
             </div>
             <div class="detail-info">
                 <h2 class="detail-name" id="detail-name">Clothes Name</h2>
@@ -326,68 +289,68 @@
                     <div class="detail-specs" id="detail-specs"></div>
                 </div>
                 
-                <a href="https://web.telegram.org/k/#@bluorabot" class="detail-buy-btn" target="_blank">BUY</a>
-                <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
+                <a href="https://t.me/your_bot" class="detail-buy-btn" target="_blank">ORDER VIA TELEGRAM</a>
+                <button class="detail-back" onclick="closeDetail()">Back to catalog</button>
             </div>
         </div>
     </div>
 
     <script>
+        // Данные для примера
         const products = [
             {
                 id: 1,
-                name: "Acne Studio Hoodie",
-                type: "Replica",
+                name: "Acne Hoodie",
+                type: "320$ P",
                 category: "hoodies",
                 images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"], 
-                description: "Много места для описания предмета\nМного места для описания предмета\nМного места для описания предмета",
-                specs: "- цвета: Black"
+                description: "Свободное худи из плотного хлопка",
+                specs: "- цвета: Black, Gray\n- размеры: S, M, L"
             },
             {
                 id: 2,
-                name: "Balenciaga Runner 2",
-                type: "Replica",
-                category: "shoes",
-                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
-                description: "Кроссовки Баленсиага в большом количестве расцветок",
-                specs: "- цвета: All\n- размеры: от 35 до 46"
-            },
-            {
-                id: 3,
-                name: "Stone Island Sweater",
-                type: "Replica",
-                category: "hoodies",
+                name: "Stone Island Sweater (Washed)",
+                type: "325$ P",
+                category: "sweaters",
                 images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
                 description: "Свитер Стонайланд с эффектом выцветания ткани",
                 specs: "- цвета: Dark Gray, Black\n- размеры: M, L, XL, 2XL"
             },
+            {
+                id: 3,
+                name: "Balenciaga Runners",
+                type: "250$ P",
+                category: "shoes",
+                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
+                description: "Кроссовки с уникальным дизайном подошвы",
+                specs: "- цвета: OG Colorway\n- размеры: 39-45"
+            },
+            {
+                id: 4,
+                name: "Supreme T-Shirt",
+                type: "250$ P",
+                category: "t-shirts",
+                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
+                description: "Классическая футболка с логотипом",
+                specs: "- цвета: White, Red\n- размеры: M, L, XL"
+            }
         ];
 
         function render(items) {
             const grid = document.getElementById('grid');
-            grid.innerHTML = ''; 
-            items.forEach(item => {
-                const coverImg = (item.images && item.images.length > 0) ? item.images[0] : '';
-                grid.innerHTML += `
-                    <div class="card">
-                        <div class="image-container" onclick="openDetail(${item.id})">
-                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
-                        </div>
-                        <div class="info">
-                            <div class="name-type">
-                                <span class="item-name">${item.name}</span>
-                                <span class="item-type">${item.type}</span>
-                            </div>
-                            <div class="card-buttons">
-                                <button class="btn" onclick="openDetail(${item.id})">INFO</button>
-                            </div>
-                        </div>
+            grid.innerHTML = items.map(item => `
+                <div class="card">
+                    <div class="image-container" onclick="openDetail(${item.id})">
+                        <img src="${item.images[0]}" alt="${item.name}">
                     </div>
-                `;
-            });
+                    <div class="info">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-type">${item.type}</span>
+                        <button class="btn" onclick="openDetail(${item.id})">INFO</button>
+                    </div>
+                </div>
+            `).join('');
         }
-
-        function filter(cat) { render(cat === 'all' ? products : products.filter(p => p.category === cat)); }
 
         let currentItem = null;
         let currentImgIndex = 0;
@@ -411,8 +374,7 @@
         }
 
         function updateSliderView() {
-            const imgEl = document.getElementById('detail-img');
-            imgEl.src = currentItem.images[currentImgIndex];
+            document.getElementById('detail-img').src = currentItem.images[currentImgIndex];
         }
 
         function nextImg() {
@@ -423,6 +385,10 @@
         function prevImg() {
             currentImgIndex = (currentImgIndex - 1 + currentItem.images.length) % currentItem.images.length;
             updateSliderView();
+        }
+
+        function filter(cat) { 
+            render(cat === 'all' ? products : products.filter(p => p.category === cat)); 
         }
 
         render(products);
