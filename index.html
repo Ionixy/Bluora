@@ -3,101 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bluora Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>Bluora Store | Premium Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-color: #222222;
-            --card-bg: #333333;
-            --text-white: #ffffff;
+            --bg-color: #111111;
+            --card-bg: #1a1a1a;
             --accent-white: #ffffff;
-            --text-dark: #000000;
+            --text-gray: #999999;
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-white);
+            background: radial-gradient(circle at top, #1e1e1e 0%, #0a0a0a 100%);
+            color: var(--accent-white);
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            -webkit-text-size-adjust: 100%;
         }
 
-        /* Логотип */
+        /* --- ЛОГОТИП --- */
         .logo {
             font-family: 'Pinyon Script', cursive;
-            font-size: 140px;
-            margin: 20px 0 10px 0;
+            font-size: clamp(80px, 15vw, 140px);
+            margin: 40px 0 20px 0;
             text-align: center;
             font-weight: 400;
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            background: linear-gradient(to bottom, #fff 30%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .logo:hover { opacity: 0.8; }
+        .logo:hover { transform: scale(1.05); }
 
-        /* --- ОСНОВНАЯ СТРАНИЦА --- */
-        #main-view {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        /* --- КАТЕГОРИИ --- */
         .categories {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 50px;
-            padding: 0 15px;
+            margin-bottom: 60px;
+            padding: 0 20px;
         }
 
         .cat-btn {
-            background-color: var(--accent-white);
-            color: var(--text-dark);
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 700;
+            background: transparent;
+            color: var(--text-gray);
+            border: 1px solid var(--glass-border);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 12px; 
+            font-size: 11px;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
         }
-        .cat-btn:hover { background-color: #ddd; }
+        .cat-btn:hover, .cat-btn.active {
+            background-color: var(--accent-white);
+            color: #000;
+            border-color: var(--accent-white);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
 
+        /* --- СЕТКА ТОВАРОВ --- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            max-width: 1100px;
+            gap: 30px;
+            max-width: 1200px;
             width: 90%;
-            padding-bottom: 50px;
+            padding-bottom: 80px;
         }
 
-        /* КАРТОЧКА ТОВАРА */
+        /* --- КАРТОЧКА --- */
         .card {
             background-color: var(--card-bg);
-            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-bottom: 20px;
-            width: 100%;
+            padding-bottom: 25px;
+            transition: all 0.4s ease;
+            animation: slideUp 0.6s ease forwards;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .image-container {
-            width: 90%;
-            aspect-ratio: 4 / 5; 
-            background-color: var(--accent-white);
-            border-radius: 15px;
-            margin-top: 15px;
+            width: 92%;
+            aspect-ratio: 4 / 5;
+            background-color: #fff;
+            border-radius: 18px;
+            margin-top: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -105,144 +114,124 @@
             cursor: pointer;
         }
         .image-container img {
-            width: 95%; 
-            height: 95%; 
-            object-fit: contain; /* Фото видно целиком */
-            transition: transform 0.3s;
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
         }
-        .image-container:hover img { transform: scale(1.05); }
+        .card:hover .image-container img { transform: scale(1.08); }
 
         .info {
             text-align: center;
-            padding: 0 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 90%;
+            padding: 0 15px;
+            width: 100%;
             box-sizing: border-box;
         }
 
-        /* БЛОК С ТЕКСТОМ (Одинаковые отступы) */
         .name-type {
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-top: 15px;    /* Отступ сверху */
-            margin-bottom: 15px; /* Отступ снизу */
-            min-height: 38px;    
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            min-height: 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
         .item-type {
-            color: #aaaaaa;
+            color: var(--text-gray);
+            font-size: 13px;
             font-weight: 400;
+            margin-top: 4px;
         }
 
-        /* КНОПКА-ССЫЛКА В ТГ */
-        .card-buttons {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+        /* Кнопка INFO */
         .btn {
-            font-family: 'Inter', sans-serif !important; 
-            text-transform: uppercase; 
-            font-weight: 800; 
-            font-size: 14px;
-            text-decoration: none;
-            padding: 10px 0;
-            border-radius: 10px; 
-            display: block;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-            text-align: center;
             background-color: var(--accent-white);
-            color: var(--text-dark);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 0;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            display: block;
+            width: 85%;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
         }
-        .btn:hover { transform: scale(1.03); }
+        .btn:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+        }
 
         /* --- ДЕТАЛЬНОЕ ОКНО --- */
         #detail-view {
             display: none;
             width: 100%;
-            max-width: 900px;
-            padding: 20px;
-            box-sizing: border-box;
-            animation: fadeIn 0.3s ease;
+            max-width: 1000px;
+            padding: 40px 20px;
+            animation: fadeIn 0.4s ease;
         }
-
         .detail-card {
-            background-color: #444444;
-            border-radius: 20px;
-            padding: 40px;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px;
             display: flex;
-            gap: 40px;
+            gap: 50px;
             align-items: center;
         }
-
         .detail-slider {
             flex: 1;
-            background-color: var(--accent-white);
-            border-radius: 15px;
-            aspect-ratio: 3 / 4;
+            background: #fff;
+            border-radius: 20px;
+            aspect-ratio: 1/1;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
         }
-
-        .detail-slider img {
-            width: 100%; height: 100%; object-fit: contain;
-            position: absolute; top: 0; left: 0; z-index: 1;
-        }
-
-        .slider-btn {
-            background: rgba(255, 255, 255, 0.7);
-            color: #000; border: none; cursor: pointer; z-index: 2;
-            width: 40px; height: 40px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px; opacity: 0.7; transition: 0.2s;
-            position: absolute; top: 50%; transform: translateY(-50%);
-        }
-        .slider-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
-        .slider-btn-prev { left: 15px; }
-        .slider-btn-next { right: 15px; }
-
-        .detail-info { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
-        .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+        .detail-slider img { width: 90%; height: 90%; object-fit: contain; }
+        
+        .detail-info { flex: 1; text-align: left; }
+        .detail-name { font-size: 38px; font-weight: 800; margin-bottom: 15px; }
+        .detail-desc { color: #ccc; font-size: 16px; margin-bottom: 25px; line-height: 1.6; }
+        .detail-specs { font-family: 'Inter', sans-serif; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 30px; font-size: 14px; color: #aaa; }
 
         .detail-buy-btn {
-            background-color: var(--accent-white);
-            color: var(--text-dark);
-            text-decoration: none; padding: 14px 0; border-radius: 10px;
-            font-weight: 800; text-align: center;
-            width: 100%; max-width: 300px; display: block; text-transform: uppercase;
+            background: #fff; color: #000; text-decoration: none; padding: 18px 0;
+            border-radius: 15px; font-weight: 800; text-align: center; display: block;
+            text-transform: uppercase; transition: 0.3s;
         }
-
         .detail-cancel-btn {
-            background: none; border: none; color: #aaa; margin-top: 15px; 
-            cursor: pointer; font-weight: 700; text-transform: lowercase;
+            background: none; border: none; color: #555; margin-top: 20px; cursor: pointer;
+            font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;
         }
 
-        /* --- АДАПТИВНОСТЬ --- */
-        @media (max-width: 900px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
-        }
-
-        @media (max-width: 550px) {
-            .logo { font-size: 80px; }
-            .product-grid { grid-template-columns: 1fr; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        /* Анимации */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) {
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .detail-card { flex-direction: column; padding: 30px; }
+        }
+        @media (max-width: 480px) {
+            .product-grid { grid-template-columns: 1fr; }
+            .logo { font-size: 70px; }
         }
     </style>
 </head>
@@ -252,13 +241,13 @@
 
     <div id="main-view">
         <nav class="categories">
-            <button class="cat-btn" onclick="filter('all')">ALL</button>
-            <button class="cat-btn" onclick="filter('shirts')">SHIRTS</button>
-            <button class="cat-btn" onclick="filter('pants')">PANTS</button>
-            <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
-            <button class="cat-btn" onclick="filter('hats')">HATS</button>
-            <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
-            <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
+            <button class="cat-btn active" onclick="filter('all', this)">ALL</button>
+            <button class="cat-btn" onclick="filter('shirts', this)">SHIRTS</button>
+            <button class="cat-btn" onclick="filter('pants', this)">PANTS</button>
+            <button class="cat-btn" onclick="filter('hoodies', this)">HOODIES</button>
+            <button class="cat-btn" onclick="filter('hats', this)">HATS</button>
+            <button class="cat-btn" onclick="filter('shoes', this)">SHOES</button>
+            <button class="cat-btn" onclick="filter('accessories', this)">ACCESSORIES</button>
         </nav>
         <main class="product-grid" id="grid"></main>
     </div>
@@ -266,16 +255,14 @@
     <div id="detail-view">
         <div class="detail-card">
             <div class="detail-slider">
-                <button class="slider-btn slider-btn-prev" onclick="prevImg()">&#10094;</button>
-                <img id="detail-img" src="" alt="" style="display: none;">
-                <button class="slider-btn slider-btn-next" onclick="nextImg()">&#10095;</button>
+                <img id="detail-img" src="" alt="">
             </div>
             <div class="detail-info">
                 <h2 class="detail-name" id="detail-name">Clothes Name</h2>
                 <div class="detail-desc" id="detail-desc"></div>
                 <div class="detail-specs" id="detail-specs"></div>
-                <a href="https://t.me/bluoralv" class="detail-buy-btn" target="_blank">INFO</a>
-                <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
+                <a href="https://t.me/bluoralv" class="detail-buy-btn" target="_blank">Contact Telegram</a>
+                <center><button class="detail-cancel-btn" onclick="closeDetail()">← Back to store</button></center>
             </div>
         </div>
     </div>
@@ -285,80 +272,56 @@
             { 
                 id: 1, 
                 name: "Polo Ralph Lauren", 
-                type: "Replica", 
+                type: "Premium Replica", 
                 category: "shirts", 
                 images: ["https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275"], 
-                description: "Базовая оверсайз футболка.", 
-                specs: "- цвета: черный\n- размеры: S, M, L" 
+                description: "Классическая футболка из плотного хлопка с фирменным логотипом.", 
+                specs: "• Состав: 100% Хлопок\n• Крой: Oversize\n• Доступно: S, M, L, XL" 
             },
             { 
                 id: 2, 
                 name: "Acne Studio Hoodie", 
-                type: "Replica", 
+                type: "Premium Replica", 
                 category: "hoodies", 
                 images: ["https://www.acnestudios.com/dw/image/v2/AAXV_PRD/on/demandware.static/-/Sites-acne-product-catalog/default/dwe37b921b/images/CI/CI0136-/2000x/CI0136-900_Z.jpg?sw=1120&sh=1680"], 
-                description: "Бомбовая худи Акне Студио", 
-                specs: "- цвета: черный" 
+                description: "Уютное худи с минималистичным дизайном в стиле Acne Studios.", 
+                specs: "• Материал: Футер 3-х нитка\n• Цвет: Deep Black\n• Плотность: 450г/м²" 
             },
-            { 
-                id: 3, 
-                name: "Diesel Jeans", 
-                type: "Replica", 
-                category: "pants", 
-                images: ["https://images.clothes.com/example-jeans.jpg"], 
-                description: "Классические джинсы Diesel.", 
-                specs: "- Denim\n- Slim Fit" 
-            },            
             { 
                 id: 4, 
                 name: "Zip-Up Hoodie PRL", 
-                type: "Replica", 
+                type: "Premium Replica", 
                 category: "hoodies", 
                 images: ["https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot"], 
-                description: "Grey Zip-Up hoodie", 
-                specs: "- цвета: GREY\n- размеры: S, M, L" 
+                description: "Зип-худи Ralph Lauren на металлической молнии.", 
+                specs: "• Цвет: Heather Grey\n• Логотип: Вышивка" 
             }, 
             { 
                 id: 5, 
-                name: "Moncler Hat", 
-                type: "Replica", 
+                name: "Moncler Beanie", 
+                type: "Premium Replica", 
                 category: "hats", 
                 images: ["https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"], 
-                description: "Black Hat", 
-                specs: "- цвета: Black" 
-            },
-            { 
-                id: 6, 
-                name: "Nike Dunk Low", 
-                type: "Replica", 
-                category: "shoes", 
-                images: ["https://images.shoes.com/example-shoes.jpg"], 
-                description: "Стильные кроссовки на каждый день.", 
-                specs: "- Размеры: 40-45" 
-            },
-            { 
-                id: 7, 
-                name: "Leather Belt", 
-                type: "Replica", 
-                category: "accessories", 
-                images: ["https://images.accs.com/example-belt.jpg"], 
-                description: "Кожаный ремень с металлической пряжкой.", 
-                specs: "- Материал: 100% Кожа" 
+                description: "Теплая шапка Moncler с шерстью мериноса.", 
+                specs: "• Состав: 50% Шерсть, 50% Акрил\n• Патч: Оригинальный нейлон" 
             }
         ];
 
         function render(items) {
             const grid = document.getElementById('grid');
             grid.innerHTML = ''; 
-            items.forEach(item => {
+            items.forEach((item, index) => {
                 const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
                 grid.innerHTML += `
-                    <div class="card">
+                    <div class="card" style="animation-delay: ${index * 0.1}s">
                         <div class="image-container" onclick="openDetail(${item.id})">
-                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span style="color:#000">IMAGE</span>`}
+                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span>NO IMAGE</span>`}
                         </div>
                         <div class="info">
-                            <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
+                            <div class="name-type">
+                                ${item.name}
+                                <span class="item-type">${item.type}</span>
+                            </div>
                             <div class="card-buttons">
                                 <a href="https://t.me/bluoralv" class="btn" target="_blank">INFO</a>
                             </div>
@@ -368,21 +331,20 @@
             });
         }
 
-        function filter(cat) {
+        function filter(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             render(cat === 'all' ? products : products.filter(p => p.category === cat));
         }
 
-        let currentItem = null;
-        let currentImgIndex = 0;
-
         function openDetail(id) {
-            currentItem = products.find(p => p.id === id);
+            const currentItem = products.find(p => p.id === id);
             if (!currentItem) return;
             document.getElementById('detail-name').innerText = currentItem.name;
             document.getElementById('detail-desc').innerText = currentItem.description;
             document.getElementById('detail-specs').innerText = currentItem.specs;
-            currentImgIndex = 0;
-            updateSliderView();
+            document.getElementById('detail-img').src = currentItem.images[0];
+            
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('detail-view').style.display = 'block';
             window.scrollTo(0, 0);
@@ -391,26 +353,6 @@
         function closeDetail() {
             document.getElementById('detail-view').style.display = 'none';
             document.getElementById('main-view').style.display = 'flex';
-        }
-
-        function updateSliderView() {
-            const imgEl = document.getElementById('detail-img');
-            if (currentItem.images && currentItem.images.length > 0) {
-                imgEl.src = currentItem.images[currentImgIndex];
-                imgEl.style.display = 'block';
-            }
-        }
-
-        function nextImg() {
-            if (!currentItem.images.length) return;
-            currentImgIndex = (currentImgIndex + 1) % currentItem.images.length;
-            updateSliderView();
-        }
-
-        function prevImg() {
-            if (!currentItem.images.length) return;
-            currentImgIndex = (currentImgIndex - 1 + currentItem.images.length) % currentItem.images.length;
-            updateSliderView();
         }
 
         render(products);
