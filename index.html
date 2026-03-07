@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -215,7 +215,7 @@
 
         .detail-info { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
-        .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+        .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; white-space: pre-line; }
 
         .detail-buy-btn {
             background-color: var(--accent-white);
@@ -234,6 +234,7 @@
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
+            .detail-slider { width: 100%; max-width: 400px; }
         }
 
         @media (max-width: 550px) {
@@ -290,7 +291,7 @@
                 category: "hoodies", 
                 images: ["https://dl.springsfern.in/dl/AAAAADCx4UBRYIk7G2sOJQ/pCeKyE_sqFqjPV7-X7UyB_fBI4wRkDIfvKX8WfJHiYM"], 
                 description: "Бомбовая худи Акне Студио", 
-                specs: "- Colors: Black\n -Sizes: XS-XL" 
+                specs: "- Colors: Black\n- Sizes: XS-XL" 
             },
             { 
                 id: 2, 
@@ -301,7 +302,7 @@
                         "https://dl.springsfern.in/dl/AAAAADCx4UBRYIk7G2sOJw/ad2_2nVbVn8fYNc1ULYLNIiII4JOUPTcZCI691zFUIs",
                         "https://dl.springsfern.in/dl/AAAAADCx4UBRYIk7G2sOJg/ckNKzpjwumj1whLXl-fKV4WkHtr85_8oeVF2sgILptw"], 
                 description: "Balenciaga Runners Track2 shoes", 
-                specs: "-Colors: All\n -Sizes: 36-46" 
+                specs: "- Colors: All\n- Sizes: 36-46" 
             },            
             { 
                 id: 3, 
@@ -424,7 +425,6 @@
 
             items.forEach(item => {
                 const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
-                // ИСПРАВЛЕНИЕ: Убрана запятая после ${item.name}
                 grid.innerHTML += `
                     <div class="card">
                         <div class="image-container" onclick="openDetail(${item.id})">
@@ -490,9 +490,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
