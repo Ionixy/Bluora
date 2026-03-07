@@ -27,6 +27,7 @@
             -webkit-text-size-adjust: 100%;
         }
 
+        /* Логотип */
         .logo {
             font-family: 'Pinyon Script', cursive;
             font-size: 140px;
@@ -39,6 +40,7 @@
         }
         .logo:hover { opacity: 0.8; }
 
+        /* --- ОСНОВНАЯ СТРАНИЦА --- */
         #main-view {
             width: 100%;
             display: flex;
@@ -63,9 +65,11 @@
             border-radius: 20px;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 14px; 
+            font-size: 12px; 
             cursor: pointer;
+            transition: background 0.2s;
         }
+        .cat-btn:hover { background-color: #ddd; }
 
         .product-grid {
             display: grid;
@@ -76,7 +80,7 @@
             padding-bottom: 50px;
         }
 
-        /* КАРТОЧКА */
+        /* КАРТОЧКА ТОВАРА */
         .card {
             background-color: var(--card-bg);
             border-radius: 20px;
@@ -100,12 +104,10 @@
             overflow: hidden;
             cursor: pointer;
         }
-        
         .image-container img {
-            width: 100%; 
-            height: 100%; 
-            /* ТЕПЕРЬ ФОТО ВИДНО ПОЛНОСТЬЮ */
-            object-fit: contain; 
+            width: 95%; 
+            height: 95%; 
+            object-fit: contain; /* Фото видно целиком */
             transition: transform 0.3s;
         }
         .image-container:hover img { transform: scale(1.05); }
@@ -120,13 +122,13 @@
             box-sizing: border-box;
         }
 
+        /* БЛОК С ТЕКСТОМ (Одинаковые отступы) */
         .name-type {
             font-size: 15px;
             font-weight: 700;
             line-height: 1.2;
-            /* ТЕ САМЫЕ ОТСТУПЫ (Красные линии) */
-            margin-top: 15px;    
-            margin-bottom: 15px; 
+            margin-top: 15px;    /* Отступ сверху */
+            margin-bottom: 15px; /* Отступ снизу */
             min-height: 38px;    
             display: flex;
             flex-direction: column;
@@ -138,24 +140,22 @@
             font-weight: 400;
         }
 
+        /* КНОПКА-ССЫЛКА В ТГ */
         .card-buttons {
             display: flex;
             justify-content: center;
             width: 100%;
         }
-
-        /* КНОПКА INFO (ССЫЛКА В ТГ) */
         .btn {
             font-family: 'Inter', sans-serif !important; 
             text-transform: uppercase; 
             font-weight: 800; 
             font-size: 14px;
-            text-decoration: none; /* Убираем подчеркивание ссылки */
+            text-decoration: none;
             padding: 10px 0;
             border-radius: 10px; 
             display: block;
             cursor: pointer;
-            border: none;
             transition: transform 0.2s;
             width: 100%;
             text-align: center;
@@ -173,6 +173,7 @@
             box-sizing: border-box;
             animation: fadeIn 0.3s ease;
         }
+
         .detail-card {
             background-color: #444444;
             border-radius: 20px;
@@ -181,6 +182,7 @@
             gap: 40px;
             align-items: center;
         }
+
         .detail-slider {
             flex: 1;
             background-color: var(--accent-white);
@@ -192,10 +194,12 @@
             position: relative;
             overflow: hidden;
         }
+
         .detail-slider img {
             width: 100%; height: 100%; object-fit: contain;
             position: absolute; top: 0; left: 0; z-index: 1;
         }
+
         .slider-btn {
             background: rgba(255, 255, 255, 0.7);
             color: #000; border: none; cursor: pointer; z-index: 2;
@@ -204,29 +208,38 @@
             font-size: 18px; opacity: 0.7; transition: 0.2s;
             position: absolute; top: 50%; transform: translateY(-50%);
         }
+        .slider-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
         .slider-btn-prev { left: 15px; }
         .slider-btn-next { right: 15px; }
+
         .detail-info { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
         .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+
         .detail-buy-btn {
             background-color: var(--accent-white);
             color: var(--text-dark);
             text-decoration: none; padding: 14px 0; border-radius: 10px;
-            font-weight: 800; text-align: center; width: 100%; max-width: 300px; display: block; text-transform: uppercase;
-        }
-        .detail-cancel-btn {
-            background: none; border: none; color: #aaa; margin-top: 15px; cursor: pointer; font-weight: 700; text-transform: lowercase;
+            font-weight: 800; text-align: center;
+            width: 100%; max-width: 300px; display: block; text-transform: uppercase;
         }
 
+        .detail-cancel-btn {
+            background: none; border: none; color: #aaa; margin-top: 15px; 
+            cursor: pointer; font-weight: 700; text-transform: lowercase;
+        }
+
+        /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
         }
+
         @media (max-width: 550px) {
             .logo { font-size: 80px; }
             .product-grid { grid-template-columns: 1fr; }
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -241,8 +254,11 @@
         <nav class="categories">
             <button class="cat-btn" onclick="filter('all')">ALL</button>
             <button class="cat-btn" onclick="filter('shirts')">SHIRTS</button>
+            <button class="cat-btn" onclick="filter('pants')">PANTS</button>
             <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
             <button class="cat-btn" onclick="filter('hats')">HATS</button>
+            <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
+            <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
         </nav>
         <main class="product-grid" id="grid"></main>
     </div>
@@ -286,12 +302,12 @@
             },
             { 
                 id: 3, 
-                name: "Long Sleeve Acne", 
+                name: "Diesel Jeans", 
                 type: "Replica", 
-                category: "shirts", 
-                images: ["https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"], 
-                description: "Классический лонгслив Black color.", 
-                specs: "- 100% хлопок" 
+                category: "pants", 
+                images: ["https://images.clothes.com/example-jeans.jpg"], 
+                description: "Классические джинсы Diesel.", 
+                specs: "- Denim\n- Slim Fit" 
             },            
             { 
                 id: 4, 
@@ -310,6 +326,24 @@
                 images: ["https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"], 
                 description: "Black Hat", 
                 specs: "- цвета: Black" 
+            },
+            { 
+                id: 6, 
+                name: "Nike Dunk Low", 
+                type: "Replica", 
+                category: "shoes", 
+                images: ["https://images.shoes.com/example-shoes.jpg"], 
+                description: "Стильные кроссовки на каждый день.", 
+                specs: "- Размеры: 40-45" 
+            },
+            { 
+                id: 7, 
+                name: "Leather Belt", 
+                type: "Replica", 
+                category: "accessories", 
+                images: ["https://images.accs.com/example-belt.jpg"], 
+                description: "Кожаный ремень с металлической пряжкой.", 
+                specs: "- Материал: 100% Кожа" 
             }
         ];
 
@@ -321,7 +355,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <div class="image-container" onclick="openDetail(${item.id})">
-                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span>image</span>`}
+                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span style="color:#000">IMAGE</span>`}
                         </div>
                         <div class="info">
                             <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
