@@ -9,8 +9,9 @@
     <style>
         :root {
             --bg-color: #1a1a1a;
-            --card-bg: #242424;
-            --card-border: #333333;
+            --card-bg: #333333; /* Чуть светлее фон карточки как на фото 2 */
+            --detail-bg: #444444; /* Фон подложки */
+            --specs-bg: #242424; /* Темный блок характеристик из фото 1 */
             --text-white: #ffffff;
             --accent-white: #ffffff;
             --text-dark: #000000;
@@ -26,15 +27,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
         .logo {
             font-family: 'Pinyon Script', cursive;
-            font-size: 100px;
-            margin: 20px 0 20px 0;
+            font-size: 80px;
+            margin: 40px 0;
             text-align: center;
             font-weight: 400;
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
             cursor: pointer;
         }
 
@@ -62,11 +63,9 @@
             border-radius: 20px;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 14px; 
+            font-size: 12px; 
             cursor: pointer;
-            transition: opacity 0.2s;
         }
-        .cat-btn:hover { opacity: 0.8; }
 
         .product-grid {
             display: grid;
@@ -77,114 +76,83 @@
             padding-bottom: 50px;
         }
 
-        /* КАРТОЧКА ТОВАРА */
+        /* КАРТОЧКА В КАТАЛОГЕ */
         .card {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--card-border);
+            border-radius: 20px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            width: 100%;
-            height: 100%; /* Чтобы все карточки в ряду были одной высоты */
             transition: transform 0.2s;
         }
         .card:hover { transform: translateY(-5px); }
 
         .image-container {
             width: 100%;
-            aspect-ratio: 1 / 1;
-            background-color: var(--card-bg); /* ИСПРАВЛЕНО: убрали белый фон */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            aspect-ratio: 1 / 1.2;
+            background-color: #eee;
             cursor: pointer;
         }
         .image-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; 
-            display: block; /* Убирает возможные микро-отступы снизу */
+            object-fit: cover;
         }
 
         .info {
-            padding: 16px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1; /* Заставляет блок инфо занимать всё свободное место */
-        }
-
-        .name-type {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: 16px;
-            flex-grow: 1; /* Выталкивает кнопку вниз */
+            flex-grow: 1;
         }
 
         .item-name {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 800;
-            color: var(--text-white);
-            /* Убрали жесткий nowrap, чтобы длинные названия не ломали верстку, 
-               но если нужно в одну строку — оставляем ellipsis */
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-bottom: 4px;
         }
 
         .item-type {
             color: var(--text-gray);
-            font-weight: 500;
-            font-size: 13px;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
 
         .btn {
-            font-family: 'Inter', sans-serif !important; 
-            text-transform: uppercase; 
-            font-weight: 800; 
-            font-size: 13px;
-            text-decoration: none;
-            padding: 12px 0;
-            border-radius: 8px; 
-            display: block;
-            text-align: center;
-            cursor: pointer;
-            border: none;
             background-color: var(--accent-white);
             color: var(--text-dark);
-            width: 100%;
-            transition: opacity 0.2s;
-            margin-top: auto; /* Прижимает кнопку к низу */
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: auto;
         }
-        .btn:hover { opacity: 0.9; }
 
-        /* КАРТОЧКА ДЕТАЛЕЙ */
+        /* КАРТОЧКА ДЕТАЛЕЙ (ОФОРМЛЕНИЕ 2 + ОПИСАНИЕ 1) */
         #detail-view {
             display: none;
             width: 100%;
-            max-width: 900px;
-            padding: 20px;
+            max-width: 1000px;
+            padding: 40px 20px;
             animation: fadeIn 0.3s ease;
         }
         
         .detail-card { 
             background-color: var(--card-bg); 
-            border: 1px solid var(--card-border);
-            border-radius: 20px; 
-            padding: 24px; 
+            border-radius: 30px; 
+            padding: 40px; 
             display: flex; 
-            gap: 40px; 
+            gap: 50px; 
             align-items: flex-start; 
         }
 
         .detail-slider { 
-            flex: 1; 
-            background-color: var(--card-bg); /* ИСПРАВЛЕНО: убрали белый фон */
-            border-radius: 12px; 
-            aspect-ratio: 1 / 1; 
+            flex: 1.1; 
+            background-color: white; 
+            border-radius: 20px; 
+            aspect-ratio: 1 / 1.2; 
             position: relative; 
             overflow: hidden; 
             display: flex; 
@@ -200,97 +168,84 @@
             position: absolute; 
             top: 50%; 
             transform: translateY(-50%); 
-            background: rgba(30, 30, 30, 0.7); 
+            background: rgba(0,0,0,0.5); 
             color: white;
             border: none; 
-            width: 36px; 
-            height: 36px; 
+            width: 40px; height: 40px; 
             border-radius: 50%; 
             cursor: pointer; 
             z-index: 2; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
         }
-        .slider-btn:hover { background: rgba(0, 0, 0, 0.9); }
-        .slider-btn-prev { left: 10px; } 
-        .slider-btn-next { right: 10px; }
+        .slider-btn-prev { left: 15px; } 
+        .slider-btn-next { right: 15px; }
         
         .detail-info { 
             flex: 1; 
-            text-align: left; 
             display: flex;
             flex-direction: column;
         }
         
         .detail-name { 
-            font-size: 26px; 
+            font-size: 42px; 
             font-weight: 800; 
-            margin: 0 0 10px 0; 
+            margin: 0 0 10px 0;
+            line-height: 1.1;
         }
         
         .detail-desc { 
-            font-size: 14px; 
-            color: var(--text-gray);
-            margin-bottom: 24px; 
-            line-height: 1.5; 
+            font-size: 16px; 
+            color: var(--text-white);
+            margin-bottom: 25px; 
+            line-height: 1.4; 
         }
         
+        /* Блок характеристик как на ФОТО 1 */
         .detail-specs-box {
-            background-color: #2e2e2e;
-            border-radius: 10px;
-            padding: 16px 20px;
-            margin-bottom: 30px;
+            background-color: var(--specs-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 40px;
         }
 
         .detail-specs { 
             margin: 0;
-            padding-left: 15px;
-            font-size: 13px; 
-            line-height: 1.6; 
-            color: #dddddd;
-            white-space: pre-line; /* Чтобы \n работал как перенос строки */
+            font-size: 15px; 
+            line-height: 1.8; 
+            color: var(--text-white);
+            white-space: pre-line;
         }
         
         .detail-buy-btn { 
             background-color: var(--accent-white); 
             color: var(--text-dark); 
             text-decoration: none; 
-            padding: 14px 0; 
-            border-radius: 8px; 
+            padding: 18px 0; 
+            border-radius: 12px; 
             font-weight: 800; 
-            font-size: 14px;
+            font-size: 18px;
             display: block; 
             text-align: center;
             text-transform: uppercase;
         }
-        .detail-buy-btn:hover { opacity: 0.9; }
 
         .detail-cancel-btn { 
             background: none; 
             border: none; 
             color: var(--text-gray); 
-            margin-top: 16px; 
+            margin-top: 20px; 
             cursor: pointer; 
-            font-size: 14px;
+            font-size: 15px;
             text-decoration: underline;
             text-align: center;
-            width: 100%;
         }
-        .detail-cancel-btn:hover { color: white; }
 
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .detail-card { flex-direction: column; gap: 20px;}
-            .detail-slider { width: 100%; max-width: 450px; margin: 0 auto;}
+            .detail-card { flex-direction: column; padding: 20px; gap: 30px;}
+            .detail-name { font-size: 32px; }
         }
-        @media (max-width: 550px) {
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; width: 95%; }
-            .logo { font-size: 60px; }
-            .cat-btn { font-size: 12px; padding: 6px 15px; }
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -303,9 +258,7 @@
             <button class="cat-btn" onclick="filter('shirts')">SHIRTS</button>
             <button class="cat-btn" onclick="filter('pants')">PANTS</button>
             <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
-            <button class="cat-btn" onclick="filter('hats')">HATS</button>
             <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
-            <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
         </nav>
         <main class="product-grid" id="grid"></main>
     </div>
@@ -319,12 +272,14 @@
             </div>
             <div class="detail-info">
                 <h2 class="detail-name" id="detail-name">Clothes Name</h2>
-                <div class="detail-desc" id="detail-desc"></div>
+                <div class="detail-desc" id="detail-desc">Много места для описания предмета...</div>
+                
                 <div class="detail-specs-box">
                     <div class="detail-specs" id="detail-specs"></div>
                 </div>
-                <a href="https://web.telegram.org/k/#@bluorabot" class="detail-buy-btn" target="_blank">ORDER VIA TELEGRAM</a>
-                <button class="detail-cancel-btn" onclick="closeDetail()">Back to catalog</button>
+
+                <a href="https://web.telegram.org/k/#@bluorabot" class="detail-buy-btn" target="_blank">BUY</a>
+                <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
             </div>
         </div>
     </div>
@@ -333,60 +288,39 @@
         const products = [
             {
                 id: 1,
-                name: "Acne Studio Hoodie",
-                type: "Replica",
-                category: "hoodies",
-                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"], // Замени на свои ссылки
-                description: "Бомбовая худи Акне Студио в черном цвете.",
-                specs: "- цвета: Black"
-            },
-            {
-                id: 2,
-                name: "Balenciaga Runner 2",
-                type: "Replica",
-                category: "shoes",
-                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
-                description: "Кроссовки Баленсиага в большом количестве расцветок",
-                specs: "- цвета: All\n- размеры: от 35 до 46"
-            },
-            {
-                id: 3,
                 name: "Stone Island Sweater (Washed)",
                 type: "Replica",
                 category: "hoodies",
                 images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
-                description: "Свитер Стонайланд с эффектом выцветания ткани",
-                specs: "- цвета: Dark Gray, Black\n- размеры: M, L, XL, 2XL"
+                description: "Свитер Стонайланд с эффектом выцветания ткани. Мягкий хлопок, премиальное качество.",
+                specs: "- цвета: Dark Gray, Black\n- размеры: M, L, XL, 2XL\n- И т.д."
             },
+            {
+                id: 2,
+                name: "Acne Studio Hoodie",
+                type: "Replica",
+                category: "hoodies",
+                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
+                description: "Классический оверсайз крой от Acne. Плотный материал.",
+                specs: "- цвета: Black, Pink\n- размеры: S, M, L"
+            }
         ];
-
-        const telegramLink = "https://web.telegram.org/k/#@bluorabot";
 
         function render(items) {
             const grid = document.getElementById('grid');
-            grid.innerHTML = ''; 
-            items.forEach(item => {
-                const coverImg = (item.images && item.images.length > 0) ? item.images[0] : '';
-                grid.innerHTML += `
-                    <div class="card">
-                        <div class="image-container" onclick="openDetail(${item.id})">
-                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
-                        </div>
-                        <div class="info">
-                            <div class="name-type">
-                                <span class="item-name">${item.name}</span>
-                                <span class="item-type">${item.type}</span>
-                            </div>
-                            <div class="card-buttons">
-                                <button class="btn" onclick="openDetail(${item.id})">INFO</button>
-                            </div>
-                        </div>
+            grid.innerHTML = items.map(item => `
+                <div class="card">
+                    <div class="image-container" onclick="openDetail(${item.id})">
+                        <img src="${item.images[0]}" alt="${item.name}">
                     </div>
-                `;
-            });
+                    <div class="info">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-type">${item.type}</span>
+                        <button class="btn" onclick="openDetail(${item.id})">INFO</button>
+                    </div>
+                </div>
+            `).join('');
         }
-
-        function filter(cat) { render(cat === 'all' ? products : products.filter(p => p.category === cat)); }
 
         let currentItem = null;
         let currentImgIndex = 0;
@@ -410,8 +344,7 @@
         }
 
         function updateSliderView() {
-            const imgEl = document.getElementById('detail-img');
-            imgEl.src = currentItem.images[currentImgIndex];
+            document.getElementById('detail-img').src = currentItem.images[currentImgIndex];
         }
 
         function nextImg() {
@@ -422,6 +355,10 @@
         function prevImg() {
             currentImgIndex = (currentImgIndex - 1 + currentItem.images.length) % currentItem.images.length;
             updateSliderView();
+        }
+
+        function filter(cat) { 
+            render(cat === 'all' ? products : products.filter(p => p.category === cat)); 
         }
 
         render(products);
