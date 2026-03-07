@@ -122,7 +122,6 @@
             box-sizing: border-box;
         }
 
-        /* БЛОК С ТЕКСТОМ */
         .name-type {
             font-size: 15px;
             font-weight: 700;
@@ -140,7 +139,6 @@
             font-weight: 400;
         }
 
-        /* КНОПКА-ССЫЛКА В ТГ */
         .card-buttons {
             display: flex;
             justify-content: center;
@@ -423,7 +421,10 @@
             const grid = document.getElementById('grid');
             grid.innerHTML = '';
 
-            items.forEach(item => {
+            // СОРТИРОВКА: Вещи с большим ID будут сверху
+            const sortedItems = [...items].sort((a, b) => b.id - a.id);
+
+            sortedItems.forEach(item => {
                 const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
                 grid.innerHTML += `
                     <div class="card">
@@ -490,4 +491,3 @@
     </script>
 </body>
 </html>
-
