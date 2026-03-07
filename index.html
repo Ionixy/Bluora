@@ -93,7 +93,7 @@
 
         .image-container {
             width: 90%;
-            height: 65%;
+            height: 70%; /* Увеличил, так как нет цены */
             background-color: var(--accent-white);
             border-radius: 15px;
             margin-top: 15px;
@@ -114,31 +114,27 @@
             padding: 15px 10px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            height: 30%;
+            justify-content: center;
+            height: 25%;
             width: 90%;
-            box-sizing: border-box; /* Важно, чтобы текст не вылазил за края */
+            box-sizing: border-box;
         }
 
         .name-type {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
             line-height: 1.2;
         }
 
-        /* Новый стиль для затемненного текста типа товара */
         .item-type {
             color: #aaaaaa;
         }
-
-        .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
 
         /* --- КНОПКИ --- */
         .card-buttons {
             display: flex;
             justify-content: center;
-            gap: 10px;
             width: 100%;
         }
         .btn {
@@ -147,7 +143,7 @@
             font-weight: 800; 
             font-size: 14px;
             text-decoration: none;
-            padding: 8px 0;
+            padding: 10px 0;
             border-radius: 10px; 
             display: inline-block;
             cursor: pointer;
@@ -155,17 +151,10 @@
             transition: transform 0.2s;
             flex: 1;
             text-align: center;
-        }
-        .btn:hover { transform: scale(1.05); }
-
-        .btn-buy {
             background-color: var(--accent-white);
             color: var(--text-dark);
         }
-        .btn-info {
-            background-color: var(--btn-info-bg);
-            color: var(--text-dark);
-        }
+        .btn:hover { transform: scale(1.05); }
 
         /* --- ДЕТАЛЬНОЕ ОКНО --- */
         #detail-view {
@@ -229,8 +218,6 @@
         .slider-btn-prev { left: 15px; }
         .slider-btn-next { right: 15px; }
 
-        .slider-placeholder { color: #000; font-weight: 800; z-index: 0; }
-
         .detail-info { 
             flex: 1; 
             display: flex; 
@@ -245,7 +232,7 @@
             background-color: var(--accent-white);
             color: var(--text-dark);
             text-decoration: none;
-            padding: 12px 0;
+            padding: 14px 0;
             border-radius: 10px;
             font-weight: 800;
             font-family: 'Inter', sans-serif;
@@ -254,6 +241,7 @@
             width: 100%; 
             max-width: 300px; 
             display: block;
+            text-transform: uppercase;
         }
 
         .detail-cancel-btn {
@@ -263,66 +251,19 @@
             display: block;
         }
 
-        /* --- АДАПТИВНОСТЬ (ДЛЯ ПЛАНШЕТОВ И ТЕЛЕФОНОВ) --- */
+        /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-
-            /* Детальное окно */
-            .detail-card { 
-                flex-direction: column; 
-                padding: 30px;
-                gap: 20px;
-            }
-            .detail-slider { width: 100%; }
-            .detail-info { width: 100%; }
-
-            /* Карточки товаров: новый дизайн как на 2-й картинке */
-            .card {
-                aspect-ratio: auto; /* Убираем жесткие пропорции высоты */
-                padding-bottom: 0; 
-            }
-            .image-container {
-                width: 100%; /* Картинка на всю ширину */
-                margin-top: 0; /* Убираем отступ сверху */
-                border-radius: 20px 20px 0 0; /* Скругления только сверху */
-                height: auto;
-                aspect-ratio: 4 / 5; /* Сохраняем красивые пропорции фото */
-            }
-            .info {
-                height: auto; 
-                width: 100%;
-                padding: 15px 20px 20px 20px; /* Добавляем отступы вокруг текста и кнопок */
-                gap: 15px; /* Разделяем блоки */
-            }
-            .card-buttons {
-                flex-direction: column; /* Кнопки друг под другом */
-                gap: 10px;
-            }
-            .btn {
-                width: 100%;
-                box-sizing: border-box;
-                padding: 10px 0; /* Кнопки чуть толще для удобного нажатия на телефоне */
-            }
+            .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
+            .card { aspect-ratio: auto; }
+            .image-container { width: 100%; margin-top: 0; border-radius: 20px 20px 0 0; aspect-ratio: 4 / 5; }
+            .info { width: 100%; padding: 15px 20px; }
         }
 
         @media (max-width: 550px) {
-            .logo { 
-                font-size: 80px; 
-                margin: 15px 0 5px 0;
-            }
+            .logo { font-size: 80px; }
             .product-grid { grid-template-columns: 1fr; }
-            .detail-card {
-                padding: 25px 20px;
-                gap: 15px;
-            }
-            .detail-name {
-                font-size: 26px;
-                margin-bottom: 10px;
-            }
-            .detail-buy-btn {
-                width: 85%;
-                font-size: 18px;
-            }
+            .detail-buy-btn { width: 85%; font-size: 18px; }
         }
 
         @keyframes fadeIn {
@@ -360,7 +301,7 @@
                 <h2 class="detail-name" id="detail-name">Clothes Name</h2>
                 <div class="detail-desc" id="detail-desc"></div>
                 <div class="detail-specs" id="detail-specs"></div>
-                <a href="https://t.me/bluoralv" class="detail-buy-btn" target="_blank">BUY</a>
+                <a href="https://t.me/bluoralv" class="detail-buy-btn" target="_blank">INFO</a>
                 <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
             </div>
         </div>
@@ -372,11 +313,8 @@
                 id: 1, 
                 name: "Polo Ralph Lauren", 
                 type: "Replica", 
-                price: "30", 
                 category: "shirts", 
-                images: [
-                    "https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275",
-                ], 
+                images: ["https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275"], 
                 description: "Базовая оверсайз футболка.", 
                 specs: "- цвета: черный\n- размеры: S, M, L" 
             },
@@ -384,12 +322,8 @@
                 id: 2, 
                 name: "Acne Studio Hoodie", 
                 type: "Replica", 
-                price: "60", 
                 category: "hoodies", 
-                images: [
-                    "https://www.acnestudios.com/dw/image/v2/AAXV_PRD/on/demandware.static/-/Sites-acne-product-catalog/default/dwe37b921b/images/CI/CI0136-/2000x/CI0136-900_Z.jpg?sw=1120&sh=1680",
-                    "https://media.discordapp.net/attachments/979762155601657926/1477435494806585567/odezhda_00000.png?ex=69a4c087&is=69a36f07&hm=eb45f929a56e86c0cee8f5306412752425dfe6c7c1138ba9f10d9381b0f1c870&=&format=webp&quality=lossless&width=750&height=960"
-                ], 
+                images: ["https://www.acnestudios.com/dw/image/v2/AAXV_PRD/on/demandware.static/-/Sites-acne-product-catalog/default/dwe37b921b/images/CI/CI0136-/2000x/CI0136-900_Z.jpg?sw=1120&sh=1680"], 
                 description: "Бомбовая худи Акне Студио", 
                 specs: "- цвета: черный" 
             },
@@ -397,11 +331,8 @@
                 id: 3, 
                 name: "Long Sleeve Acne", 
                 type: "Replica", 
-                price: "40", 
                 category: "shirts", 
-                images: [
-                    "https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"
-                ], 
+                images: ["https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"], 
                 description: "Классический лонгслив Black color.", 
                 specs: "- 100% хлопок" 
             },            
@@ -409,11 +340,8 @@
                 id: 4, 
                 name: "Polo Ralph Lauren", 
                 type: "Replica", 
-                price: "50", 
                 category: "hoodies", 
-                images: [
-                     "https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot",
-                ], 
+                images: ["https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot"], 
                 description: "grey Zip-Up hoodie", 
                 specs: "- цвета: GREY\n- размеры: S, M, L" 
             }, 
@@ -421,17 +349,12 @@
                 id: 5, 
                 name: "Moncler Hat", 
                 type: "Replica", 
-                price: "20", 
                 category: "hats", 
-                images: [
-                     "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80",
-                ], 
+                images: ["https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"], 
                 description: "Black Hat", 
                 specs: "- цвета: Black\n- размеры: S, M, L" 
             }
         ];
-
-        const telegramLink = "https://web.telegram.org/k/#@bluorabot";
 
         function render(items) {
             const grid = document.getElementById('grid');
@@ -445,10 +368,8 @@
                         </div>
                         <div class="info">
                             <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
-                            <div class="price">${item.price}€</div>
                             <div class="card-buttons">
-                                <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
-                                <button class="btn btn-info" onclick="openDetail(${item.id})">INFO</button>
+                                <button class="btn" onclick="openDetail(${item.id})">INFO</button>
                             </div>
                         </div>
                     </div>
@@ -510,4 +431,3 @@
     </script>
 </body>
 </html>
-
