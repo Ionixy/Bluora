@@ -27,7 +27,6 @@
             -webkit-text-size-adjust: 100%;
         }
 
-        /* Логотип */
         .logo {
             font-family: 'Pinyon Script', cursive;
             font-size: 140px;
@@ -40,7 +39,6 @@
         }
         .logo:hover { opacity: 0.8; }
 
-        /* --- ОСНОВНАЯ СТРАНИЦА --- */
         #main-view {
             width: 100%;
             display: flex;
@@ -78,7 +76,7 @@
             padding-bottom: 50px;
         }
 
-        /* КАРТОЧКА ТОВАРА */
+        /* КАРТОЧКА */
         .card {
             background-color: var(--card-bg);
             border-radius: 20px;
@@ -92,20 +90,22 @@
 
         .image-container {
             width: 90%;
-            aspect-ratio: 1 / 1; /* Делаем все картинки одинаковыми квадратами */
+            aspect-ratio: 4 / 5; 
             background-color: var(--accent-white);
             border-radius: 15px;
-            margin-top: 15px; /* Отступ картинки от верхнего края карточки */
+            margin-top: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             cursor: pointer;
         }
+        
         .image-container img {
             width: 100%; 
             height: 100%; 
-            object-fit: cover;
+            /* ТЕПЕРЬ ФОТО ВИДНО ПОЛНОСТЬЮ */
+            object-fit: contain; 
             transition: transform 0.3s;
         }
         .image-container:hover img { transform: scale(1.05); }
@@ -120,17 +120,13 @@
             box-sizing: border-box;
         }
 
-        /* БЛОК С ТЕКСТОМ (Тут исправлены отступы) */
         .name-type {
             font-size: 15px;
             font-weight: 700;
             line-height: 1.2;
-            
-            /* ФИКСИРОВАННЫЕ ОТСТУПЫ */
-            margin-top: 15px;    /* Расстояние от картинки до текста */
-            margin-bottom: 15px; /* Расстояние от текста до кнопки */
-            
-            /* Выравнивание высоты, чтобы кнопки были на одном уровне */
+            /* ТЕ САМЫЕ ОТСТУПЫ (Красные линии) */
+            margin-top: 15px;    
+            margin-bottom: 15px; 
             min-height: 38px;    
             display: flex;
             flex-direction: column;
@@ -142,21 +138,22 @@
             font-weight: 400;
         }
 
-        /* КНОПКА INFO */
         .card-buttons {
             display: flex;
             justify-content: center;
             width: 100%;
         }
+
+        /* КНОПКА INFO (ССЫЛКА В ТГ) */
         .btn {
             font-family: 'Inter', sans-serif !important; 
             text-transform: uppercase; 
             font-weight: 800; 
             font-size: 14px;
-            text-decoration: none;
+            text-decoration: none; /* Убираем подчеркивание ссылки */
             padding: 10px 0;
             border-radius: 10px; 
-            display: inline-block;
+            display: block;
             cursor: pointer;
             border: none;
             transition: transform 0.2s;
@@ -176,7 +173,6 @@
             box-sizing: border-box;
             animation: fadeIn 0.3s ease;
         }
-
         .detail-card {
             background-color: #444444;
             border-radius: 20px;
@@ -185,7 +181,6 @@
             gap: 40px;
             align-items: center;
         }
-
         .detail-slider {
             flex: 1;
             background-color: var(--accent-white);
@@ -197,12 +192,10 @@
             position: relative;
             overflow: hidden;
         }
-
         .detail-slider img {
-            width: 100%; height: 100%; object-fit: cover;
+            width: 100%; height: 100%; object-fit: contain;
             position: absolute; top: 0; left: 0; z-index: 1;
         }
-
         .slider-btn {
             background: rgba(255, 255, 255, 0.7);
             color: #000; border: none; cursor: pointer; z-index: 2;
@@ -211,38 +204,29 @@
             font-size: 18px; opacity: 0.7; transition: 0.2s;
             position: absolute; top: 50%; transform: translateY(-50%);
         }
-        .slider-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
         .slider-btn-prev { left: 15px; }
         .slider-btn-next { right: 15px; }
-
         .detail-info { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
         .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-
         .detail-buy-btn {
             background-color: var(--accent-white);
             color: var(--text-dark);
             text-decoration: none; padding: 14px 0; border-radius: 10px;
-            font-weight: 800; text-align: center; transition: 0.2s;
-            width: 100%; max-width: 300px; display: block; text-transform: uppercase;
+            font-weight: 800; text-align: center; width: 100%; max-width: 300px; display: block; text-transform: uppercase;
         }
-
         .detail-cancel-btn {
-            background: none; border: none; color: #aaa; margin-top: 15px; 
-            cursor: pointer; font-weight: 700; text-transform: lowercase;
+            background: none; border: none; color: #aaa; margin-top: 15px; cursor: pointer; font-weight: 700; text-transform: lowercase;
         }
 
-        /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
         }
-
         @media (max-width: 550px) {
             .logo { font-size: 80px; }
             .product-grid { grid-template-columns: 1fr; }
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -267,7 +251,6 @@
         <div class="detail-card">
             <div class="detail-slider">
                 <button class="slider-btn slider-btn-prev" onclick="prevImg()">&#10094;</button>
-                <span id="detail-placeholder">image</span>
                 <img id="detail-img" src="" alt="" style="display: none;">
                 <button class="slider-btn slider-btn-next" onclick="nextImg()">&#10095;</button>
             </div>
@@ -338,12 +321,12 @@
                 grid.innerHTML += `
                     <div class="card">
                         <div class="image-container" onclick="openDetail(${item.id})">
-                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
+                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span>image</span>`}
                         </div>
                         <div class="info">
                             <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
                             <div class="card-buttons">
-                                <button class="btn" onclick="openDetail(${item.id})">INFO</button>
+                                <a href="https://t.me/bluoralv" class="btn" target="_blank">INFO</a>
                             </div>
                         </div>
                     </div>
@@ -378,14 +361,9 @@
 
         function updateSliderView() {
             const imgEl = document.getElementById('detail-img');
-            const placeholder = document.getElementById('detail-placeholder');
             if (currentItem.images && currentItem.images.length > 0) {
                 imgEl.src = currentItem.images[currentImgIndex];
                 imgEl.style.display = 'block';
-                placeholder.style.display = 'none';
-            } else {
-                imgEl.style.display = 'none';
-                placeholder.style.display = 'block';
             }
         }
 
