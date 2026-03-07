@@ -105,9 +105,10 @@
             cursor: pointer;
         }
         .image-container img {
-            width: 95%; 
-            height: 95%; 
-            object-fit: contain; 
+            /* ИСПРАВЛЕНО: Убраны отступы и включен cover */
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Фото полностью закрывает область, обрезаясь по краям при необходимости */
             transition: transform 0.3s;
         }
         .image-container:hover img { transform: scale(1.05); }
@@ -196,7 +197,9 @@
         }
 
         .detail-slider img {
-            width: 100%; height: 100%; object-fit: contain;
+            width: 100%; height: 100%;
+            /* ИСПРАВЛЕНО: В детальном виде тоже cover */
+            object-fit: cover; 
             position: absolute; top: 0; left: 0; z-index: 1;
         }
 
@@ -320,7 +323,6 @@
 
             items.forEach(item => {
                 const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
-                // ИСПРАВЛЕНИЕ: Тег <img> теперь корректно обернут в кавычки `` внутри шаблонной строки
                 grid.innerHTML += `
                     <div class="card">
                         <div class="image-container" onclick="openDetail(${item.id})">
@@ -382,10 +384,7 @@
             updateSliderView();
         }
 
-        // Запуск рендера при загрузке страницы
         render(products);
     </script>
 </body>
 </html>
-
-
