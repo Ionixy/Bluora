@@ -105,10 +105,9 @@
             cursor: pointer;
         }
         .image-container img {
-            /* ИСПРАВЛЕНО: Убраны отступы и включен cover */
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* Фото полностью закрывает область, обрезаясь по краям при необходимости */
+            object-fit: cover; 
             transition: transform 0.3s;
         }
         .image-container:hover img { transform: scale(1.05); }
@@ -198,7 +197,6 @@
 
         .detail-slider img {
             width: 100%; height: 100%;
-            /* ИСПРАВЛЕНО: В детальном виде тоже cover */
             object-fit: cover; 
             position: absolute; top: 0; left: 0; z-index: 1;
         }
@@ -323,13 +321,14 @@
 
             items.forEach(item => {
                 const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
+                // ИСПРАВЛЕНИЕ: Убрана запятая после ${item.name}
                 grid.innerHTML += `
                     <div class="card">
                         <div class="image-container" onclick="openDetail(${item.id})">
                             ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span style="color:#000">IMAGE</span>`}
                         </div>
                         <div class="info">
-                            <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
+                            <div class="name-type">${item.name}<br><span class="item-type">${item.type}</span></div>
                             <div class="card-buttons">
                                 <a href="https://t.me/bluoralv" class="btn" target="_blank">INFO</a>
                             </div>
