@@ -13,7 +13,6 @@
             --text-white: #ffffff;
             --accent-white: #ffffff;
             --text-dark: #000000;
-            --btn-info-bg: #777777; 
         }
 
         body {
@@ -79,6 +78,7 @@
             padding-bottom: 50px;
         }
 
+        /* КАРТОЧКА ТОВАРА */
         .card {
             background-color: var(--card-bg);
             border-radius: 20px;
@@ -87,16 +87,15 @@
             flex-direction: column;
             align-items: center;
             padding-bottom: 20px;
-            aspect-ratio: 2 / 3;
             width: 100%;
         }
 
         .image-container {
             width: 90%;
-            height: 70%; /* Увеличил, так как нет цены */
+            aspect-ratio: 1 / 1; /* Делаем все картинки одинаковыми квадратами */
             background-color: var(--accent-white);
             border-radius: 15px;
-            margin-top: 15px;
+            margin-top: 15px; /* Отступ картинки от верхнего края карточки */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -104,34 +103,46 @@
             cursor: pointer;
         }
         .image-container img {
-            width: 100%; height: 100%; object-fit: cover;
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
             transition: transform 0.3s;
         }
         .image-container:hover img { transform: scale(1.05); }
 
         .info {
             text-align: center;
-            padding: 15px 10px;
+            padding: 0 10px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            height: 25%;
+            align-items: center;
             width: 90%;
             box-sizing: border-box;
         }
 
+        /* БЛОК С ТЕКСТОМ (Тут исправлены отступы) */
         .name-type {
             font-size: 15px;
             font-weight: 700;
-            margin-bottom: 15px;
             line-height: 1.2;
+            
+            /* ФИКСИРОВАННЫЕ ОТСТУПЫ */
+            margin-top: 15px;    /* Расстояние от картинки до текста */
+            margin-bottom: 15px; /* Расстояние от текста до кнопки */
+            
+            /* Выравнивание высоты, чтобы кнопки были на одном уровне */
+            min-height: 38px;    
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .item-type {
             color: #aaaaaa;
+            font-weight: 400;
         }
 
-        /* --- КНОПКИ --- */
+        /* КНОПКА INFO */
         .card-buttons {
             display: flex;
             justify-content: center;
@@ -149,12 +160,12 @@
             cursor: pointer;
             border: none;
             transition: transform 0.2s;
-            flex: 1;
+            width: 100%;
             text-align: center;
             background-color: var(--accent-white);
             color: var(--text-dark);
         }
-        .btn:hover { transform: scale(1.05); }
+        .btn:hover { transform: scale(1.03); }
 
         /* --- ДЕТАЛЬНОЕ ОКНО --- */
         #detail-view {
@@ -194,76 +205,42 @@
 
         .slider-btn {
             background: rgba(255, 255, 255, 0.7);
-            color: #000;
-            border: none;
-            cursor: pointer;
-            z-index: 2;
-            width: 40px; 
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            opacity: 0.7;
-            transition: opacity 0.2s, transform 0.2s;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            color: #000; border: none; cursor: pointer; z-index: 2;
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; opacity: 0.7; transition: 0.2s;
+            position: absolute; top: 50%; transform: translateY(-50%);
         }
-        .slider-btn:hover { 
-            opacity: 1; 
-            transform: translateY(-50%) scale(1.1); 
-        }
+        .slider-btn:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
         .slider-btn-prev { left: 15px; }
         .slider-btn-next { right: 15px; }
 
-        .detail-info { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-align: center;
-        }
+        .detail-info { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
         .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
 
         .detail-buy-btn {
             background-color: var(--accent-white);
             color: var(--text-dark);
-            text-decoration: none;
-            padding: 14px 0;
-            border-radius: 10px;
-            font-weight: 800;
-            font-family: 'Inter', sans-serif;
-            text-align: center;
-            transition: transform 0.2s;
-            width: 100%; 
-            max-width: 300px; 
-            display: block;
-            text-transform: uppercase;
+            text-decoration: none; padding: 14px 0; border-radius: 10px;
+            font-weight: 800; text-align: center; transition: 0.2s;
+            width: 100%; max-width: 300px; display: block; text-transform: uppercase;
         }
 
         .detail-cancel-btn {
-            background: none; border: none; color: #aaa;
-            margin-top: 15px; cursor: pointer; font-weight: 700;
-            text-transform: lowercase;
-            display: block;
+            background: none; border: none; color: #aaa; margin-top: 15px; 
+            cursor: pointer; font-weight: 700; text-transform: lowercase;
         }
 
         /* --- АДАПТИВНОСТЬ --- */
         @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-card { flex-direction: column; padding: 30px; gap: 20px; }
-            .card { aspect-ratio: auto; }
-            .image-container { width: 100%; margin-top: 0; border-radius: 20px 20px 0 0; aspect-ratio: 4 / 5; }
-            .info { width: 100%; padding: 15px 20px; }
         }
 
         @media (max-width: 550px) {
             .logo { font-size: 80px; }
             .product-grid { grid-template-columns: 1fr; }
-            .detail-buy-btn { width: 85%; font-size: 18px; }
         }
 
         @keyframes fadeIn {
@@ -280,11 +257,8 @@
         <nav class="categories">
             <button class="cat-btn" onclick="filter('all')">ALL</button>
             <button class="cat-btn" onclick="filter('shirts')">SHIRTS</button>
-            <button class="cat-btn" onclick="filter('pants')">PANTS</button>
             <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
             <button class="cat-btn" onclick="filter('hats')">HATS</button>
-            <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
-            <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
         </nav>
         <main class="product-grid" id="grid"></main>
     </div>
@@ -293,7 +267,7 @@
         <div class="detail-card">
             <div class="detail-slider">
                 <button class="slider-btn slider-btn-prev" onclick="prevImg()">&#10094;</button>
-                <span class="slider-placeholder" id="detail-placeholder">image</span>
+                <span id="detail-placeholder">image</span>
                 <img id="detail-img" src="" alt="" style="display: none;">
                 <button class="slider-btn slider-btn-next" onclick="nextImg()">&#10095;</button>
             </div>
@@ -338,11 +312,11 @@
             },            
             { 
                 id: 4, 
-                name: "Polo Ralph Lauren", 
+                name: "Zip-Up Hoodie PRL", 
                 type: "Replica", 
                 category: "hoodies", 
                 images: ["https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot"], 
-                description: "grey Zip-Up hoodie", 
+                description: "Grey Zip-Up hoodie", 
                 specs: "- цвета: GREY\n- размеры: S, M, L" 
             }, 
             { 
@@ -352,7 +326,7 @@
                 category: "hats", 
                 images: ["https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80"], 
                 description: "Black Hat", 
-                specs: "- цвета: Black\n- размеры: S, M, L" 
+                specs: "- цвета: Black" 
             }
         ];
 
