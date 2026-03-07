@@ -5,18 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bluora Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
-            /* Палитра на основе ваших изображений */
-            --bg-color: #0f0f0f;      /* Глубокий черный фон страницы */
-            --card-bg: #1c1c1c;       /* Темно-серый для карточек в сетке */
-            --detail-bg: #1c1c1c;     /* Фон модального окна товара */
-            --specs-bg: #121212;      /* Угольный фон для блока характеристик (как на фото 1) */
+            --bg-color: #222222;
+            --card-bg: #333333;
             --text-white: #ffffff;
             --accent-white: #ffffff;
             --text-dark: #000000;
-            --text-gray: #888888;
+            --btn-info-bg: #777777; 
         }
 
         body {
@@ -28,17 +25,23 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            -webkit-text-size-adjust: 100%;
         }
 
+        /* Логотип */
         .logo {
             font-family: 'Pinyon Script', cursive;
-            font-size: 80px;
-            margin: 30px 0;
+            font-size: 140px;
+            margin: 20px 0 10px 0;
             text-align: center;
             font-weight: 400;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
             cursor: pointer;
+            transition: opacity 0.2s;
         }
+        .logo:hover { opacity: 0.8; }
 
+        /* --- ОСНОВНАЯ СТРАНИЦА --- */
         #main-view {
             width: 100%;
             display: flex;
@@ -46,13 +49,12 @@
             align-items: center;
         }
 
-        /* ОФОРМЛЕНИЕ ВКЛАДОК */
         .categories {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             padding: 0 15px;
         }
 
@@ -60,203 +62,273 @@
             background-color: var(--accent-white);
             color: var(--text-dark);
             border: none;
-            padding: 10px 22px;
-            border-radius: 25px;
+            padding: 8px 20px;
+            border-radius: 20px;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 13px; 
+            font-size: 14px; 
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
         }
-        .cat-btn:hover { opacity: 0.9; transform: scale(1.03); }
 
         .product-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 25px;
-            max-width: 1200px;
+            max-width: 1100px;
             width: 90%;
             padding-bottom: 50px;
         }
 
-        /* КАРТОЧКА ТОВАРА */
         .card {
             background-color: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease;
+            align-items: center;
+            padding-bottom: 20px;
+            aspect-ratio: 2 / 3;
+            width: 100%;
         }
-        .card:hover { transform: translateY(-8px); }
 
         .image-container {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background-color: #f5f5f5; /* Светлый фон для превью, чтобы вещь выделялась */
+            width: 90%;
+            height: 65%;
+            background-color: var(--accent-white);
+            border-radius: 15px;
+            margin-top: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
             cursor: pointer;
         }
         .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.3s;
         }
+        .image-container:hover img { transform: scale(1.05); }
 
         .info {
-            padding: 20px;
+            text-align: center;
+            padding: 15px 10px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
+            justify-content: space-between;
+            height: 30%;
+            width: 90%;
+            box-sizing: border-box; /* Важно, чтобы текст не вылазил за края */
         }
 
-        .item-name {
-            font-size: 17px;
+        .name-type {
+            font-size: 14px;
             font-weight: 700;
             margin-bottom: 5px;
+            line-height: 1.2;
         }
 
+        /* Новый стиль для затемненного текста типа товара */
         .item-type {
-            color: var(--text-gray);
-            font-size: 14px;
-            margin-bottom: 20px;
+            color: #aaaaaa;
         }
 
+        .price { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+
+        /* --- КНОПКИ --- */
+        .card-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
         .btn {
-            background-color: var(--accent-white);
-            color: var(--text-dark);
-            border: none;
-            padding: 12px 0;
-            border-radius: 10px; 
+            font-family: 'Inter', sans-serif !important; 
+            text-transform: uppercase; 
             font-weight: 800; 
             font-size: 14px;
-            text-align: center;
+            text-decoration: none;
+            padding: 8px 0;
+            border-radius: 10px; 
+            display: inline-block;
             cursor: pointer;
-            text-transform: uppercase;
-            margin-top: auto;
+            border: none;
+            transition: transform 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        .btn-buy {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
+        }
+        .btn-info {
+            background-color: var(--btn-info-bg);
+            color: var(--text-dark);
         }
 
-        /* ОФОРМЛЕНИЕ ОТКРЫТОГО ТОВАРА (ПК ВЕРСИЯ) */
+        /* --- ДЕТАЛЬНОЕ ОКНО --- */
         #detail-view {
             display: none;
             width: 100%;
-            max-width: 1000px;
-            padding: 40px 20px;
-            animation: fadeIn 0.4s ease;
-        }
-        
-        .detail-card { 
-            background-color: var(--detail-bg); 
-            border-radius: 24px; 
-            padding: 40px; 
-            display: flex; 
-            gap: 50px; 
-            align-items: flex-start;
+            max-width: 900px;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease;
         }
 
-        .detail-slider { 
-            flex: 1; 
-            background-color: #ffffff; 
-            border-radius: 16px; 
-            aspect-ratio: 1 / 1;
-            position: relative; 
-            overflow: hidden; 
-            display: flex; 
-            align-items: center; 
+        .detail-card {
+            background-color: #444444;
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
         }
-        .detail-slider img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: contain; 
+
+        .detail-slider {
+            flex: 1;
+            background-color: var(--accent-white);
+            border-radius: 15px;
+            aspect-ratio: 3 / 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .slider-btn { 
-            position: absolute; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            background: rgba(0, 0, 0, 0.4); 
-            color: white;
-            border: none; 
+
+        .detail-slider img {
+            width: 100%; height: 100%; object-fit: cover;
+            position: absolute; top: 0; left: 0; z-index: 1;
+        }
+
+        .slider-btn {
+            background: rgba(255, 255, 255, 0.7);
+            color: #000;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
             width: 40px; 
-            height: 40px; 
-            border-radius: 50%; 
-            cursor: pointer; 
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
+            opacity: 0.7;
+            transition: opacity 0.2s, transform 0.2s;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
         }
+        .slider-btn:hover { 
+            opacity: 1; 
+            transform: translateY(-50%) scale(1.1); 
+        }
+        .slider-btn-prev { left: 15px; }
+        .slider-btn-next { right: 15px; }
+
+        .slider-placeholder { color: #000; font-weight: 800; z-index: 0; }
 
         .detail-info { 
             flex: 1; 
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .detail-name { 
-            font-size: 32px; 
-            font-weight: 800; 
-            margin: 0 0 10px 0; 
-        }
-        
-        .detail-desc { 
-            font-size: 15px; 
-            color: var(--text-gray);
-            margin-bottom: 25px; 
-            line-height: 1.5; 
-        }
-        
-        /* ТЕМНЫЙ БЛОК ХАРАКТЕРИСТИК (Как на фото 1) */
-        .detail-specs-box {
-            background-color: var(--specs-bg);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .detail-specs { 
-            font-size: 14px; 
-            line-height: 1.8; 
-            color: #ccc;
-            white-space: pre-line;
-        }
-        
-        .detail-buy-btn { 
-            background-color: var(--accent-white); 
-            color: var(--text-dark); 
-            text-decoration: none; 
-            padding: 18px 0; 
-            border-radius: 12px; 
-            font-weight: 800; 
-            font-size: 16px;
-            display: block; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
+        .detail-name { font-size: 32px; font-weight: 800; margin-bottom: 20px; }
+        .detail-desc, .detail-specs { font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
 
-        .detail-back { 
+        .detail-buy-btn {
+            background-color: var(--accent-white);
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-weight: 800;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            transition: transform 0.2s;
+            width: 100%; 
+            max-width: 300px; 
             display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: var(--text-gray);
-            text-decoration: underline;
-            font-size: 14px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            width: 100%;
         }
 
-        @media (max-width: 950px) {
+        .detail-cancel-btn {
+            background: none; border: none; color: #aaa;
+            margin-top: 15px; cursor: pointer; font-weight: 700;
+            text-transform: lowercase;
+            display: block;
+        }
+
+        /* --- АДАПТИВНОСТЬ (ДЛЯ ПЛАНШЕТОВ И ТЕЛЕФОНОВ) --- */
+        @media (max-width: 900px) {
             .product-grid { grid-template-columns: repeat(2, 1fr); }
-            .detail-card { flex-direction: column; padding: 25px; }
+
+            /* Детальное окно */
+            .detail-card { 
+                flex-direction: column; 
+                padding: 30px;
+                gap: 20px;
+            }
             .detail-slider { width: 100%; }
+            .detail-info { width: 100%; }
+
+            /* Карточки товаров: новый дизайн как на 2-й картинке */
+            .card {
+                aspect-ratio: auto; /* Убираем жесткие пропорции высоты */
+                padding-bottom: 0; 
+            }
+            .image-container {
+                width: 100%; /* Картинка на всю ширину */
+                margin-top: 0; /* Убираем отступ сверху */
+                border-radius: 20px 20px 0 0; /* Скругления только сверху */
+                height: auto;
+                aspect-ratio: 4 / 5; /* Сохраняем красивые пропорции фото */
+            }
+            .info {
+                height: auto; 
+                width: 100%;
+                padding: 15px 20px 20px 20px; /* Добавляем отступы вокруг текста и кнопок */
+                gap: 15px; /* Разделяем блоки */
+            }
+            .card-buttons {
+                flex-direction: column; /* Кнопки друг под другом */
+                gap: 10px;
+            }
+            .btn {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px 0; /* Кнопки чуть толще для удобного нажатия на телефоне */
+            }
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media (max-width: 550px) {
+            .logo { 
+                font-size: 80px; 
+                margin: 15px 0 5px 0;
+            }
+            .product-grid { grid-template-columns: 1fr; }
+            .detail-card {
+                padding: 25px 20px;
+                gap: 15px;
+            }
+            .detail-name {
+                font-size: 26px;
+                margin-bottom: 10px;
+            }
+            .detail-buy-btn {
+                width: 85%;
+                font-size: 18px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -266,10 +338,12 @@
     <div id="main-view">
         <nav class="categories">
             <button class="cat-btn" onclick="filter('all')">ALL</button>
-            <button class="cat-btn" onclick="filter('sweaters')">SWEATERS</button>
-            <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
+            <button class="cat-btn" onclick="filter('shirts')">SHIRTS</button>
             <button class="cat-btn" onclick="filter('pants')">PANTS</button>
-            <button class="cat-btn" onclick="filter('t-shirts')">T-SHIRTS</button>
+            <button class="cat-btn" onclick="filter('hoodies')">HOODIES</button>
+            <button class="cat-btn" onclick="filter('hats')">HATS</button>
+            <button class="cat-btn" onclick="filter('shoes')">SHOES</button>
+            <button class="cat-btn" onclick="filter('accessories')">ACCESSORIES</button>
         </nav>
         <main class="product-grid" id="grid"></main>
     </div>
@@ -277,79 +351,113 @@
     <div id="detail-view">
         <div class="detail-card">
             <div class="detail-slider">
-                <button class="slider-btn" style="left:10px" onclick="prevImg()">&#10094;</button>
-                <img id="detail-img" src="" alt="">
-                <button class="slider-btn" style="right:10px" onclick="nextImg()">&#10095;</button>
+                <button class="slider-btn slider-btn-prev" onclick="prevImg()">&#10094;</button>
+                <span class="slider-placeholder" id="detail-placeholder">image</span>
+                <img id="detail-img" src="" alt="" style="display: none;">
+                <button class="slider-btn slider-btn-next" onclick="nextImg()">&#10095;</button>
             </div>
             <div class="detail-info">
                 <h2 class="detail-name" id="detail-name">Clothes Name</h2>
                 <div class="detail-desc" id="detail-desc"></div>
-                
-                <div class="detail-specs-box">
-                    <div class="detail-specs" id="detail-specs"></div>
-                </div>
-                
-                <a href="https://t.me/your_bot" class="detail-buy-btn" target="_blank">ORDER VIA TELEGRAM</a>
-                <button class="detail-back" onclick="closeDetail()">Back to catalog</button>
+                <div class="detail-specs" id="detail-specs"></div>
+                <a href="https://t.me/bluoralv" class="detail-buy-btn" target="_blank">BUY</a>
+                <button class="detail-cancel-btn" onclick="closeDetail()">cancel</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Данные для примера
         const products = [
-            {
-                id: 1,
-                name: "Acne Hoodie",
-                type: "320$ P",
-                category: "hoodies",
-                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"], 
-                description: "Свободное худи из плотного хлопка",
-                specs: "- цвета: Black, Gray\n- размеры: S, M, L"
+            { 
+                id: 1, 
+                name: "Polo Ralph Lauren", 
+                type: "Replica", 
+                price: "30", 
+                category: "shirts", 
+                images: [
+                    "https://big-tall.com/cdn/shop/products/s7-1355336_lifestyle.png?v=1728922275",
+                ], 
+                description: "Базовая оверсайз футболка.", 
+                specs: "- цвета: черный\n- размеры: S, M, L" 
             },
-            {
-                id: 2,
-                name: "Stone Island Sweater (Washed)",
-                type: "325$ P",
-                category: "sweaters",
-                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
-                description: "Свитер Стонайланд с эффектом выцветания ткани",
-                specs: "- цвета: Dark Gray, Black\n- размеры: M, L, XL, 2XL"
+            { 
+                id: 2, 
+                name: "Acne Studio Hoodie", 
+                type: "Replica", 
+                price: "60", 
+                category: "hoodies", 
+                images: [
+                    "https://www.acnestudios.com/dw/image/v2/AAXV_PRD/on/demandware.static/-/Sites-acne-product-catalog/default/dwe37b921b/images/CI/CI0136-/2000x/CI0136-900_Z.jpg?sw=1120&sh=1680"
+                    "https://media.discordapp.net/attachments/979762155601657926/1477435494806585567/odezhda_00000.png?ex=69a4c087&is=69a36f07&hm=eb45f929a56e86c0cee8f5306412752425dfe6c7c1138ba9f10d9381b0f1c870&=&format=webp&quality=lossless&width=750&height=960"
+                ], 
+                description: "Бомбовая худи Акне Студио", 
+                specs: "- цвета: черный" 
             },
-            {
-                id: 3,
-                name: "Balenciaga Runners",
-                type: "250$ P",
-                category: "shoes",
-                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
-                description: "Кроссовки с уникальным дизайном подошвы",
-                specs: "- цвета: OG Colorway\n- размеры: 39-45"
-            },
-            {
-                id: 4,
-                name: "Supreme T-Shirt",
-                type: "250$ P",
-                category: "t-shirts",
-                images: ["https://i.postimg.cc/85zK6L3t/image-62795b.png"],
-                description: "Классическая футболка с логотипом",
-                specs: "- цвета: White, Red\n- размеры: M, L, XL"
+            { 
+                id: 3, 
+                name: "Long Sleeve Acne", 
+                type: "Replica", 
+                price: "40", 
+                category: "shirts", 
+                images: [
+                    "https://beamhill.fi/cdn/shop/files/Acne-Logo-LS-T-Shirt-Black_8a8ceb84-fa78-49a1-86c2-24ceb174b7ac.jpg?v=1763030537&width=1500"
+                ], 
+                description: "Классический лонгслив Black color.", 
+                specs: "- 100% хлопок" 
+            },            
+            { 
+                id: 4, 
+                name: "Polo Ralph Lauren", 
+                type: "Replica", 
+                price: "50", 
+                category: "hoodies", 
+                images: [
+                     "https://img01.ztat.net/article/spp-media-p1/509f9b0f498f4db9963170b173602ad9/72a44035208a480582b153883a9d1c80.jpg?imwidth=762&filter=packshot",
+                ], 
+                description: "grey Zip-Up hoodie", 
+                specs: "- цвета: GREY\n- размеры: S, M, L" 
+            }, 
+            { 
+                id: 5, 
+                name: "Moncler Hat", 
+                type: "Replica", 
+                price: "20", 
+                category: "hats", 
+                images: [
+                     "https://moncler-cdn.thron.com/api/v1/content-delivery/shares/dpx6uv/contents/K20913B00074M1900999_F/image/wool-and-cashmere-beanie-men-black-moncler,-1-of-0.jpg?w=800&q=80",
+                ], 
+                description: "Black Hat", 
+                specs: "- цвета: Black\n- размеры: S, M, L" 
             }
         ];
 
+        const telegramLink = "https://web.telegram.org/k/#@bluorabot";
+
         function render(items) {
             const grid = document.getElementById('grid');
-            grid.innerHTML = items.map(item => `
-                <div class="card">
-                    <div class="image-container" onclick="openDetail(${item.id})">
-                        <img src="${item.images[0]}" alt="${item.name}">
+            grid.innerHTML = ''; 
+            items.forEach(item => {
+                const coverImg = (item.images && item.images.length > 0) ? item.images[0] : null;
+                grid.innerHTML += `
+                    <div class="card">
+                        <div class="image-container" onclick="openDetail(${item.id})">
+                            ${coverImg ? `<img src="${coverImg}" alt="${item.name}">` : `<span class="placeholder-text">image</span>`}
+                        </div>
+                        <div class="info">
+                            <div class="name-type">${item.name},<br><span class="item-type">${item.type}</span></div>
+                            <div class="price">${item.price}€</div>
+                            <div class="card-buttons">
+                                <a href="${telegramLink}" class="btn btn-buy" target="_blank">BUY</a>
+                                <button class="btn btn-info" onclick="openDetail(${item.id})">INFO</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="info">
-                        <span class="item-name">${item.name}</span>
-                        <span class="item-type">${item.type}</span>
-                        <button class="btn" onclick="openDetail(${item.id})">INFO</button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            });
+        }
+
+        function filter(cat) {
+            render(cat === 'all' ? products : products.filter(p => p.category === cat));
         }
 
         let currentItem = null;
@@ -374,21 +482,28 @@
         }
 
         function updateSliderView() {
-            document.getElementById('detail-img').src = currentItem.images[currentImgIndex];
+            const imgEl = document.getElementById('detail-img');
+            const placeholder = document.getElementById('detail-placeholder');
+            if (currentItem.images && currentItem.images.length > 0) {
+                imgEl.src = currentItem.images[currentImgIndex];
+                imgEl.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                imgEl.style.display = 'none';
+                placeholder.style.display = 'block';
+            }
         }
 
         function nextImg() {
+            if (!currentItem.images.length) return;
             currentImgIndex = (currentImgIndex + 1) % currentItem.images.length;
             updateSliderView();
         }
 
         function prevImg() {
+            if (!currentItem.images.length) return;
             currentImgIndex = (currentImgIndex - 1 + currentItem.images.length) % currentItem.images.length;
             updateSliderView();
-        }
-
-        function filter(cat) { 
-            render(cat === 'all' ? products : products.filter(p => p.category === cat)); 
         }
 
         render(products);
