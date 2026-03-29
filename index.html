@@ -102,7 +102,6 @@
         .password-box button { background: white; color: black; padding: 10px; border-radius: 3rem; font-weight: bold; width: 100%; cursor: pointer; }
         .admin-panel { width: 95%; max-width: 1100px; max-height: 90vh; overflow-y: auto; }
         
-        /* Белые ползунки */
         .admin-panel::-webkit-scrollbar { width: 8px; }
         .admin-panel::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
         .admin-panel::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
@@ -145,7 +144,6 @@
         .image-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; border: 1px solid #b48b54; }
         .counter { text-align: center; margin: 10px 0 20px; font-size: 14px; opacity: 0.7; }
         
-        /* Детальная карточка (десктопная версия) */
         #detail-view { display: none; max-width: 1000px; margin: 0 auto; padding: 20px; }
         .detail-card {
             background: #2a2a2a; border-radius: 2rem; padding: 30px; display: flex; gap: 30px;
@@ -186,7 +184,6 @@
         .back-btn { background: none; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px; border-radius: 40px; cursor: pointer; font-weight: 600; transition: 0.2s; text-align: center; }
         .back-btn:hover { background: rgba(255,255,255,0.1); }
 
-        /* Белые кнопки в админке */
         .btn-primary, .btn-secondary {
             padding: 12px 28px; border-radius: 40px; font-weight: 700; cursor: pointer; border: none;
             transition: 0.2s; font-size: 14px;
@@ -207,7 +204,6 @@
         }
         .go-top.visible { opacity: 1; }
 
-        /* ========== АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ И ТЕЛЕФОНОВ (НЕ ЛОМАЕТ ДЕСКТОП) ========== */
         @media (max-width: 768px) {
             .main-wrapper { padding: 1rem; }
             .glass-nav { flex-direction: column; align-items: stretch; }
@@ -218,8 +214,6 @@
             .info { padding: 12px; }
             .name-type { font-size: 0.9rem; }
             .btn-buy { font-size: 12px; padding: 8px 0; }
-            
-            /* Детальная карточка на мобильных */
             .detail-card { flex-direction: column; padding: 20px; gap: 20px; }
             .detail-name { font-size: 24px; }
             .detail-section h4 { font-size: 16px; }
@@ -228,8 +222,6 @@
             .slider-btn { width: 28px; height: 28px; font-size: 16px; }
             .detail-buy-btn { padding: 10px; font-size: 14px; }
             .back-btn { padding: 8px; }
-            
-            /* Админ-панель на мобильных */
             .admin-panel { padding: 1rem; }
             .admin-header h2 { font-size: 1.4rem; }
             .admin-products-grid { grid-template-columns: 1fr; max-height: 300px; }
@@ -255,7 +247,7 @@
                 <div class="filter-btns"><button class="filter-btn active" data-filter="all">All</button><button class="filter-btn" data-filter="new">New Drop</button></div>
             </div>
         </div>
-        <div class="logo" onclick="closeDetail()">Bluora</div>
+        <div class="logo" id="logoHome">Bluora</div>
         <div id="main-view">
             <nav class="categories" id="categoryBar">
                 <button class="cat-btn active" data-cat="all">ALL</button>
@@ -290,7 +282,7 @@
                         <div class="detail-specs" id="detail-specs"></div>
                     </div>
                     <a href="https://t.me/bluoralv" class="detail-buy-btn" target="_blank">INFO</a>
-                    <button class="back-btn" onclick="closeDetail()">← BACK</button>
+                    <button class="back-btn" id="detailBackBtn">← BACK</button>
                 </div>
             </div>
         </div>
@@ -302,192 +294,232 @@
     <div id="adminModal" class="admin-modal"><div class="admin-panel" id="adminPanelContent"></div></div>
 
     <script>
-        // Все спецификации с пробелом перед двоеточием
-        let products = [
-            { id: 1, name: "Acne Studio Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/111_00002_guqksv.png"], description: "Bombovaja Hudi Akne Studio", specs: "- Colors : Black\n- Sizes : XS-XL", isNewDrop: false, newDropUntil: null },
-            { id: 2, name: "Balenciaga Runner", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00005_vv4fcp.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00004_ck4ljn.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/111_00003_xdyd49.png"], description: "Balenciaga Runners Track2 shoes", specs: "- Colors : All\n- Sizes : 36-46", isNewDrop: true, newDropUntil: Date.now() + 7*24*60*60*1000 },
-            { id: 3, name: "Stone Island (Washed)", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00000_s8bota.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/111_00001_ctzbor.png"], description: "Grey Zip-Up hoodie", specs: "- Colors : Dark grey, Black\n- Sizes : S, M, L", isNewDrop: false, newDropUntil: null },
-            { id: 4, name: "Chief Keef Polo Sleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00010_rlhhpa.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00009_ly2vkz.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00011_nxhhze.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00006_gvuntg.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00007_cx4tds.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00008_f3hybi.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000007/PLR_Longsleeve_00012_fvxnja.png"], description: "Chief Keef Polo longsleeve", specs: "- Colors : Look at the pictures left\n- Sizes : S-XXL", isNewDrop: false, newDropUntil: null },
-            { id: 5, name: "Jeffrey Epstein Zip", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/jeb_00013_esvimo.png"], description: "Jeffrey Epstein Quarter Zip", specs: "- Colors : Dark Blue\n- Sizes : S-XXL", isNewDrop: false, newDropUntil: null },
-            { id: 6, name: "Erd Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ERD1_00014_gextaf.png"], description: "Erd black and white Longsleeve", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 7, name: "Ralph Lauren Button Sleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/PLRlonger_00016_qo9di5.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/PLRlonger_00018_pdjlg1.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000015/PLRlonger_00017_fgbaud.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000007/PLRlonger_00015_mfj6yo.png"], description: "Ralph Lauren Button Longsleeve", specs: "- Colors : Gray, White, Navy Blue, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 8, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/CDG_00019_rrmepv.png"], description: "CDG Longsleeve with letters on the back", specs: "- Colors : Black\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
-            { id: 9, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/CDG1_00021_arfaux.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/CDG1_00020_bxqvmr.png"], description: "CDG Longsleeve with letters on the front", specs: "- Colors : Black, White\n- Sizes : S-L", isNewDrop: false, newDropUntil: null },
-            { id: 10, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/%D0%A1DG2_00023_vtziis.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/%D0%A1DG2_00022_a7gt2p.png"], description: "CDG Longsleeve with small letters on the chest", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 11, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/%D0%A1DG3_00024_h5l8fp.png"], description: "CDG Longsleeve with heart and letters on the sleeves", specs: "- Colors : White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 12, name: "Essentials FOG", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ESSENTIAL_00026_tsx8bi.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ESSENTIAL_00025_cr7xag.png"], description: "Essentials FOG hoodie", specs: "- Colors : Black, Light/Dark Oatmeal\n- Sizes : XXS-2XL", isNewDrop: false, newDropUntil: null },
-            { id: 13, name: "Supreme Arabic Logo Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/supremeT1_00027_lowz2g.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/supremeT1_00028_ch5jd6.png"], description: "Supreme classic arabic logo tee", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 14, name: "Supreme X YoungBoy Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00030_ap5ibg.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00029_wk1vpw.png"], description: "Supreme Tee with YoungBoy", specs: "- Colors : Black and White\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
-            { id: 15, name: "Givenchy Star Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00031_wdtuwr.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00032_cdvemn.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00033_qrnutx.png"], description: "Givenchy Star Tee", specs: "- Colors : Black(Red and White Stars) and White(Black Stars)\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
-            { id: 16, name: "Fortnite X Balenciaga Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00034_ckvrol.png"], description: "Balenciaga X Fortnite", specs: "- Colors : Black\n- Sizes : XS-L", isNewDrop: false, newDropUntil: null },
-            { id: 17, name: "Balenciaga Lost Tapes", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00035_qdbxnf.png"], description: "Balenciaga Lost Tapes Flared jeans", specs: "- Colors : Ice Blue\n- Sizes : XSS-M", isNewDrop: false, newDropUntil: null },
-            { id: 18, name: "Essentials Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005321/suka_00036_gaspev.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00037_fiqead.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00038_ymzrdp.png"], description: "Essentials FOG shorts", specs: "- Colors : Black, Light Oat, Dark Oat\n- Sizes : XSS-XL", isNewDrop: false, newDropUntil: null },
-            { id: 19, name: "Rick Owens Ramones", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342051/riki_00031_njmkb6.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00032_azavox.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00035_trakmf.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00030_hq0drd.png"], description: "Rick Owens Ramones low", specs: "- Colors : Black and white, Full white, Full black(leather), Black and white, Black and white with star, Full white, Black worn, Pink worn, Full black(canvas)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
-            { id: 20, name: "Rick Owens Ramones( jumbo laces )", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342046/riki_00029_n0sd9n.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00033_zrcxmw.png"], description: "Rick Owens Ramones jumbo", specs: "- Colors : Black and white (Bread),Black and white (thin leather), Full white (thin leather), Full black(thin leather)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
-            { id: 21, name: "Rick Owens Vans", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00036_cuudxd.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00037_yefmma.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00038_plm468.png"], description: "Rick Owens Vans low", specs: "- Colors : Black,White,Grey(leather), Black, Pink(canvas), Black, Light grey, Brown, Pitaya(suede)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
-            { id: 22, name: "Supreme Satin Applique Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00039_b3epqb.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00040_ajg4wl.png"], description: "Supreme Satin Appliqué Hoodie", specs: "- Colors : Black and White, Gray and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 23, name: "ERD Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00041_glio30.png"], description: "ERD Hoodie with print", specs: "- Colors : Floral Gray\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 24, name: "Typography Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691225/SUCHKA1_00042_wkkejy.png"], description: "Archive Tee", specs: "- Colors : Black\n- Sizes : M-4XL", isNewDrop: false, newDropUntil: null },
-            { id: 25, name: "Acne Studio Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773775091/A1_00043_a79grl.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775090/A1_00044_t2mgdc.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775092/A1_00045_atthku.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775090/A1_00044_t2mgdc.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775091/A1_00047_l3ebyy.png"], description: "Acne Studios 1996 stamp logo", specs: "- Colors : White, Black, Pink, Sky Blue, Green, Navy Blue, Wine Red\n- Sizes : S-L", isNewDrop: false, newDropUntil: null },
-            { id: 26, name: "Ysl Sweatshirt", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dicw3zojk/image/upload/v1774120524/suchka_nxfccj.png"], description: "Navy Blue Ysl sweatshirt", specs: "- Colors : White, Navy Blue\n- Sizes : S-2XL", isNewDrop: false, newDropUntil: null },
-            { id: 27, name: "Balenciaga Double Waist Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1774197230/Balcncn_fne9fu.png"], description: "Double Waist Balenciaga shorts", specs: "- Colors : White, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-            { id: 28, name: "Balenciaga Double Waist Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1774198600/badshgjbajdh_scyity.png"], description: "Double Waist Balenciaga shorts", specs: "- Colors : White, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null }
-        ];
+        (function() {
+            // --- Пароль в закодированном виде (base64) ---
+            // Исходный пароль: U_!2sQodiKL9-?2
+            const encodedPassword = "VV8hMnNRb2RpS0w5LT8y";
+            const ADMIN_PASSWORD = atob(encodedPassword);  // декодируем при старте
 
-        let currentCategory = 'all', currentSearch = '', currentTopFilter = 'all', currentDetailItem = null, currentImgIndex = 0, isAdminAuthenticated = false;
-        const ADMIN_PASSWORD = "U_!2sQodiKL9-?2";
+            let products = [
+                { id: 1, name: "Acne Studio Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/111_00002_guqksv.png"], description: "Bombovaja Hudi Akne Studio", specs: "- Colors : Black\n- Sizes : XS-XL", isNewDrop: false, newDropUntil: null },
+                { id: 2, name: "Balenciaga Runner", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00005_vv4fcp.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00004_ck4ljn.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/111_00003_xdyd49.png"], description: "Balenciaga Runners Track2 shoes", specs: "- Colors : All\n- Sizes : 36-46", isNewDrop: true, newDropUntil: Date.now() + 7*24*60*60*1000 },
+                { id: 3, name: "Stone Island (Washed)", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00000_s8bota.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/111_00001_ctzbor.png"], description: "Grey Zip-Up hoodie", specs: "- Colors : Dark grey, Black\n- Sizes : S, M, L", isNewDrop: false, newDropUntil: null },
+                { id: 4, name: "Chief Keef Polo Sleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00010_rlhhpa.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00009_ly2vkz.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00011_nxhhze.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00006_gvuntg.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00007_cx4tds.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00008_f3hybi.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000007/PLR_Longsleeve_00012_fvxnja.png"], description: "Chief Keef Polo longsleeve", specs: "- Colors : Look at the pictures left\n- Sizes : S-XXL", isNewDrop: false, newDropUntil: null },
+                { id: 5, name: "Jeffrey Epstein Zip", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/jeb_00013_esvimo.png"], description: "Jeffrey Epstein Quarter Zip", specs: "- Colors : Dark Blue\n- Sizes : S-XXL", isNewDrop: false, newDropUntil: null },
+                { id: 6, name: "Erd Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ERD1_00014_gextaf.png"], description: "Erd black and white Longsleeve", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 7, name: "Ralph Lauren Button Sleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/PLRlonger_00016_qo9di5.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/PLRlonger_00018_pdjlg1.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000015/PLRlonger_00017_fgbaud.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000007/PLRlonger_00015_mfj6yo.png"], description: "Ralph Lauren Button Longsleeve", specs: "- Colors : Gray, White, Navy Blue, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 8, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/CDG_00019_rrmepv.png"], description: "CDG Longsleeve with letters on the back", specs: "- Colors : Black\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
+                { id: 9, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/CDG1_00021_arfaux.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/CDG1_00020_bxqvmr.png"], description: "CDG Longsleeve with letters on the front", specs: "- Colors : Black, White\n- Sizes : S-L", isNewDrop: false, newDropUntil: null },
+                { id: 10, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/%D0%A1DG2_00023_vtziis.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/%D0%A1DG2_00022_a7gt2p.png"], description: "CDG Longsleeve with small letters on the chest", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 11, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/%D0%A1DG3_00024_h5l8fp.png"], description: "CDG Longsleeve with heart and letters on the sleeves", specs: "- Colors : White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 12, name: "Essentials FOG", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ESSENTIAL_00026_tsx8bi.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ESSENTIAL_00025_cr7xag.png"], description: "Essentials FOG hoodie", specs: "- Colors : Black, Light/Dark Oatmeal\n- Sizes : XXS-2XL", isNewDrop: false, newDropUntil: null },
+                { id: 13, name: "Supreme Arabic Logo Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/supremeT1_00027_lowz2g.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/supremeT1_00028_ch5jd6.png"], description: "Supreme classic arabic logo tee", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 14, name: "Supreme X YoungBoy Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00030_ap5ibg.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00029_wk1vpw.png"], description: "Supreme Tee with YoungBoy", specs: "- Colors : Black and White\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
+                { id: 15, name: "Givenchy Star Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00031_wdtuwr.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00032_cdvemn.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00033_qrnutx.png"], description: "Givenchy Star Tee", specs: "- Colors : Black(Red and White Stars) and White(Black Stars)\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
+                { id: 16, name: "Fortnite X Balenciaga Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00034_ckvrol.png"], description: "Balenciaga X Fortnite", specs: "- Colors : Black\n- Sizes : XS-L", isNewDrop: false, newDropUntil: null },
+                { id: 17, name: "Balenciaga Lost Tapes", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00035_qdbxnf.png"], description: "Balenciaga Lost Tapes Flared jeans", specs: "- Colors : Ice Blue\n- Sizes : XSS-M", isNewDrop: false, newDropUntil: null },
+                { id: 18, name: "Essentials Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005321/suka_00036_gaspev.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00037_fiqead.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00038_ymzrdp.png"], description: "Essentials FOG shorts", specs: "- Colors : Black, Light Oat, Dark Oat\n- Sizes : XSS-XL", isNewDrop: false, newDropUntil: null },
+                { id: 19, name: "Rick Owens Ramones", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342051/riki_00031_njmkb6.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00032_azavox.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00035_trakmf.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00030_hq0drd.png"], description: "Rick Owens Ramones low", specs: "- Colors : Black and white, Full white, Full black(leather), Black and white, Black and white with star, Full white, Black worn, Pink worn, Full black(canvas)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
+                { id: 20, name: "Rick Owens Ramones( jumbo laces )", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342046/riki_00029_n0sd9n.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00033_zrcxmw.png"], description: "Rick Owens Ramones jumbo", specs: "- Colors : Black and white (Bread),Black and white (thin leather), Full white (thin leather), Full black(thin leather)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
+                { id: 21, name: "Rick Owens Vans", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00036_cuudxd.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00037_yefmma.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00038_plm468.png"], description: "Rick Owens Vans low", specs: "- Colors : Black,White,Grey(leather), Black, Pink(canvas), Black, Light grey, Brown, Pitaya(suede)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
+                { id: 22, name: "Supreme Satin Applique Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00039_b3epqb.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00040_ajg4wl.png"], description: "Supreme Satin Appliqué Hoodie", specs: "- Colors : Black and White, Gray and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 23, name: "ERD Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00041_glio30.png"], description: "ERD Hoodie with print", specs: "- Colors : Floral Gray\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 24, name: "Typography Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691225/SUCHKA1_00042_wkkejy.png"], description: "Archive Tee", specs: "- Colors : Black\n- Sizes : M-4XL", isNewDrop: false, newDropUntil: null },
+                { id: 25, name: "Acne Studio Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773775091/A1_00043_a79grl.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775090/A1_00044_t2mgdc.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775092/A1_00045_atthku.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775090/A1_00044_t2mgdc.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775091/A1_00047_l3ebyy.png"], description: "Acne Studios 1996 stamp logo", specs: "- Colors : White, Black, Pink, Sky Blue, Green, Navy Blue, Wine Red\n- Sizes : S-L", isNewDrop: false, newDropUntil: null },
+                { id: 26, name: "Ysl Sweatshirt", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dicw3zojk/image/upload/v1774120524/suchka_nxfccj.png"], description: "Navy Blue Ysl sweatshirt", specs: "- Colors : White, Navy Blue\n- Sizes : S-2XL", isNewDrop: false, newDropUntil: null },
+                { id: 27, name: "Balenciaga Double Waist Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1774197230/Balcncn_fne9fu.png"], description: "Double Waist Balenciaga shorts", specs: "- Colors : White, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
+                { id: 28, name: "Balenciaga Double Waist Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1774198600/badshgjbajdh_scyity.png"], description: "Double Waist Balenciaga shorts", specs: "- Colors : White, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null }
+            ];
 
-        function isProductNew(p) { return p.isNewDrop && p.newDropUntil && Date.now() < p.newDropUntil; }
-        function getSortedProducts() {
-            const newDrop = products.filter(p => isProductNew(p)).sort((a,b)=>b.id-a.id);
-            const regular = products.filter(p => !isProductNew(p)).sort((a,b)=>b.id-a.id);
-            return [...newDrop, ...regular];
-        }
-        function renderProducts() {
-            let filtered = getSortedProducts().filter(p => {
-                if (currentSearch && !p.name.toLowerCase().includes(currentSearch.toLowerCase())) return false;
-                if (currentCategory !== 'all' && p.category !== currentCategory) return false;
-                if (currentTopFilter === 'new' && !isProductNew(p)) return false;
-                return true;
-            });
-            document.getElementById('productCounter').innerText = `📦 ${filtered.length} product${filtered.length !== 1 ? 's' : ''} found`;
-            const grid = document.getElementById('grid');
-            if (!filtered.length) { grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:40px;">No products found</div>'; return; }
-            grid.innerHTML = filtered.map(p => `<div class="card"><div class="image-container" onclick="openDetail(${p.id})">${isProductNew(p) ? '<span class="new-badge">NEW DROP</span>' : ''}<img src="${p.images[0]}" loading="lazy"></div><div class="info"><div class="name-type">${p.name}<span class="item-type">${p.type}</span></div><button class="btn-buy" onclick="openDetail(${p.id})">DETAILS</button></div></div>`).join('');
-        }
-        function openDetail(id) {
-            const p = products.find(p=>p.id===id);
-            if(!p) return;
-            currentDetailItem = p;
-            currentImgIndex = 0;
-            document.getElementById('main-view').style.display = 'none';
-            document.getElementById('detail-view').style.display = 'block';
-            document.getElementById('detail-name').innerText = p.name;
-            document.getElementById('detail-desc').innerHTML = p.description;
-            
-            let lines = p.specs.split('\n');
-            let formattedLines = lines.map(line => {
-                if (line.trim().startsWith('- ')) {
-                    return line.replace(/^(- .*?)(:| :)/, '<span class="spec-bold">$1$2</span>');
+            let currentCategory = 'all', currentSearch = '', currentTopFilter = 'all', currentDetailItem = null, currentImgIndex = 0, isAdminAuthenticated = false;
+            let editingProductId = null;
+
+            function isProductNew(p) { return p.isNewDrop && p.newDropUntil && Date.now() < p.newDropUntil; }
+            function getSortedProducts() {
+                const newDrop = products.filter(p => isProductNew(p)).sort((a,b)=>b.id-a.id);
+                const regular = products.filter(p => !isProductNew(p)).sort((a,b)=>b.id-a.id);
+                return [...newDrop, ...regular];
+            }
+            function renderProducts() {
+                let filtered = getSortedProducts().filter(p => {
+                    if (currentSearch && !p.name.toLowerCase().includes(currentSearch.toLowerCase())) return false;
+                    if (currentCategory !== 'all' && p.category !== currentCategory) return false;
+                    if (currentTopFilter === 'new' && !isProductNew(p)) return false;
+                    return true;
+                });
+                document.getElementById('productCounter').innerText = `📦 ${filtered.length} product${filtered.length !== 1 ? 's' : ''} found`;
+                const grid = document.getElementById('grid');
+                if (!filtered.length) { grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:40px;">No products found</div>'; return; }
+                grid.innerHTML = filtered.map(p => `<div class="card"><div class="image-container" data-id="${p.id}">${isProductNew(p) ? '<span class="new-badge">NEW DROP</span>' : ''}<img src="${p.images[0]}" loading="lazy"></div><div class="info"><div class="name-type">${p.name}<span class="item-type">${p.type}</span></div><button class="btn-buy" data-id="${p.id}">DETAILS</button></div></div>`).join('');
+                document.querySelectorAll('.image-container[data-id]').forEach(el => {
+                    el.addEventListener('click', (e) => { e.stopPropagation(); openDetail(parseInt(el.dataset.id)); });
+                });
+                document.querySelectorAll('.btn-buy[data-id]').forEach(btn => {
+                    btn.addEventListener('click', (e) => { e.stopPropagation(); openDetail(parseInt(btn.dataset.id)); });
+                });
+            }
+            function openDetail(id) {
+                const p = products.find(p=>p.id===id);
+                if(!p) return;
+                currentDetailItem = p;
+                currentImgIndex = 0;
+                document.getElementById('main-view').style.display = 'none';
+                document.getElementById('detail-view').style.display = 'block';
+                document.getElementById('detail-name').innerText = p.name;
+                document.getElementById('detail-desc').innerHTML = p.description;
+                let lines = p.specs.split('\n');
+                let formattedLines = lines.map(line => {
+                    if (line.trim().startsWith('- ')) {
+                        return line.replace(/^(- .*?)(:| :)/, '<span class="spec-bold">$1$2</span>');
+                    }
+                    return line;
+                });
+                let formattedSpecs = formattedLines.join('<br>');
+                document.getElementById('detail-specs').innerHTML = formattedSpecs;
+                const hasMultiple = p.images.length > 1;
+                document.getElementById('prevBtn').style.display = hasMultiple ? 'flex' : 'none';
+                document.getElementById('nextBtn').style.display = hasMultiple ? 'flex' : 'none';
+                updateDetailImage();
+                renderThumbnails();
+            }
+            function updateDetailImage() {
+                const img = document.getElementById('detail-img');
+                if(currentDetailItem?.images.length) {
+                    img.src = currentDetailItem.images[currentImgIndex % currentDetailItem.images.length];
                 }
-                return line;
-            });
-            let formattedSpecs = formattedLines.join('<br>');
-            document.getElementById('detail-specs').innerHTML = formattedSpecs;
-            
-            const hasMultiple = p.images.length > 1;
-            document.getElementById('prevBtn').style.display = hasMultiple ? 'flex' : 'none';
-            document.getElementById('nextBtn').style.display = hasMultiple ? 'flex' : 'none';
-            updateDetailImage();
-            renderThumbnails();
-        }
-        function updateDetailImage() {
-            const img = document.getElementById('detail-img');
-            if(currentDetailItem?.images.length) {
-                img.src = currentDetailItem.images[currentImgIndex % currentDetailItem.images.length];
+                document.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
+                    if(idx === currentImgIndex) thumb.classList.add('active');
+                    else thumb.classList.remove('active');
+                });
             }
-            document.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
-                if(idx === currentImgIndex) thumb.classList.add('active');
-                else thumb.classList.remove('active');
-            });
-        }
-        function renderThumbnails() {
-            const strip = document.getElementById('thumbnailStrip');
-            if(!currentDetailItem) return;
-            if(currentDetailItem.images.length <= 1) {
-                strip.innerHTML = '';
-                return;
+            function renderThumbnails() {
+                const strip = document.getElementById('thumbnailStrip');
+                if(!currentDetailItem) return;
+                if(currentDetailItem.images.length <= 1) {
+                    strip.innerHTML = '';
+                    return;
+                }
+                strip.innerHTML = currentDetailItem.images.map((img, idx) => 
+                    `<img class="thumbnail ${idx === currentImgIndex ? 'active' : ''}" src="${img}" data-index="${idx}">`
+                ).join('');
+                document.querySelectorAll('.thumbnail').forEach(thumb => {
+                    thumb.addEventListener('click', () => setImageIndex(parseInt(thumb.dataset.index)));
+                });
             }
-            strip.innerHTML = currentDetailItem.images.map((img, idx) => 
-                `<img class="thumbnail ${idx === currentImgIndex ? 'active' : ''}" src="${img}" onclick="setImageIndex(${idx})">`
-            ).join('');
-        }
-        function setImageIndex(idx) {
-            currentImgIndex = idx;
-            updateDetailImage();
-        }
-        function nextImg() {
-            if(currentDetailItem?.images.length > 1) {
-                currentImgIndex = (currentImgIndex + 1) % currentDetailItem.images.length;
+            function setImageIndex(idx) {
+                currentImgIndex = idx;
                 updateDetailImage();
             }
-        }
-        function prevImg() {
-            if(currentDetailItem?.images.length > 1) {
-                currentImgIndex = (currentImgIndex - 1 + currentDetailItem.images.length) % currentDetailItem.images.length;
-                updateDetailImage();
+            function nextImg() {
+                if(currentDetailItem?.images.length > 1) {
+                    currentImgIndex = (currentImgIndex + 1) % currentDetailItem.images.length;
+                    updateDetailImage();
+                }
             }
-        }
-        function closeDetail() {
-            document.getElementById('main-view').style.display = 'block';
-            document.getElementById('detail-view').style.display = 'none';
+            function prevImg() {
+                if(currentDetailItem?.images.length > 1) {
+                    currentImgIndex = (currentImgIndex - 1 + currentDetailItem.images.length) % currentDetailItem.images.length;
+                    updateDetailImage();
+                }
+            }
+            function closeDetail() {
+                document.getElementById('main-view').style.display = 'block';
+                document.getElementById('detail-view').style.display = 'none';
+                renderProducts();
+            }
+            function initFilters() {
+                document.getElementById('searchInput').addEventListener('input', e=>{ currentSearch=e.target.value; renderProducts(); });
+                document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentTopFilter=btn.dataset.filter; renderProducts(); }));
+                document.querySelectorAll('.cat-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentCategory=btn.dataset.cat; renderProducts(); }));
+            }
+
+            // Admin panel functions (используют ADMIN_PASSWORD из замыкания)
+            function showPasswordModal() { document.getElementById('passwordModal').classList.add('active'); document.getElementById('adminPassword').focus(); }
+            function checkPasswordAndOpenAdmin() {
+                if(document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
+                    isAdminAuthenticated = true;
+                    document.getElementById('passwordModal').classList.remove('active');
+                    openAdminPanel();
+                } else {
+                    document.getElementById('passwordError').innerText = 'Wrong password.';
+                }
+            }
+            function openAdminPanel() { if(!isAdminAuthenticated) { showPasswordModal(); return; } editingProductId=null; renderAdminPanel(); document.getElementById('adminModal').classList.add('active'); }
+            function renderAdminPanel() {
+                const container = document.getElementById('adminPanelContent');
+                const sorted = getSortedProducts();
+                container.innerHTML = `
+                    <div class="admin-header"><h2><i class="fas fa-tools"></i> Admin Dashboard</h2><button class="close-admin" id="closeAdminBtn">&times;</button></div>
+                    <div class="admin-search"><input type="text" id="adminSearchInput" placeholder="🔍 Search products in admin..."></div>
+                    <div style="margin-bottom:20px;"><h3>Products List</h3><div class="admin-products-grid" id="adminProductsGrid"></div></div>
+                    <div class="admin-form" id="adminForm"><h3 style="margin-top:0; margin-bottom:1.5rem;" id="formTitle">➕ Add New Product</h3><div class="form-row"><input type="text" id="prodName" placeholder="Product Name"><select id="prodCategory"><option value="shirts">SHIRTS</option><option value="pants">PANTS</option><option value="hoodies">HOODIES</option><option value="hats">HATS</option><option value="shoes">SHOES</option><option value="accessories">ACCESSORIES</option></select></div>
+                    <div class="form-row"><input type="text" id="prodImages" placeholder="Image URLs (comma separated)"><input type="text" id="prodSpecs" placeholder="Specifications (use format \"- Color : value\\n- Size : value\")"></div>
+                    <div id="imagePreviewContainer" class="image-preview"></div>
+                    <textarea id="prodDesc" placeholder="Description"></textarea>
+                    <label class="checkbox-label"><input type="checkbox" id="prodIsNew"> <span>🔥 Mark as New Drop</span></label>
+                    <div class="form-actions" style="display:flex; gap:15px; justify-content:flex-end; margin-top:20px;"><button class="btn-secondary" id="cancelAdminFormBtn">Cancel</button><button class="btn-primary" id="saveProductBtn">Save Product</button></div></div>`;
+                document.getElementById('closeAdminBtn').addEventListener('click', closeAdminModal);
+                document.getElementById('cancelAdminFormBtn').addEventListener('click', resetAdminForm);
+                const renderAdminList = () => {
+                    const searchVal = document.getElementById('adminSearchInput')?.value.toLowerCase() || '';
+                    const filtered = sorted.filter(p => p.name.toLowerCase().includes(searchVal));
+                    const gridDiv = document.getElementById('adminProductsGrid');
+                    gridDiv.innerHTML = filtered.map(p => `<div class="admin-product-card"><img class="admin-product-img" src="${p.images[0]}"><div class="admin-product-info"><div class="admin-product-name">${p.name}</div><div class="admin-product-cat">${p.category}</div></div><div class="admin-product-actions"><button class="edit-btn" data-id="${p.id}" title="Edit"><i class="fas fa-edit"></i></button><button class="clone-btn" data-id="${p.id}" title="Clone"><i class="fas fa-copy"></i></button><button class="delete-btn" data-id="${p.id}" title="Delete"><i class="fas fa-trash-alt"></i></button></div></div>`).join('');
+                    document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', () => editProductForm(parseInt(btn.dataset.id))));
+                    document.querySelectorAll('.clone-btn').forEach(btn => btn.addEventListener('click', () => cloneProduct(parseInt(btn.dataset.id))));
+                    document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', () => deleteProductConfirm(parseInt(btn.dataset.id))));
+                };
+                setTimeout(() => {
+                    const searchInput = document.getElementById('adminSearchInput');
+                    if(searchInput) searchInput.addEventListener('input', renderAdminList);
+                    renderAdminList();
+                    document.getElementById('saveProductBtn').onclick = () => saveProduct();
+                    attachImagePreview();
+                }, 10);
+            }
+            function attachImagePreview() {
+                const imagesInput = document.getElementById('prodImages');
+                const previewDiv = document.getElementById('imagePreviewContainer');
+                const updatePreview = () => {
+                    let urls = imagesInput.value.split(',').map(s=>s.trim()).filter(s=>s);
+                    previewDiv.innerHTML = urls.map(url => `<img src="${url}" onerror="this.style.opacity='0.3'">`).join('');
+                };
+                imagesInput.addEventListener('input', updatePreview);
+                updatePreview();
+            }
+            function resetAdminForm() { editingProductId=null; document.getElementById('formTitle').innerText='➕ Add New Product'; document.getElementById('prodName').value=''; document.getElementById('prodCategory').value='shirts'; document.getElementById('prodImages').value=''; document.getElementById('prodSpecs').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodIsNew').checked=false; attachImagePreview(); }
+            function editProductForm(id) { const p=products.find(p=>p.id===id); if(!p) return; editingProductId=id; document.getElementById('formTitle').innerText='✏️ Edit Product'; document.getElementById('prodName').value=p.name; document.getElementById('prodCategory').value=p.category; document.getElementById('prodImages').value=p.images.join(', '); document.getElementById('prodSpecs').value=p.specs; document.getElementById('prodDesc').value=p.description; document.getElementById('prodIsNew').checked=p.isNewDrop; attachImagePreview(); document.getElementById('adminForm').scrollIntoView({behavior:'smooth'}); }
+            function cloneProduct(id) { const original=products.find(p=>p.id===id); if(!original) return; const newId=Math.max(...products.map(p=>p.id),0)+1; const clone={...original, id:newId, name:original.name+' (copy)', isNewDrop:false, newDropUntil:null}; products.push(clone); renderAdminPanel(); renderProducts(); }
+            function saveProduct() { const name=document.getElementById('prodName').value.trim(); if(!name) return alert('Name required'); const category=document.getElementById('prodCategory').value; let imagesRaw=document.getElementById('prodImages').value; let images=imagesRaw?imagesRaw.split(',').map(s=>s.trim()).filter(s=>s):['https://picsum.photos/id/1/400/500']; const desc=document.getElementById('prodDesc').value||'No description'; let specs=document.getElementById('prodSpecs').value||'- Colors : ...\n- Sizes : ...'; const isNew=document.getElementById('prodIsNew').checked; if(editingProductId!==null){ const idx=products.findIndex(p=>p.id===editingProductId); if(idx!==-1){ products[idx]={...products[idx], name, category, images, description:desc, specs, isNewDrop:isNew, newDropUntil:isNew?Date.now()+7*24*60*60*1000:null}; } } else { const newId=Math.max(...products.map(p=>p.id),0)+1; products.push({id:newId, name, type:'Replica', category, images, description:desc, specs, isNewDrop:isNew, newDropUntil:isNew?Date.now()+7*24*60*60*1000:null}); } renderAdminPanel(); renderProducts(); if(currentDetailItem && !products.find(p=>p.id===currentDetailItem.id)) closeDetail(); }
+            function deleteProductConfirm(id) { const p=products.find(p=>p.id===id); if(confirm(`Delete "${p?.name}"?`)) { products=products.filter(p=>p.id!==id); renderAdminPanel(); renderProducts(); if(currentDetailItem?.id===id) closeDetail(); } }
+            function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
+
+            // Глобальные функции, нужные из HTML (onclick и т.п.)
+            window.openDetail = openDetail;
+            window.closeDetail = closeDetail;
+            window.nextImg = nextImg;
+            window.prevImg = prevImg;
+            window.setImageIndex = setImageIndex;
+            window.closeAdminModal = closeAdminModal;
+            window.editProductForm = editProductForm;
+            window.deleteProductConfirm = deleteProductConfirm;
+            window.resetAdminForm = resetAdminForm;
+            window.cloneProduct = cloneProduct;
+
+            // Назначение обработчиков событий
+            document.getElementById('logoHome').addEventListener('click', closeDetail);
+            document.getElementById('detailBackBtn').addEventListener('click', closeDetail);
+            document.getElementById('prevBtn').addEventListener('click', prevImg);
+            document.getElementById('nextBtn').addEventListener('click', nextImg);
+            document.getElementById('adminBtn').addEventListener('click', () => isAdminAuthenticated ? openAdminPanel() : showPasswordModal());
+            document.getElementById('submitPasswordBtn').addEventListener('click', checkPasswordAndOpenAdmin);
+            document.getElementById('adminPassword').addEventListener('keypress', e => { if(e.key==='Enter') checkPasswordAndOpenAdmin(); });
+            window.addEventListener('scroll', () => { document.getElementById('goTop').classList.toggle('visible', window.scrollY>300); });
+            document.getElementById('goTop').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+            initFilters();
             renderProducts();
-        }
-        function initFilters() {
-            document.getElementById('searchInput').addEventListener('input', e=>{ currentSearch=e.target.value; renderProducts(); });
-            document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentTopFilter=btn.dataset.filter; renderProducts(); }));
-            document.querySelectorAll('.cat-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentCategory=btn.dataset.cat; renderProducts(); }));
-        }
-
-        // Admin panel
-        let editingProductId = null;
-        function showPasswordModal() { document.getElementById('passwordModal').classList.add('active'); document.getElementById('adminPassword').focus(); }
-        function checkPasswordAndOpenAdmin() { if(document.getElementById('adminPassword').value===ADMIN_PASSWORD) { isAdminAuthenticated=true; document.getElementById('passwordModal').classList.remove('active'); openAdminPanel(); } else { document.getElementById('passwordError').innerText='Wrong password.'; } }
-        function openAdminPanel() { if(!isAdminAuthenticated) { showPasswordModal(); return; } editingProductId=null; renderAdminPanel(); document.getElementById('adminModal').classList.add('active'); }
-        function renderAdminPanel() {
-            const container = document.getElementById('adminPanelContent');
-            const sorted = getSortedProducts();
-            container.innerHTML = `
-                <div class="admin-header"><h2><i class="fas fa-tools"></i> Admin Dashboard</h2><button class="close-admin" onclick="closeAdminModal()">&times;</button></div>
-                <div class="admin-search"><input type="text" id="adminSearchInput" placeholder="🔍 Search products in admin..."></div>
-                <div style="margin-bottom:20px;"><h3>Products List</h3><div class="admin-products-grid" id="adminProductsGrid"></div></div>
-                <div class="admin-form" id="adminForm"><h3 style="margin-top:0; margin-bottom:1.5rem;">➕ Add New Product</h3><div class="form-row"><input type="text" id="prodName" placeholder="Product Name"><select id="prodCategory"><option value="shirts">SHIRTS</option><option value="pants">PANTS</option><option value="hoodies">HOODIES</option><option value="hats">HATS</option><option value="shoes">SHOES</option><option value="accessories">ACCESSORIES</option></select></div>
-                <div class="form-row"><input type="text" id="prodImages" placeholder="Image URLs (comma separated)"><input type="text" id="prodSpecs" placeholder="Specifications (use format \"- Color : value\\n- Size : value\")"></div>
-                <div id="imagePreviewContainer" class="image-preview"></div>
-                <textarea id="prodDesc" placeholder="Description"></textarea>
-                <label class="checkbox-label"><input type="checkbox" id="prodIsNew"> <span>🔥 Mark as New Drop</span></label>
-                <div class="form-actions" style="display:flex; gap:15px; justify-content:flex-end; margin-top:20px;"><button class="btn-secondary" onclick="resetAdminForm()">Cancel</button><button class="btn-primary" id="saveProductBtn">Save Product</button></div></div>`;
-            const renderAdminList = () => {
-                const searchVal = document.getElementById('adminSearchInput')?.value.toLowerCase() || '';
-                const filtered = sorted.filter(p => p.name.toLowerCase().includes(searchVal));
-                const gridDiv = document.getElementById('adminProductsGrid');
-                gridDiv.innerHTML = filtered.map(p => `<div class="admin-product-card"><img class="admin-product-img" src="${p.images[0]}"><div class="admin-product-info"><div class="admin-product-name">${p.name}</div><div class="admin-product-cat">${p.category}</div></div><div class="admin-product-actions"><button class="edit-btn" onclick="editProductForm(${p.id})" title="Edit"><i class="fas fa-edit"></i></button><button class="clone-btn" onclick="cloneProduct(${p.id})" title="Clone"><i class="fas fa-copy"></i></button><button class="delete-btn" onclick="deleteProductConfirm(${p.id})" title="Delete"><i class="fas fa-trash-alt"></i></button></div></div>`).join('');
-            };
-            setTimeout(() => {
-                const searchInput = document.getElementById('adminSearchInput');
-                if(searchInput) searchInput.addEventListener('input', renderAdminList);
-                renderAdminList();
-                document.getElementById('saveProductBtn').onclick = () => saveProduct();
-                attachImagePreview();
-            }, 10);
-        }
-        function attachImagePreview() {
-            const imagesInput = document.getElementById('prodImages');
-            const previewDiv = document.getElementById('imagePreviewContainer');
-            const updatePreview = () => {
-                let urls = imagesInput.value.split(',').map(s=>s.trim()).filter(s=>s);
-                previewDiv.innerHTML = urls.map(url => `<img src="${url}" onerror="this.style.opacity='0.3'">`).join('');
-            };
-            imagesInput.addEventListener('input', updatePreview);
-            updatePreview();
-        }
-        function resetAdminForm() { editingProductId=null; document.getElementById('formTitle').innerText='➕ Add New Product'; document.getElementById('prodName').value=''; document.getElementById('prodCategory').value='shirts'; document.getElementById('prodImages').value=''; document.getElementById('prodSpecs').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodIsNew').checked=false; attachImagePreview(); }
-        function editProductForm(id) { const p=products.find(p=>p.id===id); if(!p) return; editingProductId=id; document.getElementById('formTitle').innerText='✏️ Edit Product'; document.getElementById('prodName').value=p.name; document.getElementById('prodCategory').value=p.category; document.getElementById('prodImages').value=p.images.join(', '); document.getElementById('prodSpecs').value=p.specs; document.getElementById('prodDesc').value=p.description; document.getElementById('prodIsNew').checked=p.isNewDrop; attachImagePreview(); document.getElementById('adminForm').scrollIntoView({behavior:'smooth'}); }
-        function cloneProduct(id) { const original=products.find(p=>p.id===id); if(!original) return; const newId=Math.max(...products.map(p=>p.id),0)+1; const clone={...original, id:newId, name:original.name+' (copy)', isNewDrop:false, newDropUntil:null}; products.push(clone); renderAdminPanel(); renderProducts(); }
-        function saveProduct() { const name=document.getElementById('prodName').value.trim(); if(!name) return alert('Name required'); const category=document.getElementById('prodCategory').value; let imagesRaw=document.getElementById('prodImages').value; let images=imagesRaw?imagesRaw.split(',').map(s=>s.trim()).filter(s=>s):['https://picsum.photos/id/1/400/500']; const desc=document.getElementById('prodDesc').value||'No description'; let specs=document.getElementById('prodSpecs').value||'- Colors : ...\n- Sizes : ...'; const isNew=document.getElementById('prodIsNew').checked; if(editingProductId!==null){ const idx=products.findIndex(p=>p.id===editingProductId); if(idx!==-1){ products[idx]={...products[idx], name, category, images, description:desc, specs, isNewDrop:isNew, newDropUntil:isNew?Date.now()+7*24*60*60*1000:null}; } } else { const newId=Math.max(...products.map(p=>p.id),0)+1; products.push({id:newId, name, type:'Replica', category, images, description:desc, specs, isNewDrop:isNew, newDropUntil:isNew?Date.now()+7*24*60*60*1000:null}); } renderAdminPanel(); renderProducts(); if(currentDetailItem && !products.find(p=>p.id===currentDetailItem.id)) closeDetail(); }
-        function deleteProductConfirm(id) { const p=products.find(p=>p.id===id); if(confirm(`Delete "${p?.name}"?`)) { products=products.filter(p=>p.id!==id); renderAdminPanel(); renderProducts(); if(currentDetailItem?.id===id) closeDetail(); } }
-        function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
-
-        window.addEventListener('scroll', () => { document.getElementById('goTop').classList.toggle('visible', window.scrollY>300); });
-        document.getElementById('goTop').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
-
-        document.getElementById('adminBtn').addEventListener('click', () => isAdminAuthenticated ? openAdminPanel() : showPasswordModal());
-        document.getElementById('submitPasswordBtn').addEventListener('click', checkPasswordAndOpenAdmin);
-        document.getElementById('adminPassword').addEventListener('keypress', e => { if(e.key==='Enter') checkPasswordAndOpenAdmin(); });
-        window.openDetail=openDetail; window.closeDetail=closeDetail; window.nextImg=nextImg; window.prevImg=prevImg; window.setImageIndex=setImageIndex;
-        window.closeAdminModal=closeAdminModal; window.editProductForm=editProductForm; window.deleteProductConfirm=deleteProductConfirm;
-        window.resetAdminForm=resetAdminForm; window.cloneProduct=cloneProduct;
-        initFilters(); renderProducts();
+        })();
     </script>
 </body>
 </html>
