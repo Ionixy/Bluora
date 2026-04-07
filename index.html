@@ -525,7 +525,10 @@
               if (!confirm('Delete this product?')) return;
 
               await fetch(`/api/products/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                  'x-admin-token': adminToken
+                }
               });
 
               await loadProducts();
