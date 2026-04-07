@@ -494,13 +494,19 @@
               }
 
               if (editingProductId !== null) {
-                await fetch(`/api/products/${editingProductId}`, {
+                await headers: {
+                  'Content-Type': 'application/json',
+                  'x-admin-token': adminToken
+                }, {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(product)
                 });
               } else {
-                await fetch('/api/products', {
+                await headers: {
+                  'Content-Type': 'application/json',
+                  'x-admin-token': adminToken
+                }, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(product)
