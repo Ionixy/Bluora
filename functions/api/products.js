@@ -1,3 +1,8 @@
+function isAuthorized(request, env) {
+  const token = request.headers.get('x-admin-token');
+  return token === env.ADMIN_TOKEN;
+}
+
 export async function onRequestGet(context) {
   const { env } = context;
 
@@ -17,6 +22,11 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   const { env, request } = context;
+
+  if (!isAuthorized(request, env)) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const body = await request.json();
 
   const {
@@ -31,7 +41,10 @@ export async function onRequestPost(context) {
   } = body;
 
   if (!name || !category) {
-    return Response.json({ error: "name and category are required" }, { status: 400 });
+    return Response.json(
+      { error: "name and category are required" },
+      { status: 400 }
+    );
   }
 
   const result = await env.DB
