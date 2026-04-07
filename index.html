@@ -446,28 +446,126 @@
               }
             }
 
-            function openAdminPanel() { if(!isAdminAuthenticated) { showPasswordModal(); return; } editingProductId=null; renderAdminPanel(); document.getElementById('adminModal').classList.add('active'); }
-            function renderAdminPanel() { /* полная админка (код не меняем, просто сохраняем работоспособность) */
-                const container = document.getElementById('adminPanelContent');
-                const sorted = getSortedProducts();
-                container.innerHTML = `<div class="admin-header"><h2><i class="fas fa-tools"></i> Admin Dashboard</h2><button class="close-admin" id="closeAdminBtn">&times;</button></div><div class="admin-search"><input type="text" id="adminSearchInput" placeholder="🔍 Search products in admin..."></div><div style="margin-bottom:20px;"><h3>Products List</h3><div class="admin-products-grid" id="adminProductsGrid"></div></div><div class="admin-form" id="adminForm"><h3 style="margin-top:0; margin-bottom:1.5rem;" id="formTitle">➕ Add New Product</h3><div class="form-row"><input type="text" id="prodName" placeholder="Product Name"><select id="prodCategory"><option value="shirts">SHIRTS</option><option value="pants">PANTS</option><option value="hoodies">HOODIES</option><option value="hats">HATS</option><option value="shoes">SHOES</option><option value="accessories">ACCESSORIES</option></select></div><div class="form-row"><input type="text" id="prodImages" placeholder="Image URLs (comma separated)"><input type="text" id="prodSpecs" placeholder="Specifications (use format \"- Color : value\\n- Size : value\")"></div><div id="imagePreviewContainer" class="image-preview"></div><textarea id="prodDesc" placeholder="Description"></textarea><label class="checkbox-label"><input type="checkbox" id="prodIsNew"> <span>🔥 Mark as New Drop</span></label><div class="form-actions" style="display:flex; gap:15px; justify-content:flex-end; margin-top:20px;"><button class="btn-secondary" id="cancelAdminFormBtn">Cancel</button><button class="btn-primary" id="saveProductBtn">Save Product</button></div></div>`;
-                document.getElementById('closeAdminBtn').addEventListener('click', closeAdminModal);
-                document.getElementById('cancelAdminFormBtn').addEventListener('click', resetAdminForm);
-                const renderAdminList = () => {
-                    const searchVal = document.getElementById('adminSearchInput')?.value.toLowerCase() || '';
-                    const filtered = sorted.filter(p => p.name.toLowerCase().includes(searchVal));
-                    const gridDiv = document.getElementById('adminProductsGrid');
-                    gridDiv.innerHTML = filtered.map(p => `<div class="admin-product-card"><img class="admin-product-img" src="${p.images[0]}"><div class="admin-product-info"><div class="admin-product-name">${p.name}</div><div class="admin-product-cat">${p.category}</div></div><div class="admin-product-actions"><button class="edit-btn" data-id="${p.id}" title="Edit"><i class="fas fa-edit"></i></button><button class="clone-btn" data-id="${p.id}" title="Clone"><i class="fas fa-copy"></i></button><button class="delete-btn" data-id="${p.id}" title="Delete"><i class="fas fa-trash-alt"></i></button></div></div>`).join('');
-                    document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', () => editProductForm(parseInt(btn.dataset.id))));
-                    document.querySelectorAll('.clone-btn').forEach(btn => btn.addEventListener('click', () => cloneProduct(parseInt(btn.dataset.id))));
-                    document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', () => deleteProductConfirm(parseInt(btn.dataset.id))));
-                };
-                setTimeout(() => { const searchInput = document.getElementById('adminSearchInput'); if(searchInput) searchInput.addEventListener('input', renderAdminList); renderAdminList(); document.getElementById('saveProductBtn').onclick = () => saveProduct(); attachImagePreview(); }, 10);
+            function openAdminPanel() {
+              if (!isAdminAuthenticated) {
+                showPasswordModal();
+                return;
+              }
+              editingProductId = null;
+              renderAdminPanel();
+              document.getElementById('adminModal').classList.add('active');
             }
-            function attachImagePreview() { const imagesInput = document.getElementById('prodImages'); const previewDiv = document.getElementById('imagePreviewContainer'); const updatePreview = () => { let urls = imagesInput.value.split(',').map(s=>s.trim()).filter(s=>s); previewDiv.innerHTML = urls.map(url => `<img src="${url}" onerror="this.style.opacity='0.3'">`).join(''); }; imagesInput.addEventListener('input', updatePreview); updatePreview(); }
-            function resetAdminForm() { editingProductId=null; document.getElementById('formTitle').innerText='➕ Add New Product'; document.getElementById('prodName').value=''; document.getElementById('prodCategory').value='shirts'; document.getElementById('prodImages').value=''; document.getElementById('prodSpecs').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodIsNew').checked=false; attachImagePreview(); }
-            function editProductForm(id) { const p=products.find(p=>p.id===id); if(!p) return; editingProductId=id; document.getElementById('formTitle').innerText='✏️ Edit Product'; document.getElementById('prodName').value=p.name; document.getElementById('prodCategory').value=p.category; document.getElementById('prodImages').value=p.images.join(', '); document.getElementById('prodSpecs').value=p.specs; document.getElementById('prodDesc').value=p.description; document.getElementById('prodIsNew').checked=p.isNewDrop; attachImagePreview(); document.getElementById('adminForm').scrollIntoView({behavior:'smooth'}); }
-            function cloneProduct(id) { const original=products.find(p=>p.id===id); if(!original) return; const newId=Math.max(...products.map(p=>p.id),0)+1; const clone={...original, id:newId, name:original.name+' (copy)', isNewDrop:false, newDropUntil:null}; products.push(clone); renderAdminPanel(); renderProducts(); }
+
+            function renderAdminPanel() {
+              const container = document.getElementById('adminPanelContent');
+              const sorted = getSortedProducts();
+            
+              container.innerHTML = `<div class="admin-header"><h2><i class="fas fa-tools"></i> Admin Dashboard</h2><button class="close-admin" id="closeAdminBtn">&times;</button></div><div class="admin-search"><input type="text" id="adminSearchInput" placeholder="🔍 Search products in admin..."></div><div style="margin-bottom:20px;"><h3>Products List</h3><div class="admin-products-grid" id="adminProductsGrid"></div></div><div class="admin-form" id="adminForm"><h3 style="margin-top:0; margin-bottom:1.5rem;" id="formTitle">➕ Add New Product</h3><div class="form-row"><input type="text" id="prodName" placeholder="Product Name"><select id="prodCategory"><option value="shirts">SHIRTS</option><option value="pants">PANTS</option><option value="hoodies">HOODIES</option><option value="hats">HATS</option><option value="shoes">SHOES</option><option value="accessories">ACCESSORIES</option></select></div><div class="form-row"><input type="text" id="prodImages" placeholder="Image URLs (comma separated)"><input type="text" id="prodSpecs" placeholder="Specifications (use format \"- Color : value\\n- Size : value\")"></div><div id="imagePreviewContainer" class="image-preview"></div><textarea id="prodDesc" placeholder="Description"></textarea><label class="checkbox-label"><input type="checkbox" id="prodIsNew"> <span>🔥 Mark as New Drop</span></label><div class="form-actions" style="display:flex; gap:15px; justify-content:flex-end; margin-top:20px;"><button class="btn-secondary" id="cancelAdminFormBtn">Cancel</button><button class="btn-primary" id="saveProductBtn">Save Product</button></div></div>`;
+
+              document.getElementById('closeAdminBtn').addEventListener('click', closeAdminModal);
+              document.getElementById('cancelAdminFormBtn').addEventListener('click', resetAdminForm);
+
+              const renderAdminList = () => {
+                const searchVal = document.getElementById('adminSearchInput')?.value.toLowerCase() || '';
+                const filtered = sorted.filter(p => p.name.toLowerCase().includes(searchVal));
+                const gridDiv = document.getElementById('adminProductsGrid');
+
+                gridDiv.innerHTML = filtered.map(p => `<div class="admin-product-card"><img class="admin-product-img" src="${p.images[0]}"><div class="admin-product-info"><div class="admin-product-name">${p.name}</div><div class="admin-product-cat">${p.category}</div></div><div class="admin-product-actions"><button class="edit-btn" data-id="${p.id}" title="Edit"><i class="fas fa-edit"></i></button><button class="clone-btn" data-id="${p.id}" title="Clone"><i class="fas fa-copy"></i></button><button class="delete-btn" data-id="${p.id}" title="Delete"><i class="fas fa-trash-alt"></i></button></div></div>`).join('');
+
+                document.querySelectorAll('.edit-btn').forEach(btn =>
+                  btn.addEventListener('click', () => editProductForm(parseInt(btn.dataset.id)))
+                );
+                document.querySelectorAll('.clone-btn').forEach(btn =>
+                  btn.addEventListener('click', () => cloneProduct(parseInt(btn.dataset.id)))
+                );
+                document.querySelectorAll('.delete-btn').forEach(btn =>
+                  btn.addEventListener('click', () => deleteProductConfirm(parseInt(btn.dataset.id)))
+                );
+              };
+
+              setTimeout(() => {
+                const searchInput = document.getElementById('adminSearchInput');
+                if (searchInput) searchInput.addEventListener('input', renderAdminList);
+                renderAdminList();
+                document.getElementById('saveProductBtn').onclick = () => saveProduct();
+                attachImagePreview();
+              }, 10);
+            }
+
+            function attachImagePreview() {
+              const imagesInput = document.getElementById('prodImages');
+              const previewDiv = document.getElementById('imagePreviewContainer');
+
+              const updatePreview = () => {
+                let urls = imagesInput.value.split(',').map(s => s.trim()).filter(s => s);
+                previewDiv.innerHTML = urls.map(url => `<img src="${url}" onerror="this.style.opacity='0.3'">`).join('');
+              };
+
+              imagesInput.addEventListener('input', updatePreview);
+              updatePreview();
+            }
+
+            function resetAdminForm() {
+              editingProductId = null;
+              document.getElementById('formTitle').innerText = '➕ Add New Product';
+              document.getElementById('prodName').value = '';
+              document.getElementById('prodCategory').value = 'shirts';
+              document.getElementById('prodImages').value = '';
+              document.getElementById('prodSpecs').value = '';
+              document.getElementById('prodDesc').value = '';
+              document.getElementById('prodIsNew').checked = false;
+              attachImagePreview();
+            }
+
+            function editProductForm(id) {
+              const p = products.find(p => p.id === id);
+              if (!p) return;
+
+              editingProductId = id;
+              document.getElementById('formTitle').innerText = '✏️ Edit Product';
+              document.getElementById('prodName').value = p.name;
+              document.getElementById('prodCategory').value = p.category;
+              document.getElementById('prodImages').value = p.images.join(', ');
+              document.getElementById('prodSpecs').value = p.specs;
+              document.getElementById('prodDesc').value = p.description;
+              document.getElementById('prodIsNew').checked = p.isNewDrop;
+              attachImagePreview();
+              document.getElementById('adminForm').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            async function cloneProduct(id) {
+              const original = products.find(p => p.id === id);
+              if (!original) return;
+
+              const clone = {
+                name: original.name + ' (copy)',
+                type: original.type || 'Replica',
+                category: original.category,
+                images: original.images,
+                description: original.description,
+                specs: original.specs,
+                isNewDrop: false,
+                newDropUntil: null
+              };
+
+              const res = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-admin-token': adminToken
+                },
+                body: JSON.stringify(clone)
+              });
+
+              if (!res.ok) {
+                alert('Unauthorized or server error while cloning.');
+                return;
+              }
+
+              await loadProducts();
+              renderAdminPanel();
+            }
+
             async function saveProduct() {
               const product = {
                 name: document.getElementById('prodName').value.trim(),
@@ -494,24 +592,31 @@
                 product.images = ['https://picsum.photos/id/1/400/500'];
               }
 
+              let res;
+
               if (editingProductId !== null) {
-                await headers: {
-                  'Content-Type': 'application/json',
-                  'x-admin-token': adminToken
-                }, {
+                res = await fetch(`/api/products/${editingProductId}`, {
                   method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'x-admin-token': adminToken
+                  },
                   body: JSON.stringify(product)
                 });
               } else {
-                await headers: {
-                  'Content-Type': 'application/json',
-                  'x-admin-token': adminToken
-                }, {
+                res = await fetch('/api/products', {
                   method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'x-admin-token': adminToken
+                  },
                   body: JSON.stringify(product)
                 });
+              }
+
+              if (!res.ok) {
+                alert('Unauthorized or server error while saving.');
+                return;
               }
 
               await loadProducts();
@@ -522,15 +627,21 @@
                 closeDetail();
               }
             }
+
             async function deleteProductConfirm(id) {
               if (!confirm('Delete this product?')) return;
 
-              await fetch(`/api/products/${id}`, {
+              const res = await fetch(`/api/products/${id}`, {
                 method: 'DELETE',
                 headers: {
                   'x-admin-token': adminToken
                 }
-              };
+              });
+
+              if (!res.ok) {
+                alert('Unauthorized or server error while deleting.');
+                return;
+              }
 
               await loadProducts();
               renderAdminPanel();
@@ -539,7 +650,10 @@
                 closeDetail();
               }
             }
-            function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
+
+            function closeAdminModal() {
+              document.getElementById('adminModal').classList.remove('active');
+            }
             
             window.openDetail = openDetail; window.closeDetail = closeDetail; window.nextImg = nextImg; window.prevImg = prevImg; window.setImageIndex = setImageIndex; window.closeAdminModal = closeAdminModal; window.editProductForm = editProductForm; window.deleteProductConfirm = deleteProductConfirm; window.resetAdminForm = resetAdminForm; window.cloneProduct = cloneProduct;
             
