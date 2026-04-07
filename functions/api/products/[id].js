@@ -1,5 +1,15 @@
+function isAuthorized(request, env) {
+  const token = request.headers.get('x-admin-token');
+  return token === env.ADMIN_TOKEN;
+}
+
 export async function onRequestPut(context) {
   const { env, request, params } = context;
+
+  if (!isAuthorized(request, env)) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const id = Number(params.id);
   const body = await request.json();
 
@@ -37,7 +47,12 @@ export async function onRequestPut(context) {
 }
 
 export async function onRequestDelete(context) {
-  const { env, params } = context;
+  const { env, request, params } = context;
+
+  if (!isAuthorized(request, env)) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const id = Number(params.id);
 
   await env.DB
