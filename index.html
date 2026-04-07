@@ -343,47 +343,17 @@
             const encodedPassword = "VV8hMnNRb2RpS0w5LT8y";
             const ADMIN_PASSWORD = atob(encodedPassword);
 
-            let products = [
-                { id: 1, name: "Acne Studio Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/111_00002_guqksv.png"], description: "Bombovaja Hudi Akne Studio", specs: "- Colors : Black\n- Sizes : XS-XL", isNewDrop: false, newDropUntil: null },
-                { id: 2, name: "Balenciaga Runner", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00005_vv4fcp.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00004_ck4ljn.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/111_00003_xdyd49.png"], description: "Balenciaga Runners Track2 shoes", specs: "- Colors : All\n- Sizes : 36-46", isNewDrop: true, newDropUntil: null },
-                { id: 3, name: "Stone Island (Washed)", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/111_00000_s8bota.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/111_00001_ctzbor.png"], description: "Grey Zip-Up hoodie", specs: "- Colors : Dark grey, Black\n- Sizes : S, M, L", isNewDrop: false, newDropUntil: null },
-                { id: 4, name: "Chief Keef Polo Sleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00010_rlhhpa.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00009_ly2vkz.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00011_nxhhze.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00006_gvuntg.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00007_cx4tds.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/PLR_Longsleeve_00008_f3hybi.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000007/PLR_Longsleeve_00012_fvxnja.png"], description: "Chief Keef Polo longsleeve", specs: "- Colors : Look at the pictures left\n- Sizes : S-XXL", isNewDrop: false, newDropUntil: null },
-                { id: 5, name: "Jeffrey Epstein Zip", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999994/jeb_00013_esvimo.png"], description: "Jeffrey Epstein Quarter Zip", specs: "- Colors : Dark Blue\n- Sizes : S-XXL", isNewDrop: false, newDropUntil: null },
-                { id: 6, name: "Erd Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ERD1_00014_gextaf.png"], description: "Erd black and white Longsleeve", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 7, name: "Ralph Lauren Button Sleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/PLRlonger_00016_qo9di5.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/PLRlonger_00018_pdjlg1.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000015/PLRlonger_00017_fgbaud.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000007/PLRlonger_00015_mfj6yo.png"], description: "Ralph Lauren Button Longsleeve", specs: "- Colors : Gray, White, Navy Blue, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 8, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/CDG_00019_rrmepv.png"], description: "CDG Longsleeve with letters on the back", specs: "- Colors : Black\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
-                { id: 9, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/CDG1_00021_arfaux.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999992/CDG1_00020_bxqvmr.png"], description: "CDG Longsleeve with letters on the front", specs: "- Colors : Black, White\n- Sizes : S-L", isNewDrop: false, newDropUntil: null },
-                { id: 10, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/%D0%A1DG2_00023_vtziis.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/%D0%A1DG2_00022_a7gt2p.png"], description: "CDG Longsleeve with small letters on the chest", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 11, name: "CDG Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999991/%D0%A1DG3_00024_h5l8fp.png"], description: "CDG Longsleeve with heart and letters on the sleeves", specs: "- Colors : White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 12, name: "Essentials FOG", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ESSENTIAL_00026_tsx8bi.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1772999993/ESSENTIAL_00025_cr7xag.png"], description: "Essentials FOG hoodie", specs: "- Colors : Black, Light/Dark Oatmeal\n- Sizes : XXS-2XL", isNewDrop: false, newDropUntil: null },
-                { id: 13, name: "Supreme Arabic Logo Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/supremeT1_00027_lowz2g.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773000008/supremeT1_00028_ch5jd6.png"], description: "Supreme classic arabic logo tee", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 14, name: "Supreme X YoungBoy Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00030_ap5ibg.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00029_wk1vpw.png"], description: "Supreme Tee with YoungBoy", specs: "- Colors : Black and White\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
-                { id: 15, name: "Givenchy Star Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005318/suka_00031_wdtuwr.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00032_cdvemn.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00033_qrnutx.png"], description: "Givenchy Star Tee", specs: "- Colors : Black(Red and White Stars) and White(Black Stars)\n- Sizes : M-XL", isNewDrop: false, newDropUntil: null },
-                { id: 16, name: "Fortnite X Balenciaga Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00034_ckvrol.png"], description: "Balenciaga X Fortnite", specs: "- Colors : Black\n- Sizes : XS-L", isNewDrop: false, newDropUntil: null },
-                { id: 17, name: "Balenciaga Lost Tapes", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00035_qdbxnf.png"], description: "Balenciaga Lost Tapes Flared jeans", specs: "- Colors : Ice Blue\n- Sizes : XSS-M", isNewDrop: false, newDropUntil: null },
-                { id: 18, name: "Essentials Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773005321/suka_00036_gaspev.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00037_fiqead.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773005319/suka_00038_ymzrdp.png"], description: "Essentials FOG shorts", specs: "- Colors : Black, Light Oat, Dark Oat\n- Sizes : XSS-XL", isNewDrop: false, newDropUntil: null },
-                { id: 19, name: "Rick Owens Ramones", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342051/riki_00031_njmkb6.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00032_azavox.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00035_trakmf.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00030_hq0drd.png"], description: "Rick Owens Ramones low", specs: "- Colors : Black and white, Full white, Full black(leather), Black and white, Black and white with star, Full white, Black worn, Pink worn, Full black(canvas)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
-                { id: 20, name: "Rick Owens Ramones( jumbo laces )", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342046/riki_00029_n0sd9n.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00033_zrcxmw.png"], description: "Rick Owens Ramones jumbo", specs: "- Colors : Black and white (Bread),Black and white (thin leather), Full white (thin leather), Full black(thin leather)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
-                { id: 21, name: "Rick Owens Vans", type: "Replica", category: "shoes", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773342050/riki_00036_cuudxd.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00037_yefmma.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773342047/riki_00038_plm468.png"], description: "Rick Owens Vans low", specs: "- Colors : Black,White,Grey(leather), Black, Pink(canvas), Black, Light grey, Brown, Pitaya(suede)\n- Sizes : 36-48", isNewDrop: false, newDropUntil: null },
-                { id: 22, name: "Supreme Satin Applique Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00039_b3epqb.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00040_ajg4wl.png"], description: "Supreme Satin Appliqué Hoodie", specs: "- Colors : Black and White, Gray and White\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 23, name: "ERD Hoodie", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691224/SUCHKA1_00041_glio30.png"], description: "ERD Hoodie with print", specs: "- Colors : Floral Gray\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 24, name: "Typography Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773691225/SUCHKA1_00042_wkkejy.png"], description: "Archive Tee", specs: "- Colors : Black\n- Sizes : M-4XL", isNewDrop: false, newDropUntil: null },
-                { id: 25, name: "Acne Studio Longsleeve", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1773775091/A1_00043_a79grl.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775090/A1_00044_t2mgdc.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775092/A1_00045_atthku.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775091/A1_00046_y3haov.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1773775091/A1_00047_l3ebyy.png"], description: "Acne Studios 1996 stamp logo", specs: "- Colors : White, Black, Pink, Sky Blue, Green, Navy Blue, Wine Red\n- Sizes : S-L", isNewDrop: false, newDropUntil: null },
-                { id: 26, name: "Ysl Sweatshirt", type: "Replica", category: "hoodies", images: ["https://res.cloudinary.com/dicw3zojk/image/upload/v1774120524/suchka_nxfccj.png"], description: "Navy Blue Ysl sweatshirt", specs: "- Colors : White, Navy Blue\n- Sizes : S-2XL", isNewDrop: false, newDropUntil: null },
-                { id: 27, name: "Balenciaga Double Waist Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1774197230/Balcncn_fne9fu.png"], description: "Double Waist Balenciaga shorts", specs: "- Colors : White, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 28, name: "Balenciaga Double Waist Shorts", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1774198600/badshgjbajdh_scyity.png"], description: "Double Waist Balenciaga shorts", specs: "- Colors : White, Black\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 29, name: "Balenciaga Sweetpants", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1775417518/balbanan_00048_ubttpf.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775417519/balbanan_00049_maades.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775415599/FON_00043_1_w0swld.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775417518/balbanan_00050_xubgva.png"], description: "Balenciaga Sweatpants with logo, many different variants of pants", specs: "- Colors : White, Black, Blue, Mixed\n- Sizes : S-XL", isNewDrop: false, newDropUntil: null },
-                { id: 30, name: "Jaded London Sweatpants", type: "Replica", category: "pants", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1775428178/bape_00051_n4nk85.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775428179/bape_00052_voebl9.png"], description: "Jaded London baggy sweatpants", specs: "- Colors : Gray and Black\n- Sizes : S-XL", isNewDrop: true, newDropUntil: Date.now() + 7*24*60*60*1000 },
-                { id: 31, name: "Burberry Scarf", type: "Replica", category: "accessories", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1775428179/bape_00053_lezsqp.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775428178/bape_00054_f5bnsl.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775428179/bape_00055_rxvylc.png"], description: "Long Burberry Scarf with burberry bag and box", specs: "- Colors : Classic, Black and Pink\n- Sizes : One Size", isNewDrop: true, newDropUntil: Date.now() + 7*24*60*60*1000 },
-                { id: 32, name: "Bape Zip-Up Hoodie", type: "Replica", category: "hoodie", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1775428179/bape_00057_n54cof.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775428179/bape_00058_f80iz5.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775428178/bape_00060_hb6rh9.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775428179/bape_00056_mzif4p.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775428178/bape_00059_ecl65t.png"], description: "Bape Zip-Up Hoodie", specs: "- Colors : Red, Dark Gray, Blue, Army Green, Purple, Yellow, Purple and Pink\n- Sizes : M-3XL", isNewDrop: false, newDropUntil: null },
-                { id: 33, name: "Burberry Zip-Up Hoodie", type: "Replica", category: "hoodie", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1775465589/burberrrrzip_00062_r7esvv.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775465589/burberrrrzip_00061_bxxgkl.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775465588/burberrrrzip_00063_vqfkaw.png"], description: "Burberry Zip-Up hoodie with same colored hood", specs: "- Colors : Gray, Black and Navy Blue\n- Sizes : S-2XL", isNewDrop: true, newDropUntil: Date.now() + 7*24*60*60*1000 },
-                { id: 34, name: "Bape x Comme des Garcons Osaka 1 Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1775479358/cdggg_00066_g1ambk.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775479358/cdggg_00067_lfbrvz.png"], description: "Bape x Comme des Garcons Osaka 1 Tee with big print on front", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: true, newDropUntil: Date.now() + 7*24*60*60*1000 },
-                { id: 35, name: "Bape x Comme des Garcons Osaka 4 Tee", type: "Replica", category: "shirts", images: ["https://res.cloudinary.com/dwacujq5u/image/upload/v1775479358/cdggg_00065_slbndl.png","https://res.cloudinary.com/dwacujq5u/image/upload/v1775479358/cdggg_00064_kptckg.png"], description: "Bape x Comme des Garcons Osaka 4 Tee with big print on front", specs: "- Colors : Black and White\n- Sizes : S-XL", isNewDrop: true, newDropUntil: null },
-            ];
+            let products = [];
 
             let currentCategory = 'all', currentSearch = '', currentTopFilter = 'all', currentDetailItem = null, currentImgIndex = 0, isAdminAuthenticated = false;
             let editingProductId = null;
 
+            async function loadProducts() {
+            const res = await fetch('/api/products');
+            products = await res.json();
+            enderProducts();
+            }          
+            
             function isProductNew(p) { return p.isNewDrop && p.newDropUntil && Date.now() < p.newDropUntil; }
             function getSortedProducts() {
                 const newDrop = products.filter(p => isProductNew(p)).sort((a,b)=>b.id-a.id);
@@ -490,8 +460,68 @@
             function resetAdminForm() { editingProductId=null; document.getElementById('formTitle').innerText='➕ Add New Product'; document.getElementById('prodName').value=''; document.getElementById('prodCategory').value='shirts'; document.getElementById('prodImages').value=''; document.getElementById('prodSpecs').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodIsNew').checked=false; attachImagePreview(); }
             function editProductForm(id) { const p=products.find(p=>p.id===id); if(!p) return; editingProductId=id; document.getElementById('formTitle').innerText='✏️ Edit Product'; document.getElementById('prodName').value=p.name; document.getElementById('prodCategory').value=p.category; document.getElementById('prodImages').value=p.images.join(', '); document.getElementById('prodSpecs').value=p.specs; document.getElementById('prodDesc').value=p.description; document.getElementById('prodIsNew').checked=p.isNewDrop; attachImagePreview(); document.getElementById('adminForm').scrollIntoView({behavior:'smooth'}); }
             function cloneProduct(id) { const original=products.find(p=>p.id===id); if(!original) return; const newId=Math.max(...products.map(p=>p.id),0)+1; const clone={...original, id:newId, name:original.name+' (copy)', isNewDrop:false, newDropUntil:null}; products.push(clone); renderAdminPanel(); renderProducts(); }
-            function saveProduct() { const name=document.getElementById('prodName').value.trim(); if(!name) return alert('Name required'); const category=document.getElementById('prodCategory').value; let imagesRaw=document.getElementById('prodImages').value; let images=imagesRaw?imagesRaw.split(',').map(s=>s.trim()).filter(s=>s):['https://picsum.photos/id/1/400/500']; const desc=document.getElementById('prodDesc').value||'No description'; let specs=document.getElementById('prodSpecs').value||'- Colors : ...\n- Sizes : ...'; const isNew=document.getElementById('prodIsNew').checked; if(editingProductId!==null){ const idx=products.findIndex(p=>p.id===editingProductId); if(idx!==-1){ products[idx]={...products[idx], name, category, images, description:desc, specs, isNewDrop:isNew, newDropUntil:isNew?Date.now()+7*24*60*60*1000:null}; } } else { const newId=Math.max(...products.map(p=>p.id),0)+1; products.push({id:newId, name, type:'Replica', category, images, description:desc, specs, isNewDrop:isNew, newDropUntil:isNew?Date.now()+7*24*60*60*1000:null}); } renderAdminPanel(); renderProducts(); if(currentDetailItem && !products.find(p=>p.id===currentDetailItem.id)) closeDetail(); }
-            function deleteProductConfirm(id) { const p=products.find(p=>p.id===id); if(confirm(`Delete "${p?.name}"?`)) { products=products.filter(p=>p.id!==id); renderAdminPanel(); renderProducts(); if(currentDetailItem?.id===id) closeDetail(); } }
+            async function saveProduct() {
+              const product = {
+                name: document.getElementById('prodName').value.trim(),
+                type: 'Replica',
+                category: document.getElementById('prodCategory').value,
+                images: document.getElementById('prodImages').value
+                  .split(',')
+                  .map(s => s.trim())
+                  .filter(Boolean),
+                specs: document.getElementById('prodSpecs').value.trim() || '- Colors : ...\n- Sizes : ...',
+                description: document.getElementById('prodDesc').value.trim() || 'No description',
+                isNewDrop: document.getElementById('prodIsNew').checked,
+                newDropUntil: document.getElementById('prodIsNew').checked
+                  ? Date.now() + 7 * 24 * 60 * 60 * 1000
+                  : null
+              };
+
+              if (!product.name) {
+                alert('Name required');
+                return;
+              }
+
+              if (!product.images.length) {
+                product.images = ['https://picsum.photos/id/1/400/500'];
+              }
+
+              if (editingProductId !== null) {
+                await fetch(`/api/products/${editingProductId}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(product)
+                });
+              } else {
+                await fetch('/api/products', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(product)
+                });
+              }
+
+              await loadProducts();
+              renderAdminPanel();
+              resetAdminForm();
+
+              if (currentDetailItem && !products.find(p => p.id === currentDetailItem.id)) {
+                closeDetail();
+              }
+            }
+            async function deleteProductConfirm(id) {
+              if (!confirm('Delete this product?')) return;
+
+              await fetch(`/api/products/${id}`, {
+                method: 'DELETE'
+              });
+
+              await loadProducts();
+              renderAdminPanel();
+
+              if (currentDetailItem && currentDetailItem.id === id) {
+                closeDetail();
+              }
+            }
             function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
             
             window.openDetail = openDetail; window.closeDetail = closeDetail; window.nextImg = nextImg; window.prevImg = prevImg; window.setImageIndex = setImageIndex; window.closeAdminModal = closeAdminModal; window.editProductForm = editProductForm; window.deleteProductConfirm = deleteProductConfirm; window.resetAdminForm = resetAdminForm; window.cloneProduct = cloneProduct;
@@ -506,7 +536,7 @@
             window.addEventListener('scroll', () => { document.getElementById('goTop').classList.toggle('visible', window.scrollY>300); });
             document.getElementById('goTop').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
             initFilters();
-            renderProducts();
+            loadProducts();
         })();
     </script>
 </body>
