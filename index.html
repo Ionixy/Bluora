@@ -445,7 +445,6 @@
                 document.getElementById('passwordError').innerText = 'Wrong password.';
               }
             }
-            }
             function openAdminPanel() { if(!isAdminAuthenticated) { showPasswordModal(); return; } editingProductId=null; renderAdminPanel(); document.getElementById('adminModal').classList.add('active'); }
             function renderAdminPanel() { /* полная админка (код не меняем, просто сохраняем работоспособность) */
                 const container = document.getElementById('adminPanelContent');
