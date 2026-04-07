@@ -347,6 +347,7 @@
 
             let currentCategory = 'all', currentSearch = '', currentTopFilter = 'all', currentDetailItem = null, currentImgIndex = 0, isAdminAuthenticated = false;
             let editingProductId = null;
+            let adminToken = '';
 
             async function loadProducts() {
             const res = await fetch('/api/products');
@@ -432,11 +433,17 @@
             // ADMIN (без изменений, логика сохранена)
             function showPasswordModal() { document.getElementById('passwordModal').classList.add('active'); document.getElementById('adminPassword').focus(); }
             function checkPasswordAndOpenAdmin() {
-                if(document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
-                    isAdminAuthenticated = true;
-                    document.getElementById('passwordModal').classList.remove('active');
-                    openAdminPanel();
-                } else { document.getElementById('passwordError').innerText = 'Wrong password.'; }
+              const enteredPassword = document.getElementById('adminPassword').value;
+
+              if (enteredPassword === ADMIN_PASSWORD) {
+                adminToken = enteredPassword;
+                isAdminAuthenticated = true;
+                document.getElementById('passwordModal').classList.remove('active');
+                document.getElementById('passwordError').innerText = '';
+                openAdminPanel();
+              } else {
+                document.getElementById('passwordError').innerText = 'Wrong password.';
+              }
             }
             function openAdminPanel() { if(!isAdminAuthenticated) { showPasswordModal(); return; } editingProductId=null; renderAdminPanel(); document.getElementById('adminModal').classList.add('active'); }
             function renderAdminPanel() { /* полная админка (код не меняем, просто сохраняем работоспособность) */
