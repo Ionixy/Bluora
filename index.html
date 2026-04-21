@@ -194,8 +194,12 @@
             color: white; margin-bottom: 10px;
         }
         .detail-desc { font-size: 16px; line-height: 1.5; color: #ddd; }
-        .detail-specs { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.5; white-space: pre-wrap; color: #ddd; }
+        .detail-specs { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.5; color: #ddd; display: flex; flex-direction: column; gap: 10px; }
+        .spec-row { display: flex; flex-direction: column; gap: 6px; }
         .spec-bold { font-weight: 700; color: white; }
+        .spec-values { display: flex; flex-wrap: wrap; gap: 8px; }
+        .spec-pill { padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); font-size: 14px; color: #fff; }
+        .spec-text { color: #ddd; }
         
         /* ГРУППА КНОПОК ВНИЗУ (info + back) */
         .detail-buttons {
@@ -375,6 +379,58 @@
                 document.querySelectorAll('.image-container[data-id]').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); openDetail(parseInt(el.dataset.id)); }); });
                 document.querySelectorAll('.btn-buy[data-id]').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); openDetail(parseInt(btn.dataset.id)); }); });
             }
+            function escapeHtml(value = '') {
+                return value
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function normalizeSpecsLines(specs = '') {
+                return specs
+                    .replace(/\s+-\s*(Colors?|Sizes?)\s*:/gi, '\n- $1 :')
+                    .split(/\n+/)
+                    .map(line => line.trim())
+                    .filter(Boolean);
+            }
+
+            function formatSpecs(specs = '') {
+                const lines = normalizeSpecsLines(specs);
+
+                if (!lines.length) {
+                    return '<div class="spec-text">No specifications</div>';
+                }
+
+                return lines.map(line => {
+                    const cleanedLine = line.replace(/^[-•]\s*/, '');
+                    const match = cleanedLine.match(/^([^:]+?)\s*:\s*(.*)$/);
+
+                    if (!match) {
+                        return `<div class="spec-text">${escapeHtml(cleanedLine)}</div>`;
+                    }
+
+                    const label = match[1].trim();
+                    const value = match[2].trim();
+                    const valueItems = value
+                        .split(/[,/|]+/)
+                        .map(item => item.trim())
+                        .filter(Boolean);
+
+                    const valuesHtml = valueItems.length > 1
+                        ? `<div class="spec-values">${valueItems.map(item => `<span class="spec-pill">${escapeHtml(item)}</span>`).join('')}</div>`
+                        : `<div class="spec-text">${escapeHtml(value || '—')}</div>`;
+
+                    return `
+                        <div class="spec-row">
+                            <div class="spec-bold">${escapeHtml(label)}:</div>
+                            ${valuesHtml}
+                        </div>
+                    `;
+                }).join('');
+            }
+
             function openDetail(id) {
                 const p = products.find(p=>p.id===id);
                 if(!p) return;
@@ -384,15 +440,7 @@
                 document.getElementById('detail-view').style.display = 'block';
                 document.getElementById('detail-name').innerText = p.name;
                 document.getElementById('detail-desc').innerHTML = p.description;
-                let lines = p.specs.split('\n');
-                let formattedLines = lines.map(line => {
-                    if (line.trim().startsWith('- ')) {
-                        return line.replace(/^(- .*?)(:| :)/, '<span class="spec-bold">$1$2</span>');
-                    }
-                    return line;
-                });
-                let formattedSpecs = formattedLines.join('<br>');
-                document.getElementById('detail-specs').innerHTML = formattedSpecs;
+                document.getElementById('detail-specs').innerHTML = formatSpecs(p.specs);
                 const hasMultiple = p.images.length > 1;
                 document.getElementById('prevBtn').style.display = hasMultiple ? 'flex' : 'none';
                 document.getElementById('nextBtn').style.display = hasMultiple ? 'flex' : 'none';
