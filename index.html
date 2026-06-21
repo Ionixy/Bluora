@@ -49,6 +49,13 @@
             border-radius: 2rem; cursor: pointer; font-weight: 600;
         }
         .filter-btn.active { background: rgba(255,255,255,0.2); box-shadow: 0 0 8px rgba(255,255,255,0.2); }
+        .profile-btn {
+            display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 22px; background: rgba(255,255,255,0.1);
+            color: white; cursor: pointer; font: inherit; font-weight: 600;
+        }
+        .profile-btn:hover { background: rgba(255,255,255,0.2); }
+        .profile-name { max-width: 12ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
         /* ===== LOGO BIGGER ===== */
         .logo {
@@ -282,6 +289,7 @@
                 <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search products"></div>
                 <div class="filter-btns"><button class="filter-btn active" data-filter="all">All</button><button class="filter-btn" data-filter="new">New Drop</button></div>
             </div>
+            <button class="profile-btn" id="profileBtn" type="button" title="Account"><i class="fas fa-user"></i><span class="profile-name" id="profileName">Account</span></button>
         </div>
         <div class="logo" id="logoHome">Bluora</div>
         
@@ -335,7 +343,7 @@
     <div class="admin-hidden" id="adminBtn"><i class="fas fa-user-shield"></i> Admin</div>
     <div class="go-top" id="goTop"><i class="fas fa-arrow-up"></i></div>
 
-    <div id="passwordModal" class="password-modal"><div class="password-box"><h3 id="authTitle">Login</h3><input type="email" id="authEmail" placeholder="Email"><input type="password" id="authPassword" placeholder="Password"><button id="submitPasswordBtn">Login</button><button id="switchAuthModeBtn" type="button" style="margin-top:10px; background:transparent; color:white; border:1px solid rgba(255,255,255,0.25);">Create account</button><div id="passwordError" class="error-msg"></div></div></div>
+    <div id="passwordModal" class="password-modal"><div class="password-box"><h3 id="authTitle">Login</h3><input type="text" id="authUsername" placeholder="Username (3-12 characters)" maxlength="12" autocomplete="username" style="display:none;"><input type="email" id="authEmail" placeholder="Email" autocomplete="email"><input type="password" id="authPassword" placeholder="Password" autocomplete="current-password"><button id="submitPasswordBtn">Login</button><button id="switchAuthModeBtn" type="button" style="margin-top:10px; background:transparent; color:white; border:1px solid rgba(255,255,255,0.25);">Create account</button><div id="passwordError" class="error-msg"></div></div></div>
     <div id="adminModal" class="admin-modal"><div class="admin-panel" id="adminPanelContent"></div></div>
 
     <script>
@@ -624,6 +632,7 @@
                 document.getElementById('authTitle').innerText = mode === 'login' ? 'Login' : 'Create account';
                 document.getElementById('submitPasswordBtn').innerText = mode === 'login' ? 'Login' : 'Register';
                 document.getElementById('switchAuthModeBtn').innerText = mode === 'login' ? 'Create account' : 'Back to login';
+                document.getElementById('authUsername').style.display = mode === 'register' ? 'block' : 'none';
                 document.getElementById('passwordError').innerText = '';
             }
             function showPasswordModal() {
@@ -637,15 +646,18 @@
                     const data = await res.json();
                     currentUser = data.user || null;
                     isAdminAuthenticated = currentUser?.role === 'admin';
+                    document.getElementById('profileName').innerText = currentUser?.username || 'Account';
                     document.getElementById('adminBtn').innerHTML = isAdminAuthenticated
                         ? '<i class="fas fa-user-shield"></i> Admin'
                         : '<i class="fas fa-sign-in-alt"></i> Login';
                 } catch (error) {
                     currentUser = null;
                     isAdminAuthenticated = false;
+                    document.getElementById('profileName').innerText = 'Account';
                 }
             }
             async function submitAuthForm() {
+                const username = document.getElementById('authUsername').value.trim();
                 const email = document.getElementById('authEmail').value.trim();
                 const password = document.getElementById('authPassword').value;
                 const errorBox = document.getElementById('passwordError');
@@ -654,7 +666,7 @@
                 const res = await fetch(`/api/auth/${authMode === 'login' ? 'login' : 'register'}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ username, email, password })
                 });
                 const data = await res.json();
 
@@ -677,6 +689,13 @@
                 isAdminAuthenticated = false;
                 closeAdminModal();
                 await syncAuthState();
+            }
+            async function openProfile() {
+                if (!currentUser) {
+                    showPasswordModal();
+                    return;
+                }
+                if (confirm(`Log out of ${currentUser.username}?`)) await logout();
             }
             function openAdminPanel() { if(!isAdminAuthenticated) { showPasswordModal(); return; } editingProductId=null; renderAdminPanel(); document.getElementById('adminModal').classList.add('active'); }
             
@@ -709,7 +728,10 @@
                     usersGrid.innerHTML = data.users.map(user => {
                         const nextRole = user.role === 'admin' ? 'user' : 'admin';
                         const label = user.role === 'admin' ? 'Make user' : 'Make admin';
-                        return `<div class="admin-product-card"><div class="admin-product-info"><div class="admin-product-name">${user.email}</div><div class="admin-product-cat">${user.role}</div></div><div class="admin-product-actions"><button class="clone-btn user-role-btn" data-id="${user.id}" data-role="${nextRole}" title="${label}">${label}</button></div></div>`;
+                        const removeAction = currentUser?.isPrimaryAdmin && Number(user.id) !== Number(currentUser.id)
+                            ? `<button class="delete-btn delete-user-btn" data-id="${user.id}" title="Delete account"><i class="fas fa-user-minus"></i></button>`
+                            : '';
+                        return `<div class="admin-product-card"><div class="admin-product-info"><div class="admin-product-name">${user.username || user.email}</div><div class="admin-product-cat">${user.role} · ${user.email}</div></div><div class="admin-product-actions"><button class="clone-btn user-role-btn" data-id="${user.id}" data-role="${nextRole}" title="${label}">${label}</button>${removeAction}</div></div>`;
                     }).join('') || '<div style="opacity:.7; padding:10px;">No users yet.</div>';
 
                     document.querySelectorAll('.user-role-btn').forEach(btn => {
@@ -721,6 +743,18 @@
                             });
                             if (!res.ok) {
                                 alert('Could not update user role.');
+                                return;
+                            }
+                            await renderAdminUsers();
+                        });
+                    });
+                    document.querySelectorAll('.delete-user-btn').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            if (!confirm('Delete this account? The person will need to register again.')) return;
+                            const res = await fetch(`/api/admin/users/${btn.dataset.id}`, { method: 'DELETE' });
+                            const data = await res.json();
+                            if (!res.ok) {
+                                alert(data.error || 'Could not delete user.');
                                 return;
                             }
                             await renderAdminUsers();
@@ -884,6 +918,7 @@
             document.getElementById('prevBtn').addEventListener('click', prevImg);
             document.getElementById('nextBtn').addEventListener('click', nextImg);
             document.getElementById('adminBtn').addEventListener('click', () => isAdminAuthenticated ? openAdminPanel() : showPasswordModal());
+            document.getElementById('profileBtn').addEventListener('click', openProfile);
             document.getElementById('submitPasswordBtn').addEventListener('click', submitAuthForm);
             document.getElementById('switchAuthModeBtn').addEventListener('click', () => setAuthMode(authMode === 'login' ? 'register' : 'login'));
             document.getElementById('authPassword').addEventListener('keypress', e => { if(e.key==='Enter') submitAuthForm(); });
