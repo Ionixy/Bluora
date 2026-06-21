@@ -1,21 +1,16 @@
-function isAuthorized(request, env) {
-  if (!env.ADMIN_TOKEN) return true;
-  const token = request.headers.get('x-admin-token');
-  return token === env.ADMIN_TOKEN;
-}
+import { json, requireAdmin } from '../_lib/auth.js';
 
 function getRemoveBgApiKey(env) {
   return env.REMOVEBG_API_KEY || env.REMOVE_BG_API_KEY || env.REMOVEBG_TOKEN || env.REMOVE_BG_TOKEN;
 }
 
 export async function onRequestPost({ request, env }) {
-  if (!isAuthorized(request, env)) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const auth = await requireAdmin(request, env);
+  if (auth.error) return auth.error;
 
   const apiKey = getRemoveBgApiKey(env);
   if (!apiKey) {
-    return Response.json(
+    return json(
       { error: 'Remove.bg API key is missing. Add REMOVEBG_API_KEY in Cloudflare secrets.' },
       { status: 500 }
     );
@@ -24,7 +19,7 @@ export async function onRequestPost({ request, env }) {
   const { imageUrl } = await request.json();
 
   if (!imageUrl) {
-    return Response.json({ error: 'imageUrl is required' }, { status: 400 });
+    return json({ error: 'imageUrl is required' }, { status: 400 });
   }
 
   const form = new FormData();
@@ -42,7 +37,7 @@ export async function onRequestPost({ request, env }) {
 
   if (!removeBgResponse.ok) {
     const errorText = await removeBgResponse.text();
-    return Response.json({ error: errorText }, { status: removeBgResponse.status });
+    return json({ error: errorText }, { status: removeBgResponse.status });
   }
 
   const imageBuffer = await removeBgResponse.arrayBuffer();
