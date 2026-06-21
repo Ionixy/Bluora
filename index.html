@@ -364,6 +364,34 @@
             function splitSpecValues(value) {
                 return String(value || '').split(',').map(s => s.trim()).filter(Boolean);
             }
+            function splitImageValues(value) {
+                const items = [];
+                let current = '';
+                let dataUrlHeaderFinished = false;
+
+                for (const char of String(value || '')) {
+                    const trimmed = current.trim();
+                    const isDataUrl = trimmed.startsWith('data:');
+
+                    if (char === ',' && isDataUrl && !dataUrlHeaderFinished) {
+                        current += char;
+                        dataUrlHeaderFinished = true;
+                        continue;
+                    }
+
+                    if (char === ',' || char === '\n') {
+                        if (trimmed) items.push(trimmed);
+                        current = '';
+                        dataUrlHeaderFinished = false;
+                        continue;
+                    }
+
+                    current += char;
+                }
+
+                if (current.trim()) items.push(current.trim());
+                return items;
+            }
             function readSpecLine(specs, label) {
                 const line = String(specs || '').split('\n').find(item => item.toLowerCase().includes(label.toLowerCase()));
                 return line ? line.replace(/^-\s*[^:]+:\s*/i, '').trim() : '';
@@ -487,7 +515,7 @@
                     
                     document.getElementById('magicBgBtn').onclick = async () => {
                         const imagesInput = document.getElementById('prodImages');
-                        const urls = imagesInput.value.split(',').map(s => s.trim()).filter(Boolean);
+                        const urls = splitImageValues(imagesInput.value);
                         
                         if (!urls.length) {
                             alert('Пожалуйста, сначала вставьте хотя бы одну ссылку на исходное фото товара в поле Image URLs!');
@@ -554,7 +582,7 @@
                 }, 10);
             }
             
-            function attachImagePreview() { const imagesInput = document.getElementById('prodImages'); const previewDiv = document.getElementById('imagePreviewContainer'); const updatePreview = () => { let urls = imagesInput.value.split(',').map(s=>s.trim()).filter(s=>s); previewDiv.innerHTML = urls.map(url => `<img src="${url}" onerror="this.style.opacity='0.3'">`).join(''); }; imagesInput.addEventListener('input', updatePreview); updatePreview(); }
+            function attachImagePreview() { const imagesInput = document.getElementById('prodImages'); const previewDiv = document.getElementById('imagePreviewContainer'); const updatePreview = () => { let urls = splitImageValues(imagesInput.value); previewDiv.innerHTML = urls.map(url => `<img src="${url}" onerror="this.style.opacity='0.3'">`).join(''); }; imagesInput.addEventListener('input', updatePreview); updatePreview(); }
             function resetAdminForm() { editingProductId=null; document.getElementById('formTitle').innerText='➕ Add New Product'; document.getElementById('prodName').value=''; document.getElementById('prodCategory').value='shirts'; document.getElementById('prodImages').value=''; document.getElementById('prodColors').value=''; document.getElementById('prodSizes').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodIsNew').checked=false; attachImagePreview(); }
             function editProductForm(id) { const p=products.find(p=>p.id===id); if(!p) return; editingProductId=id; document.getElementById('formTitle').innerText='✏️ Edit Product'; document.getElementById('prodName').value=p.name; document.getElementById('prodCategory').value=p.category; document.getElementById('prodImages').value=p.images.join(', '); document.getElementById('prodColors').value=getProductColors(p).join(', '); document.getElementById('prodSizes').value=getProductSizes(p).join(', '); document.getElementById('prodDesc').value=p.description; document.getElementById('prodIsNew').checked=p.isNewDrop; attachImagePreview(); document.getElementById('adminForm').scrollIntoView({behavior:'smooth'}); }
             function cloneProduct(id) { const original=products.find(p=>p.id===id); if(!original) return; const newId=Math.max(...products.map(p=>p.id),0)+1; const clone={...original, id:newId, name:original.name+' (copy)', isNewDrop:false, newDropUntil:null}; products.push(clone); renderAdminPanel(); renderProducts(); }
@@ -563,10 +591,7 @@
                 name: document.getElementById('prodName').value.trim(),
                 type: 'Replica',
                 category: document.getElementById('prodCategory').value,
-                images: document.getElementById('prodImages').value
-                  .split(',')
-                  .map(s => s.trim())
-                  .filter(Boolean),
+                images: splitImageValues(document.getElementById('prodImages').value),
                 colors: document.getElementById('prodColors').value.trim(),
                 sizes: document.getElementById('prodSizes').value.trim(),
                 specs: buildSpecs(document.getElementById('prodColors').value, document.getElementById('prodSizes').value),
