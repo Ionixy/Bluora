@@ -5,7 +5,7 @@ export async function onRequestPost({ request, env }) {
   const normalizedEmail = normalizeEmail(email);
 
   const user = await env.DB
-    .prepare('SELECT id, email, password_hash, role FROM users WHERE email = ? LIMIT 1')
+    .prepare('SELECT id, username, email, password_hash, role FROM users WHERE email = ? LIMIT 1')
     .bind(normalizedEmail)
     .first();
 
@@ -15,7 +15,7 @@ export async function onRequestPost({ request, env }) {
 
   const sessionId = await createSession(env, user.id);
   return json(
-    { user: { id: user.id, email: user.email, role: user.role } },
+    { user: { id: user.id, username: user.username, email: user.email, role: user.role, isPrimaryAdmin: normalizeEmail(user.email) === normalizeEmail(env.FIRST_ADMIN_EMAIL) } },
     { headers: { 'Set-Cookie': makeSessionCookie(sessionId) } }
   );
 }
