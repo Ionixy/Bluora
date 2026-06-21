@@ -392,6 +392,96 @@
                 if (current.trim()) items.push(current.trim());
                 return items;
             }
+            function loadImageSource(source) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    let objectUrl = null;
+
+                    img.onload = () => {
+                        if (objectUrl) URL.revokeObjectURL(objectUrl);
+                        resolve(img);
+                    };
+                    img.onerror = () => {
+                        if (objectUrl) URL.revokeObjectURL(objectUrl);
+                        reject(new Error('Could not load image'));
+                    };
+
+                    if (source instanceof Blob) {
+                        objectUrl = URL.createObjectURL(source);
+                        img.src = objectUrl;
+                    } else {
+                        img.src = source;
+                    }
+                });
+            }
+            function getAlphaBounds(canvas) {
+                const ctx = canvas.getContext('2d');
+                const { width, height } = canvas;
+                const pixels = ctx.getImageData(0, 0, width, height).data;
+                let minX = width, minY = height, maxX = -1, maxY = -1;
+
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        const alpha = pixels[(y * width + x) * 4 + 3];
+                        if (alpha > 10) {
+                            if (x < minX) minX = x;
+                            if (y < minY) minY = y;
+                            if (x > maxX) maxX = x;
+                            if (y > maxY) maxY = y;
+                        }
+                    }
+                }
+
+                if (maxX < minX || maxY < minY) {
+                    return { x: 0, y: 0, width, height };
+                }
+
+                return { x: minX, y: minY, width: maxX - minX + 1, height: maxY - minY + 1 };
+            }
+            function canvasToDataUrl(canvas) {
+                return canvas.toDataURL('image/png');
+            }
+            async function composeProductOnBluoraBg(productBlob) {
+                const [bgImg, productImg] = await Promise.all([
+                    loadImageSource('/bg.png'),
+                    loadImageSource(productBlob)
+                ]);
+
+                const canvas = document.createElement('canvas');
+                canvas.width = bgImg.naturalWidth;
+                canvas.height = bgImg.naturalHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+                const productCanvas = document.createElement('canvas');
+                productCanvas.width = productImg.naturalWidth;
+                productCanvas.height = productImg.naturalHeight;
+                const productCtx = productCanvas.getContext('2d');
+                productCtx.drawImage(productImg, 0, 0);
+
+                const bounds = getAlphaBounds(productCanvas);
+                const maxWidth = canvas.width * 0.78;
+                const maxHeight = canvas.height * 0.62;
+                const scale = Math.min(maxWidth / bounds.width, maxHeight / bounds.height);
+                const drawWidth = bounds.width * scale;
+                const drawHeight = bounds.height * scale;
+                const drawX = (canvas.width - drawWidth) / 2;
+                const drawY = (canvas.height * 0.49) - (drawHeight / 2);
+
+                ctx.drawImage(
+                    productCanvas,
+                    bounds.x,
+                    bounds.y,
+                    bounds.width,
+                    bounds.height,
+                    drawX,
+                    drawY,
+                    drawWidth,
+                    drawHeight
+                );
+
+                return canvasToDataUrl(canvas);
+            }
             function readSpecLine(specs, label) {
                 const line = String(specs || '').split('\n').find(item => item.toLowerCase().includes(label.toLowerCase()));
                 return line ? line.replace(/^-\s*[^:]+:\s*/i, '').trim() : '';
@@ -551,11 +641,7 @@
                                 }
 
                                 const blob = await response.blob();
-                                const dataUrl = await new Promise((resolve) => {
-                                    const reader = new FileReader();
-                                    reader.onloadend = () => resolve(reader.result);
-                                    reader.readAsDataURL(blob);
-                                });
+                                const dataUrl = await composeProductOnBluoraBg(blob);
 
                                 processedUrls.push(dataUrl);
                             } catch (error) {
