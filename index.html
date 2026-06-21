@@ -116,6 +116,7 @@
             border: 1px solid rgba(255,255,255,0.2); color: white;
         }
         .password-box { width: 320px; text-align: center; }
+        .close-auth { float: right; margin: -12px -6px 0 0; background: transparent !important; color: white !important; border: 0; font-size: 24px; line-height: 1; width: auto !important; padding: 6px; }
         .password-box input { width: 100%; padding: 12px; margin: 20px 0; border-radius: 3rem; background: #444; border: none; color: white; text-align: center; }
         .password-box button { background: white; color: black; padding: 10px; border-radius: 3rem; font-weight: bold; width: 100%; cursor: pointer; }
         .admin-panel { width: 95%; max-width: 1100px; max-height: 90vh; overflow-y: auto; }
@@ -343,7 +344,7 @@
     <div class="admin-hidden" id="adminBtn"><i class="fas fa-user-shield"></i> Admin</div>
     <div class="go-top" id="goTop"><i class="fas fa-arrow-up"></i></div>
 
-    <div id="passwordModal" class="password-modal"><div class="password-box"><h3 id="authTitle">Login</h3><input type="text" id="authUsername" placeholder="Username (3-12 characters)" maxlength="12" autocomplete="username" style="display:none;"><input type="email" id="authEmail" placeholder="Email" autocomplete="email"><input type="password" id="authPassword" placeholder="Password" autocomplete="current-password"><button id="submitPasswordBtn">Login</button><button id="switchAuthModeBtn" type="button" style="margin-top:10px; background:transparent; color:white; border:1px solid rgba(255,255,255,0.25);">Create account</button><div id="passwordError" class="error-msg"></div></div></div>
+    <div id="passwordModal" class="password-modal"><div class="password-box"><button id="closeAuthBtn" class="close-auth" type="button" aria-label="Close">&times;</button><h3 id="authTitle">Login</h3><input type="text" id="authUsername" placeholder="Username (3-12 characters)" maxlength="12" autocomplete="username" style="display:none;"><input type="email" id="authEmail" placeholder="Email" autocomplete="email"><input type="password" id="authPassword" placeholder="Password" autocomplete="current-password"><button id="submitPasswordBtn">Login</button><button id="switchAuthModeBtn" type="button" style="margin-top:10px; background:transparent; color:white; border:1px solid rgba(255,255,255,0.25);">Create account</button><div id="passwordError" class="error-msg"></div></div></div>
     <div id="adminModal" class="admin-modal"><div class="admin-panel" id="adminPanelContent"></div></div>
 
     <script>
@@ -919,6 +920,7 @@
             document.getElementById('nextBtn').addEventListener('click', nextImg);
             document.getElementById('adminBtn').addEventListener('click', () => isAdminAuthenticated ? openAdminPanel() : showPasswordModal());
             document.getElementById('profileBtn').addEventListener('click', openProfile);
+            document.getElementById('closeAuthBtn').addEventListener('click', () => document.getElementById('passwordModal').classList.remove('active'));
             document.getElementById('submitPasswordBtn').addEventListener('click', submitAuthForm);
             document.getElementById('switchAuthModeBtn').addEventListener('click', () => setAuthMode(authMode === 'login' ? 'register' : 'login'));
             document.getElementById('authPassword').addEventListener('keypress', e => { if(e.key==='Enter') submitAuthForm(); });
