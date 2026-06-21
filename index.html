@@ -392,6 +392,9 @@
                 if (sizes.trim()) parts.push(`- Sizes : ${sizes.trim()}`);
                 return parts.join('\n') || '- Colors : ...\n- Sizes : ...';
             }
+            function getAdminHeaders() {
+                return { 'Content-Type': 'application/json', 'x-admin-token': ADMIN_PASSWORD };
+            }
             function renderProducts() {
                 let filtered = getSortedProducts().filter(p => {
                     if (currentSearch && !p.name.toLowerCase().includes(currentSearch.toLowerCase())) return false;
@@ -519,18 +522,21 @@
                 product.images = ['https://picsum.photos/id/1/400/500'];
               }
 
-              if (editingProductId !== null) {
-                await fetch(`/api/products/${editingProductId}`, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(product)
-                });
-              } else {
-                await fetch('/api/products', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(product)
-                });
+              const res = editingProductId !== null
+                ? await fetch(`/api/products/${editingProductId}`, {
+                    method: 'PUT',
+                    headers: getAdminHeaders(),
+                    body: JSON.stringify(product)
+                  })
+                : await fetch('/api/products', {
+                    method: 'POST',
+                    headers: getAdminHeaders(),
+                    body: JSON.stringify(product)
+                  });
+
+              if (!res.ok) {
+                alert('Could not save product. Please try again.');
+                return;
               }
 
               await loadProducts();
@@ -544,9 +550,14 @@
             async function deleteProductConfirm(id) {
               if (!confirm('Delete this product?')) return;
 
-              await fetch(`/api/products/${id}`, {
-                method: 'DELETE'
+              const res = await fetch(`/api/products/${id}`, {
+                method: 'DELETE',
+                headers: getAdminHeaders()
               });
+              if (!res.ok) {
+                alert('Could not delete product. Please try again.');
+                return;
+              }
 
               await loadProducts();
               renderAdminPanel();
