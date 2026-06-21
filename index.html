@@ -648,13 +648,14 @@
                     currentUser = data.user || null;
                     isAdminAuthenticated = currentUser?.role === 'admin';
                     document.getElementById('profileName').innerText = currentUser?.username || 'Account';
-                    document.getElementById('adminBtn').innerHTML = isAdminAuthenticated
-                        ? '<i class="fas fa-user-shield"></i> Admin'
-                        : '<i class="fas fa-sign-in-alt"></i> Login';
+                    const adminButton = document.getElementById('adminBtn');
+                    adminButton.style.display = isAdminAuthenticated ? 'block' : 'none';
+                    if (isAdminAuthenticated) adminButton.innerHTML = '<i class="fas fa-user-shield"></i> Admin';
                 } catch (error) {
                     currentUser = null;
                     isAdminAuthenticated = false;
                     document.getElementById('profileName').innerText = 'Account';
+                    document.getElementById('adminBtn').style.display = 'none';
                 }
             }
             async function submitAuthForm() {
