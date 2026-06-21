@@ -5,7 +5,7 @@ export async function onRequestGet({ request, env }) {
   if (auth.error) return auth.error;
 
   const { results } = await env.DB
-    .prepare('SELECT id, email, role, created_at FROM users ORDER BY created_at DESC')
+    .prepare('SELECT id, username, email, role, created_at FROM users ORDER BY created_at DESC')
     .all();
 
   return json({ users: results });
