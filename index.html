@@ -414,9 +414,24 @@
                     }
                 });
             }
-            function getAlphaBounds(canvas) {
-                const ctx = canvas.getContext('2d');
-                const { width, height } = canvas;
+            function drawContain(ctx, img, x, y, width, height) {
+                const scale = Math.min(width / img.naturalWidth, height / img.naturalHeight);
+                const drawWidth = img.naturalWidth * scale;
+                const drawHeight = img.naturalHeight * scale;
+                const drawX = x + (width - drawWidth) / 2;
+                const drawY = y + (height - drawHeight) / 2;
+                ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+            }
+            function getAlphaBoundsFromImage(img) {
+                const maxSide = 640;
+                const analysisScale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+                const width = Math.max(1, Math.round(img.naturalWidth * analysisScale));
+                const height = Math.max(1, Math.round(img.naturalHeight * analysisScale));
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                ctx.drawImage(img, 0, 0, width, height);
                 const pixels = ctx.getImageData(0, 0, width, height).data;
                 let minX = width, minY = height, maxX = -1, maxY = -1;
 
@@ -433,13 +448,37 @@
                 }
 
                 if (maxX < minX || maxY < minY) {
-                    return { x: 0, y: 0, width, height };
+                    return { x: 0, y: 0, width: img.naturalWidth, height: img.naturalHeight };
                 }
 
-                return { x: minX, y: minY, width: maxX - minX + 1, height: maxY - minY + 1 };
+                return {
+                    x: Math.max(0, Math.floor(minX / analysisScale)),
+                    y: Math.max(0, Math.floor(minY / analysisScale)),
+                    width: Math.min(img.naturalWidth, Math.ceil((maxX - minX + 1) / analysisScale)),
+                    height: Math.min(img.naturalHeight, Math.ceil((maxY - minY + 1) / analysisScale))
+                };
             }
             function canvasToDataUrl(canvas) {
-                return canvas.toDataURL('image/png');
+                return new Promise((resolve) => {
+                    if (!canvas.toBlob) {
+                        resolve(canvas.toDataURL('image/webp', 0.82));
+                        return;
+                    }
+
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            resolve(canvas.toDataURL('image/webp', 0.82));
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.readAsDataURL(blob);
+                    }, 'image/webp', 0.82);
+                });
+            }
+            function waitForNextFrame() {
+                return new Promise(resolve => requestAnimationFrame(resolve));
             }
             async function composeProductOnBluoraBg(productBlob) {
                 const [bgImg, productImg] = await Promise.all([
@@ -448,28 +487,24 @@
                 ]);
 
                 const canvas = document.createElement('canvas');
-                canvas.width = bgImg.naturalWidth;
-                canvas.height = bgImg.naturalHeight;
+                canvas.width = 900;
+                canvas.height = 1125;
                 const ctx = canvas.getContext('2d');
-                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#d7d9d8';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                drawContain(ctx, bgImg, 0, 0, canvas.width, canvas.height);
 
-                const productCanvas = document.createElement('canvas');
-                productCanvas.width = productImg.naturalWidth;
-                productCanvas.height = productImg.naturalHeight;
-                const productCtx = productCanvas.getContext('2d');
-                productCtx.drawImage(productImg, 0, 0);
-
-                const bounds = getAlphaBounds(productCanvas);
-                const maxWidth = canvas.width * 0.78;
-                const maxHeight = canvas.height * 0.62;
+                const bounds = getAlphaBoundsFromImage(productImg);
+                const maxWidth = canvas.width * 0.74;
+                const maxHeight = canvas.height * 0.56;
                 const scale = Math.min(maxWidth / bounds.width, maxHeight / bounds.height);
                 const drawWidth = bounds.width * scale;
                 const drawHeight = bounds.height * scale;
                 const drawX = (canvas.width - drawWidth) / 2;
-                const drawY = (canvas.height * 0.49) - (drawHeight / 2);
+                const drawY = (canvas.height * 0.47) - (drawHeight / 2);
 
                 ctx.drawImage(
-                    productCanvas,
+                    productImg,
                     bounds.x,
                     bounds.y,
                     bounds.width,
@@ -480,7 +515,7 @@
                     drawHeight
                 );
 
-                return canvasToDataUrl(canvas);
+                return await canvasToDataUrl(canvas);
             }
             function readSpecLine(specs, label) {
                 const line = String(specs || '').split('\n').find(item => item.toLowerCase().includes(label.toLowerCase()));
@@ -619,7 +654,11 @@
 
                         const processedUrls = [];
 
-                        for (let url of urls) {
+                        for (let i = 0; i < urls.length; i++) {
+                            const url = urls[i];
+                            btn.innerText = `⏳ Обрабатываем фото ${i + 1}/${urls.length}...`;
+                            await waitForNextFrame();
+
                             if (url.startsWith('data:')) {
                                 processedUrls.push(url);
                                 continue;
