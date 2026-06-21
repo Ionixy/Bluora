@@ -27,7 +27,7 @@ export async function onRequestPost({ request, env }) {
   const removeBgResponse = await fetch('https://api.remove.bg/v1.0/removebg', {
     method: 'POST',
     headers: {
-      'X-Api-Key': env.REMOVEBG_API_KEY
+      'X-Api-Key': env.92JHGBJjxPDMuXHcRqRK2gdn
     },
     body: form
   });
