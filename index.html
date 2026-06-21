@@ -195,6 +195,11 @@
         }
         .detail-desc { font-size: 16px; line-height: 1.5; color: #ddd; }
         .detail-specs { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.5; white-space: pre-wrap; color: #ddd; }
+        .detail-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+        .detail-pill {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 999px; padding: 7px 12px; font-size: 14px; color: #f2f2f2;
+        }
         .spec-bold { font-weight: 700; color: white; }
         
         /* ГРУППА КНОПОК ВНИЗУ (info + back) */
@@ -316,9 +321,13 @@
                         <h4>Description</h4>
                         <div class="detail-desc" id="detail-desc"></div>
                     </div>
-                    <div class="detail-section">
-                        <h4>Specifications</h4>
-                        <div class="detail-specs" id="detail-specs"></div>
+                    <div class="detail-section" id="detailColorsSection">
+                        <h4>Colors</h4>
+                        <div class="detail-pills" id="detail-colors"></div>
+                    </div>
+                    <div class="detail-section" id="detailSizesSection">
+                        <h4>Sizes</h4>
+                        <div class="detail-pills" id="detail-sizes"></div>
                     </div>
                     <!-- ГРУППА КНОПОК ВНИЗУ КАРТОЧКИ (auto margin прижимает) -->
                     <div class="detail-buttons">
@@ -344,6 +353,7 @@
             const ADMIN_PASSWORD = atob(encodedPassword);
 
             let products = [];
+            let lastCatalogScrollY = 0;
 
             let currentCategory = 'all', currentSearch = '', currentTopFilter = 'all', currentDetailItem = null, currentImgIndex = 0, isAdminAuthenticated = false;
             let editingProductId = null;
@@ -359,6 +369,28 @@
                 const newDrop = products.filter(p => isProductNew(p)).sort((a,b)=>b.id-a.id);
                 const regular = products.filter(p => !isProductNew(p)).sort((a,b)=>b.id-a.id);
                 return [...newDrop, ...regular];
+            }
+            function splitSpecValues(value) {
+                return String(value || '').split(',').map(s => s.trim()).filter(Boolean);
+            }
+            function readSpecLine(specs, label) {
+                const line = String(specs || '').split('\n').find(item => item.toLowerCase().includes(label.toLowerCase()));
+                return line ? line.replace(/^-\s*[^:]+:\s*/i, '').trim() : '';
+            }
+            function getProductColors(p) {
+                return splitSpecValues(p?.colors || p?.color || readSpecLine(p?.specs, 'color'));
+            }
+            function getProductSizes(p) {
+                return splitSpecValues(p?.sizes || p?.size || readSpecLine(p?.specs, 'size'));
+            }
+            function renderPills(values, emptyText) {
+                return values.length ? values.map(value => `<span class="detail-pill">${value}</span>`).join('') : `<span class="detail-pill">${emptyText}</span>`;
+            }
+            function buildSpecs(colors, sizes) {
+                const parts = [];
+                if (colors.trim()) parts.push(`- Colors : ${colors.trim()}`);
+                if (sizes.trim()) parts.push(`- Sizes : ${sizes.trim()}`);
+                return parts.join('\n') || '- Colors : ...\n- Sizes : ...';
             }
             function renderProducts() {
                 let filtered = getSortedProducts().filter(p => {
@@ -379,19 +411,13 @@
                 if(!p) return;
                 currentDetailItem = p;
                 currentImgIndex = 0;
+                lastCatalogScrollY = window.scrollY;
                 document.getElementById('main-view').style.display = 'none';
                 document.getElementById('detail-view').style.display = 'block';
                 document.getElementById('detail-name').innerText = p.name;
                 document.getElementById('detail-desc').innerHTML = p.description;
-                let lines = p.specs.split('\n');
-                let formattedLines = lines.map(line => {
-                    if (line.trim().startsWith('- ')) {
-                        return line.replace(/^(- .*?)(:| :)/, '<span class="spec-bold">$1$2</span>');
-                    }
-                    return line;
-                });
-                let formattedSpecs = formattedLines.join('<br>');
-                document.getElementById('detail-specs').innerHTML = formattedSpecs;
+                document.getElementById('detail-colors').innerHTML = renderPills(getProductColors(p), 'No colors');
+                document.getElementById('detail-sizes').innerHTML = renderPills(getProductSizes(p), 'No sizes');
                 const hasMultiple = p.images.length > 1;
                 document.getElementById('prevBtn').style.display = hasMultiple ? 'flex' : 'none';
                 document.getElementById('nextBtn').style.display = hasMultiple ? 'flex' : 'none';
@@ -421,7 +447,12 @@
             function setImageIndex(idx) { currentImgIndex = idx; updateDetailImage(); }
             function nextImg() { if(currentDetailItem?.images.length > 1) { currentImgIndex = (currentImgIndex + 1) % currentDetailItem.images.length; updateDetailImage(); } }
             function prevImg() { if(currentDetailItem?.images.length > 1) { currentImgIndex = (currentImgIndex - 1 + currentDetailItem.images.length) % currentDetailItem.images.length; updateDetailImage(); } }
-            function closeDetail() { document.getElementById('main-view').style.display = 'block'; document.getElementById('detail-view').style.display = 'none'; renderProducts(); }
+            function closeDetail() {
+                document.getElementById('main-view').style.display = 'block';
+                document.getElementById('detail-view').style.display = 'none';
+                renderProducts();
+                requestAnimationFrame(() => window.scrollTo({ top: lastCatalogScrollY, behavior: 'auto' }));
+            }
             
             function initFilters() {
                 document.getElementById('searchInput').addEventListener('input', e=>{ currentSearch=e.target.value; renderProducts(); });
@@ -442,7 +473,7 @@
             function renderAdminPanel() { /* полная админка (код не меняем, просто сохраняем работоспособность) */
                 const container = document.getElementById('adminPanelContent');
                 const sorted = getSortedProducts();
-                container.innerHTML = `<div class="admin-header"><h2><i class="fas fa-tools"></i> Admin Dashboard</h2><button class="close-admin" id="closeAdminBtn">&times;</button></div><div class="admin-search"><input type="text" id="adminSearchInput" placeholder="🔍 Search products in admin..."></div><div style="margin-bottom:20px;"><h3>Products List</h3><div class="admin-products-grid" id="adminProductsGrid"></div></div><div class="admin-form" id="adminForm"><h3 style="margin-top:0; margin-bottom:1.5rem;" id="formTitle">➕ Add New Product</h3><div class="form-row"><input type="text" id="prodName" placeholder="Product Name"><select id="prodCategory"><option value="shirts">SHIRTS</option><option value="pants">PANTS</option><option value="hoodies">HOODIES</option><option value="hats">HATS</option><option value="shoes">SHOES</option><option value="accessories">ACCESSORIES</option></select></div><div class="form-row"><input type="text" id="prodImages" placeholder="Image URLs (comma separated)"><input type="text" id="prodSpecs" placeholder="Specifications (use format \"- Color : value\\n- Size : value\")"></div><div id="imagePreviewContainer" class="image-preview"></div><textarea id="prodDesc" placeholder="Description"></textarea><label class="checkbox-label"><input type="checkbox" id="prodIsNew"> <span>🔥 Mark as New Drop</span></label><div class="form-actions" style="display:flex; gap:15px; justify-content:flex-end; margin-top:20px;"><button class="btn-secondary" id="cancelAdminFormBtn">Cancel</button><button class="btn-primary" id="saveProductBtn">Save Product</button></div></div>`;
+                container.innerHTML = `<div class="admin-header"><h2><i class="fas fa-tools"></i> Admin Dashboard</h2><button class="close-admin" id="closeAdminBtn">&times;</button></div><div class="admin-search"><input type="text" id="adminSearchInput" placeholder="🔍 Search products in admin..."></div><div style="margin-bottom:20px;"><h3>Products List</h3><div class="admin-products-grid" id="adminProductsGrid"></div></div><div class="admin-form" id="adminForm"><h3 style="margin-top:0; margin-bottom:1.5rem;" id="formTitle">➕ Add New Product</h3><div class="form-row"><input type="text" id="prodName" placeholder="Product Name"><select id="prodCategory"><option value="shirts">SHIRTS</option><option value="pants">PANTS</option><option value="hoodies">HOODIES</option><option value="hats">HATS</option><option value="shoes">SHOES</option><option value="accessories">ACCESSORIES</option></select></div><div class="form-row"><input type="text" id="prodImages" placeholder="Image URLs (comma separated)"><input type="text" id="prodColors" placeholder="Colors (comma separated)"></div><div class="form-row"><input type="text" id="prodSizes" placeholder="Sizes (comma separated)"><div></div></div><div id="imagePreviewContainer" class="image-preview"></div><textarea id="prodDesc" placeholder="Description"></textarea><label class="checkbox-label"><input type="checkbox" id="prodIsNew"> <span>🔥 Mark as New Drop</span></label><div class="form-actions" style="display:flex; gap:15px; justify-content:flex-end; margin-top:20px;"><button class="btn-secondary" id="cancelAdminFormBtn">Cancel</button><button class="btn-primary" id="saveProductBtn">Save Product</button></div></div>`;
                 document.getElementById('closeAdminBtn').addEventListener('click', closeAdminModal);
                 document.getElementById('cancelAdminFormBtn').addEventListener('click', resetAdminForm);
                 const renderAdminList = () => {
@@ -457,8 +488,8 @@
                 setTimeout(() => { const searchInput = document.getElementById('adminSearchInput'); if(searchInput) searchInput.addEventListener('input', renderAdminList); renderAdminList(); document.getElementById('saveProductBtn').onclick = () => saveProduct(); attachImagePreview(); }, 10);
             }
             function attachImagePreview() { const imagesInput = document.getElementById('prodImages'); const previewDiv = document.getElementById('imagePreviewContainer'); const updatePreview = () => { let urls = imagesInput.value.split(',').map(s=>s.trim()).filter(s=>s); previewDiv.innerHTML = urls.map(url => `<img src="${url}" onerror="this.style.opacity='0.3'">`).join(''); }; imagesInput.addEventListener('input', updatePreview); updatePreview(); }
-            function resetAdminForm() { editingProductId=null; document.getElementById('formTitle').innerText='➕ Add New Product'; document.getElementById('prodName').value=''; document.getElementById('prodCategory').value='shirts'; document.getElementById('prodImages').value=''; document.getElementById('prodSpecs').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodIsNew').checked=false; attachImagePreview(); }
-            function editProductForm(id) { const p=products.find(p=>p.id===id); if(!p) return; editingProductId=id; document.getElementById('formTitle').innerText='✏️ Edit Product'; document.getElementById('prodName').value=p.name; document.getElementById('prodCategory').value=p.category; document.getElementById('prodImages').value=p.images.join(', '); document.getElementById('prodSpecs').value=p.specs; document.getElementById('prodDesc').value=p.description; document.getElementById('prodIsNew').checked=p.isNewDrop; attachImagePreview(); document.getElementById('adminForm').scrollIntoView({behavior:'smooth'}); }
+            function resetAdminForm() { editingProductId=null; document.getElementById('formTitle').innerText='➕ Add New Product'; document.getElementById('prodName').value=''; document.getElementById('prodCategory').value='shirts'; document.getElementById('prodImages').value=''; document.getElementById('prodColors').value=''; document.getElementById('prodSizes').value=''; document.getElementById('prodDesc').value=''; document.getElementById('prodIsNew').checked=false; attachImagePreview(); }
+            function editProductForm(id) { const p=products.find(p=>p.id===id); if(!p) return; editingProductId=id; document.getElementById('formTitle').innerText='✏️ Edit Product'; document.getElementById('prodName').value=p.name; document.getElementById('prodCategory').value=p.category; document.getElementById('prodImages').value=p.images.join(', '); document.getElementById('prodColors').value=getProductColors(p).join(', '); document.getElementById('prodSizes').value=getProductSizes(p).join(', '); document.getElementById('prodDesc').value=p.description; document.getElementById('prodIsNew').checked=p.isNewDrop; attachImagePreview(); document.getElementById('adminForm').scrollIntoView({behavior:'smooth'}); }
             function cloneProduct(id) { const original=products.find(p=>p.id===id); if(!original) return; const newId=Math.max(...products.map(p=>p.id),0)+1; const clone={...original, id:newId, name:original.name+' (copy)', isNewDrop:false, newDropUntil:null}; products.push(clone); renderAdminPanel(); renderProducts(); }
             async function saveProduct() {
               const product = {
@@ -469,7 +500,9 @@
                   .split(',')
                   .map(s => s.trim())
                   .filter(Boolean),
-                specs: document.getElementById('prodSpecs').value.trim() || '- Colors : ...\n- Sizes : ...',
+                colors: document.getElementById('prodColors').value.trim(),
+                sizes: document.getElementById('prodSizes').value.trim(),
+                specs: buildSpecs(document.getElementById('prodColors').value, document.getElementById('prodSizes').value),
                 description: document.getElementById('prodDesc').value.trim() || 'No description',
                 isNewDrop: document.getElementById('prodIsNew').checked,
                 newDropUntil: document.getElementById('prodIsNew').checked
