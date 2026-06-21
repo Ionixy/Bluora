@@ -1,14 +1,10 @@
-function isAuthorized(request, env) {
-  const token = request.headers.get('x-admin-token');
-  return token === env.ADMIN_TOKEN;
-}
+import { json, requireAdmin } from '../../_lib/auth.js';
 
 export async function onRequestPut(context) {
   const { env, request, params } = context;
 
-  if (!isAuthorized(request, env)) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const auth = await requireAdmin(request, env);
+  if (auth.error) return auth.error;
 
   const id = Number(params.id);
   const body = await request.json();
@@ -43,15 +39,14 @@ export async function onRequestPut(context) {
     )
     .run();
 
-  return Response.json({ success: true });
+  return json({ success: true });
 }
 
 export async function onRequestDelete(context) {
   const { env, request, params } = context;
 
-  if (!isAuthorized(request, env)) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const auth = await requireAdmin(request, env);
+  if (auth.error) return auth.error;
 
   const id = Number(params.id);
 
@@ -60,5 +55,5 @@ export async function onRequestDelete(context) {
     .bind(id)
     .run();
 
-  return Response.json({ success: true });
+  return json({ success: true });
 }
