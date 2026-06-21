@@ -110,9 +110,9 @@ export async function getCurrentUser(request, env) {
   const sessionId = getCookie(request, SESSION_COOKIE);
   if (!sessionId) return null;
 
-  const row = await env.DB
+  const query = (includeUsername) => env.DB
     .prepare(`
-      SELECT users.id, users.email, users.username, users.role, sessions.expires_at
+      SELECT users.id, users.email, ${includeUsername ? 'users.username,' : ''} users.role, sessions.expires_at
       FROM sessions
       JOIN users ON users.id = sessions.user_id
       WHERE sessions.id = ?
@@ -120,6 +120,12 @@ export async function getCurrentUser(request, env) {
     `)
     .bind(sessionId)
     .first();
+  let row;
+  try {
+    row = await query(true);
+  } catch {
+    row = await query(false);
+  }
 
   if (!row) return null;
   if (Number(row.expires_at) < Date.now()) {
@@ -130,7 +136,7 @@ export async function getCurrentUser(request, env) {
   return {
     id: row.id,
     email: row.email,
-    username: row.username,
+    username: row.username || row.email.split('@')[0].slice(0, 12),
     role: row.role,
     isPrimaryAdmin: normalizeEmail(row.email) === normalizeEmail(env.FIRST_ADMIN_EMAIL)
   };
