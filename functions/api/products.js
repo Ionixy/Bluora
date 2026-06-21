@@ -1,7 +1,4 @@
-function isAuthorized(request, env) {
-  const token = request.headers.get('x-admin-token');
-  return token === env.ADMIN_TOKEN;
-}
+import { json, requireAdmin } from '../_lib/auth.js';
 
 export async function onRequestGet(context) {
   const { env } = context;
@@ -17,15 +14,14 @@ export async function onRequestGet(context) {
     newDropUntil: p.newDropUntil ?? null,
   }));
 
-  return Response.json(products);
+  return json(products);
 }
 
 export async function onRequestPost(context) {
   const { env, request } = context;
 
-  if (!isAuthorized(request, env)) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const auth = await requireAdmin(request, env);
+  if (auth.error) return auth.error;
 
   const body = await request.json();
 
@@ -41,7 +37,7 @@ export async function onRequestPost(context) {
   } = body;
 
   if (!name || !category) {
-    return Response.json(
+    return json(
       { error: "name and category are required" },
       { status: 400 }
     );
@@ -64,5 +60,5 @@ export async function onRequestPost(context) {
     )
     .run();
 
-  return Response.json({ success: true, id: result.meta.last_row_id });
+  return json({ success: true, id: result.meta.last_row_id });
 }
