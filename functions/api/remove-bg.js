@@ -1,11 +1,24 @@
 function isAuthorized(request, env) {
+  if (!env.ADMIN_TOKEN) return true;
   const token = request.headers.get('x-admin-token');
   return token === env.ADMIN_TOKEN;
+}
+
+function getRemoveBgApiKey(env) {
+  return env.REMOVEBG_API_KEY || env.REMOVE_BG_API_KEY || env.REMOVEBG_TOKEN || env.REMOVE_BG_TOKEN;
 }
 
 export async function onRequestPost({ request, env }) {
   if (!isAuthorized(request, env)) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const apiKey = getRemoveBgApiKey(env);
+  if (!apiKey) {
+    return Response.json(
+      { error: 'Remove.bg API key is missing. Add REMOVEBG_API_KEY in Cloudflare secrets.' },
+      { status: 500 }
+    );
   }
 
   const { imageUrl } = await request.json();
@@ -19,15 +32,14 @@ export async function onRequestPost({ request, env }) {
   form.append('size', 'auto');
   form.append('format', 'png');
 
-  // Автоматически определяем адрес сайта и указываем путь к bg.jpg
   const requestUrl = new URL(request.url);
-  const bgImageUrl = `${requestUrl.origin}/bg.jpg`;
+  const bgImageUrl = `${requestUrl.origin}/bg.png`;
   form.append('bg_image_url', bgImageUrl);
 
   const removeBgResponse = await fetch('https://api.remove.bg/v1.0/removebg', {
     method: 'POST',
     headers: {
-      'X-Api-Key': env.REMOVEBG_API_KEY
+      'X-Api-Key': apiKey
     },
     body: form
   });
