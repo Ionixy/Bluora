@@ -632,12 +632,12 @@
                 authMode = mode;
                 document.getElementById('authTitle').innerText = mode === 'login' ? 'Login' : 'Create account';
                 document.getElementById('submitPasswordBtn').innerText = mode === 'login' ? 'Login' : 'Register';
-                document.getElementById('switchAuthModeBtn').innerText = mode === 'login' ? 'Create account' : 'Back to login';
+                document.getElementById('switchAuthModeBtn').innerText = mode === 'login' ? 'Register' : 'Login';
                 document.getElementById('authUsername').style.display = mode === 'register' ? 'block' : 'none';
                 document.getElementById('passwordError').innerText = '';
             }
-            function showPasswordModal() {
-                setAuthMode('login');
+            function showPasswordModal(mode = 'register') {
+                setAuthMode(mode);
                 document.getElementById('passwordModal').classList.add('active');
                 document.getElementById('authEmail').focus();
             }
@@ -665,12 +665,19 @@
                 const errorBox = document.getElementById('passwordError');
                 errorBox.innerText = '';
 
-                const res = await fetch(`/api/auth/${authMode === 'login' ? 'login' : 'register'}`, {
+                const isRegistering = authMode === 'register';
+                const res = await fetch(`/api/auth/${isRegistering ? 'register' : 'login'}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password })
                 });
-                const data = await res.json();
+                let data;
+                try {
+                    data = await res.json();
+                } catch {
+                    errorBox.innerText = 'The server returned an unexpected response. Please try again.';
+                    return;
+                }
 
                 if (!res.ok) {
                     errorBox.innerText = data.error || 'Could not authenticate.';
@@ -683,7 +690,7 @@
                 await syncAuthState();
 
                 if (isAdminAuthenticated) openAdminPanel();
-                else alert('Account created. Ask an admin to grant access to the admin panel.');
+                else if (isRegistering) alert('Account created successfully.');
             }
             async function logout() {
                 await fetch('/api/auth/logout', { method: 'POST' });
@@ -694,7 +701,7 @@
             }
             async function openProfile() {
                 if (!currentUser) {
-                    showPasswordModal();
+                    showPasswordModal('register');
                     return;
                 }
                 if (confirm(`Log out of ${currentUser.username}?`)) await logout();
