@@ -43,9 +43,6 @@ async function handleRemoveBg(request, env) {
   form.append("size", "auto");
   form.append("format", "png");
 
-  const requestUrl = new URL(request.url);
-  form.append("bg_image_url", `${requestUrl.origin}/bg.png`);
-
   const response = await fetch("https://api.remove.bg/v1.0/removebg", {
     method: "POST",
     headers: {
