@@ -422,6 +422,14 @@
                 const drawY = y + (height - drawHeight) / 2;
                 ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
             }
+            function getOutputSizeFromBg(bgImg) {
+                const maxSide = 1100;
+                const scale = Math.min(1, maxSide / Math.max(bgImg.naturalWidth, bgImg.naturalHeight));
+                return {
+                    width: Math.max(1, Math.round(bgImg.naturalWidth * scale)),
+                    height: Math.max(1, Math.round(bgImg.naturalHeight * scale))
+                };
+            }
             function getAlphaBoundsFromImage(img) {
                 const maxSide = 640;
                 const analysisScale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
@@ -460,21 +468,25 @@
             }
             function canvasToDataUrl(canvas) {
                 return new Promise((resolve) => {
+                    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                    const type = isSafari ? 'image/jpeg' : 'image/webp';
+                    const quality = isSafari ? 0.88 : 0.82;
+
                     if (!canvas.toBlob) {
-                        resolve(canvas.toDataURL('image/webp', 0.82));
+                        resolve(canvas.toDataURL(type, quality));
                         return;
                     }
 
                     canvas.toBlob((blob) => {
                         if (!blob) {
-                            resolve(canvas.toDataURL('image/webp', 0.82));
+                            resolve(canvas.toDataURL(type, quality));
                             return;
                         }
 
                         const reader = new FileReader();
                         reader.onloadend = () => resolve(reader.result);
                         reader.readAsDataURL(blob);
-                    }, 'image/webp', 0.82);
+                    }, type, quality);
                 });
             }
             function waitForNextFrame() {
@@ -486,9 +498,10 @@
                     loadImageSource(productBlob)
                 ]);
 
+                const outputSize = getOutputSizeFromBg(bgImg);
                 const canvas = document.createElement('canvas');
-                canvas.width = 900;
-                canvas.height = 1125;
+                canvas.width = outputSize.width;
+                canvas.height = outputSize.height;
                 const ctx = canvas.getContext('2d');
                 ctx.fillStyle = '#d7d9d8';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
