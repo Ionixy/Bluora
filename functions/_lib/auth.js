@@ -40,6 +40,15 @@ export function validatePassword(password) {
   return typeof password === 'string' && password.length >= 8;
 }
 
+export function normalizeUsername(username) {
+  return String(username || '').trim();
+}
+
+export function validateUsername(username) {
+  const value = normalizeUsername(username);
+  return Array.from(value).length >= 3 && Array.from(value).length <= 12 && /^[\p{L}\p{N}_-]+$/u.test(value);
+}
+
 export async function hashPassword(password) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const key = await crypto.subtle.importKey(
@@ -103,7 +112,7 @@ export async function getCurrentUser(request, env) {
 
   const row = await env.DB
     .prepare(`
-      SELECT users.id, users.email, users.role, sessions.expires_at
+      SELECT users.id, users.email, users.username, users.role, sessions.expires_at
       FROM sessions
       JOIN users ON users.id = sessions.user_id
       WHERE sessions.id = ?
@@ -118,7 +127,13 @@ export async function getCurrentUser(request, env) {
     return null;
   }
 
-  return { id: row.id, email: row.email, role: row.role };
+  return {
+    id: row.id,
+    email: row.email,
+    username: row.username,
+    role: row.role,
+    isPrimaryAdmin: normalizeEmail(row.email) === normalizeEmail(env.FIRST_ADMIN_EMAIL)
+  };
 }
 
 export async function requireAdmin(request, env) {
