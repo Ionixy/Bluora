@@ -191,7 +191,12 @@ async function register(request, env) {
 
   const existing = await env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(normalizedEmail).first();
   if (existing) return json({ error: "User already exists." }, { status: 409 });
-  const existingUsername = await env.DB.prepare("SELECT id FROM users WHERE username = ? COLLATE NOCASE").bind(normalizedUsername).first();
+  let existingUsername;
+  try {
+    existingUsername = await env.DB.prepare("SELECT id FROM users WHERE username = ? COLLATE NOCASE").bind(normalizedUsername).first();
+  } catch {
+    return json({ error: "Database update required. Run migration-add-usernames.sql in the Cloudflare D1 Console." }, { status: 503 });
+  }
   if (existingUsername) return json({ error: "This username is already taken." }, { status: 409 });
 
   const adminCount = await env.DB.prepare("SELECT COUNT(*) AS count FROM users WHERE role = 'admin'").first();
