@@ -32,10 +32,6 @@ export async function onRequestPost({ request, env }) {
   form.append('size', 'auto');
   form.append('format', 'png');
 
-  const requestUrl = new URL(request.url);
-  const bgImageUrl = `${requestUrl.origin}/bg.png`;
-  form.append('bg_image_url', bgImageUrl);
-
   const removeBgResponse = await fetch('https://api.remove.bg/v1.0/removebg', {
     method: 'POST',
     headers: {
