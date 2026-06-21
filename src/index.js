@@ -10,7 +10,28 @@ export default {
   }
 };
 
+function isAuthorized(request, env) {
+  if (!env.ADMIN_TOKEN) return true;
+  return request.headers.get("x-admin-token") === env.ADMIN_TOKEN;
+}
+
+function getRemoveBgApiKey(env) {
+  return env.REMOVEBG_API_KEY || env.REMOVE_BG_API_KEY || env.REMOVEBG_TOKEN || env.REMOVE_BG_TOKEN;
+}
+
 async function handleRemoveBg(request, env) {
+  if (!isAuthorized(request, env)) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const apiKey = getRemoveBgApiKey(env);
+  if (!apiKey) {
+    return Response.json(
+      { error: "Remove.bg API key is missing. Add REMOVEBG_API_KEY in Cloudflare secrets." },
+      { status: 500 }
+    );
+  }
+
   const { imageUrl } = await request.json();
 
   if (!imageUrl) {
@@ -22,10 +43,13 @@ async function handleRemoveBg(request, env) {
   form.append("size", "auto");
   form.append("format", "png");
 
+  const requestUrl = new URL(request.url);
+  form.append("bg_image_url", `${requestUrl.origin}/bg.png`);
+
   const response = await fetch("https://api.remove.bg/v1.0/removebg", {
     method: "POST",
     headers: {
-      "X-Api-Key": env.REMOVEBG_API_KEY
+      "X-Api-Key": apiKey
     },
     body: form
   });
